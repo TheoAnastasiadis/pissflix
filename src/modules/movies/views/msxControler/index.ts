@@ -1,8 +1,10 @@
 import { Request } from "express-serve-static-core"
-import { MoviesControler } from "../movies.controler.interface"
+import { MoviesControler } from "../moviesViewsRegistry.interface"
 import { ControlerFunction } from "../../../../shared/Objects/controlerFunction"
 import { Movie } from "../../entities/movie.entity"
 import { MsxMenu } from "../../../../shared/ui/msxUIComponents/menuObject"
+import { MovieRoutes } from "./subtypes/routes.enum"
+import { MoviesMenu } from "./subtypes/moviesMenu"
 
 class MsxMoviesCotrnoler implements MoviesControler {
     routes: [string, ControlerFunction<MsxMenu>][]
@@ -16,6 +18,7 @@ class MsxMoviesCotrnoler implements MoviesControler {
 
 const msxMoviesCotrnoler = new MsxMoviesCotrnoler()
 
+msxMoviesCotrnoler.registerRoute(MovieRoutes.BASE, MoviesMenu)
 // msxMoviesCotrnoler.registerRoute()
 // msxMoviesCotrnoler.registerRoute()
 // msxMoviesCotrnoler.registerRoute()

@@ -1,4 +1,4 @@
-import { Image } from "../../../shared/Objects/Image"
+import { Image } from "../../../../shared/Objects/image"
 
 export abstract class MovieImage implements Image {
     baseURL = ""

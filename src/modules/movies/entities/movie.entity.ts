@@ -1,8 +1,5 @@
-import { Image } from "../../../shared/Objects/Image"
-import { Genre } from "./movieGenres"
-import { Status } from "./movieStatus"
-import { Language } from "./movieLanguages"
-import { Country } from "./movieCountries"
+import { Image } from "../../../shared/Objects/image"
+import { Country, Genre, Language, Status } from "./subtypes"
 
 type MovieProps = {
     adult: Boolean

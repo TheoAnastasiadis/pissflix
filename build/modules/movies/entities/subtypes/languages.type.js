@@ -6,7 +6,7 @@ class Language {
     constructor(isoCode, isoType) {
         if ((0, all_iso_language_codes_1.isValid)(isoCode, [isoType])) {
             this.isoCode = isoCode;
-            this.name = (0, all_iso_language_codes_1.getName)(isoCode, 'en');
+            this.name = (0, all_iso_language_codes_1.getName)(isoCode, "en");
         }
         else {
             this.isoCode = null;

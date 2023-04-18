@@ -1,4 +1,4 @@
-import { MovieImage } from "../../entity/movieImage"
+import { MovieImage } from "../../../entities/subtypes"
 
 export class TMDBBackgroundImage extends MovieImage {
     constructor(filePath: string) {

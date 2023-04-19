@@ -4,11 +4,12 @@
     "description": "Civilized content platform for smart TVs",
     "main": "index.js",
     "scripts": {
-        "pre-start:dev": "npx prettier --write .",
+        "pre-test": "npx prettier --write .",
         "start:dev": "npx nodemon",
         "build": "rimraf ./build && tsc",
         "start": "npm run build && node build/index.js",
-        "test": "npx jest --coverage"
+        "test": "npx jest",
+        "coverage": "npx jest --coverage --collectCoverageFrom=\"./src/**\""
     },
     "keywords": [
         "torrents",

@@ -8,19 +8,23 @@ import { getMoviesByGenre } from "../../../../src/modules/movies/useCases/getMov
 import { TMDBRepo } from "../../../../src/modules/movies/repos/tmdb"
 
 const succesfullMovie: Movie = exampleMovie
-const validGenre : Genre = {
+const validGenre: Genre = {
     name: "Genre",
-    uniqueId: 1
+    uniqueId: 1,
 }
-const invalidGenre : Genre = {
+const invalidGenre: Genre = {
     name: "Non-existent Genre",
-    uniqueId: 0
+    uniqueId: 0,
 }
 
 const mockedRepo: IMoviesRepo = mock(TMDBRepo)
-when(mockedRepo.getMoviesByGenre(validGenre)).thenReturn(Promise.resolve(new Result<Movie[]>(true, undefined, [succesfullMovie])))
-when(mockedRepo.getMoviesByGenre(invalidGenre)).thenReturn(Promise.resolve(new Result<Movie[]>(false, "Invalid Genre")))
-const mockedRepoInstance : IMoviesRepo = instance(mockedRepo)
+when(mockedRepo.getMoviesByGenre(validGenre)).thenReturn(
+    Promise.resolve(new Result<Movie[]>(true, undefined, [succesfullMovie]))
+)
+when(mockedRepo.getMoviesByGenre(invalidGenre)).thenReturn(
+    Promise.resolve(new Result<Movie[]>(false, "Invalid Genre"))
+)
+const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)
 
 describe("getMoviesByGenre(repo, Genre)", () => {
     test("When genre is valid returns succesfull result(s)", async () => {

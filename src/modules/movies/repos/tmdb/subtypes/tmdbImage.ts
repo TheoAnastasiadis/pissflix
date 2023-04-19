@@ -8,7 +8,7 @@ export class TMDBBackgroundImage extends MovieImage {
         super("https://image.tmdb.org/t/p", filePath, ["w300", "w780", "w1280"])
     }
 
-    getDefaultQuality :() => string = () => {
+    getDefaultQuality: () => string = () => {
         return this.baseURL + "/" + this.variations[1] + "/" + this.filePath
     }
     getHighestQuality(): string {

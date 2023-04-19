@@ -15,7 +15,7 @@ when(mockedRepo.getMovieById(123456)).thenReturn(
 when(mockedRepo.getMovieById(0)).thenReturn(
     Promise.resolve(new Result<Movie>(false, "Unscucesfull fetch"))
 )
-const mockedRepoInstance : IMoviesRepo = instance(mockedRepo)
+const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)
 
 describe("getMovie(repo, id)", () => {
     test("When id is valid returns succesfull result", async () => {

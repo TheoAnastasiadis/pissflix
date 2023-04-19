@@ -1,5 +1,8 @@
 import { Movie } from "../../../../src/modules/movies/entities/movie.entity"
-import { Language, MovieImage } from "../../../../src/modules/movies/entities/subtypes"
+import {
+    Language,
+    MovieImage,
+} from "../../../../src/modules/movies/entities/subtypes"
 import { TMDBRepo } from "../../../../src/modules/movies/repos/tmdb"
 import { Result } from "../../../../src/shared/Objects/result"
 
@@ -47,8 +50,10 @@ const invalidStartDate = new Date(2080, 0, 0) //very far into the future
 
 describe("getMoviesByRealeaseDate(startDate, endDate)", () => {
     test("given valid start and end dates TMDB returns an array of movies", async () => {
-        const result: Result<Movie[]> =
-            await repo.getMoviesByRealeaseDate(validStartDate, validEndDate)
+        const result: Result<Movie[]> = await repo.getMoviesByRealeaseDate(
+            validStartDate,
+            validEndDate
+        )
         expect(result.isSuccess).toBe(true)
         expect(result.getValue()).toBeDefined()
         for (const movie of result.getValue() || []) {
@@ -71,21 +76,24 @@ describe("getMoviesByRealeaseDate(startDate, endDate)", () => {
         }
     })
     test("given invalid dates returns an error", async () => {
-        const result: Result<Movie[]> =
-            await repo.getMoviesByRealeaseDate(invalidStartDate, validEndDate)
+        const result: Result<Movie[]> = await repo.getMoviesByRealeaseDate(
+            invalidStartDate,
+            validEndDate
+        )
         expect(result.isFailure).toBe(true)
         expect(result.errorValue()).toBeDefined()
     })
 })
 
-const firstLanguage =  new Language("en", "639-1")
-const secondLanguage =  new Language("fr", "639-1")
+const firstLanguage = new Language("en", "639-1")
+const secondLanguage = new Language("fr", "639-1")
 const invalidLanguage = new Language("--", "639-1")
 
 describe("getMoviesByLanguage(language)", () => {
     test("given a valid language returns an array of movies", async () => {
-        const result: Result<Movie[]> =
-            await repo.getMoviesByLanguage(firstLanguage)
+        const result: Result<Movie[]> = await repo.getMoviesByLanguage(
+            firstLanguage
+        )
         expect(result.isSuccess).toBe(true)
         expect(result.getValue()).toBeDefined()
         for (const movie of result.getValue() || []) {

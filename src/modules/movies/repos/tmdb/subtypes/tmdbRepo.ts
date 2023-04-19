@@ -125,9 +125,12 @@ export class TMDBRepo implements IMoviesRepo {
                 baseURL +
                     `discover/movie/?primary_release_date.gte=${startDate
                         .toLocaleDateString("en-US")
-                        .replace("/", "-")}&primary_release_date.lte=${endDate
+                        .replace(
+                            /(\d{1,2})\/(\d{1,2})\/(\d{4})/gm,
+                            "$3"
+                        )}&primary_release_date.lte=${endDate
                         .toLocaleDateString("en-US")
-                        .replace("/", "-")}`
+                        .replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/gm, "$3")}` //TMDB API bug: 2020-01-01 --> no results, 2020 --> 20 results
             )
             if (response.status == 200 && response.data.results.length > 0) {
                 //Empty results should return error Result

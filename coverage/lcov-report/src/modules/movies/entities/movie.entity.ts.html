@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.88% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.88% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -143,7 +143,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,22 +161,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Image } from "../../../shared/Objects/image"
@@ -218,23 +218,23 @@ export class Movie {
     public genres: Genre[]
     public languages: Language[]
     public countries: Country[]
-<span class="fstat-no" title="function not covered" >    public constructor(p</span>rops: MovieProps) {
-<span class="cstat-no" title="statement not covered" >        this.adult = props.adult</span>
-<span class="cstat-no" title="statement not covered" >        this.background = props.background</span>
-<span class="cstat-no" title="statement not covered" >        this.id = props.id</span>
-<span class="cstat-no" title="statement not covered" >        this.overview = props.overview</span>
-<span class="cstat-no" title="statement not covered" >        this.popularity = props.popularity</span>
-<span class="cstat-no" title="statement not covered" >        this.poster = props.poster</span>
-<span class="cstat-no" title="statement not covered" >        this.release = props.release</span>
-<span class="cstat-no" title="statement not covered" >        this.runtime = props.runtime</span>
-<span class="cstat-no" title="statement not covered" >        this.tagline = props.tagline</span>
-<span class="cstat-no" title="statement not covered" >        this.imdbId = props.imdbId</span>
-<span class="cstat-no" title="statement not covered" >        this.status = props.status</span>
-<span class="cstat-no" title="statement not covered" >        this.rating = props.rating</span>
-<span class="cstat-no" title="statement not covered" >        this.title = props.title</span>
-<span class="cstat-no" title="statement not covered" >        this.genres = props.genres</span>
-<span class="cstat-no" title="statement not covered" >        this.languages = props.languages</span>
-<span class="cstat-no" title="statement not covered" >        this.countries = props.countries</span>
+    public constructor(props: MovieProps) {
+        this.adult = props.adult
+        this.background = props.background
+        this.id = props.id
+        this.overview = props.overview
+        this.popularity = props.popularity
+        this.poster = props.poster
+        this.release = props.release
+        this.runtime = props.runtime
+        this.tagline = props.tagline
+        this.imdbId = props.imdbId
+        this.status = props.status
+        this.rating = props.rating
+        this.title = props.title
+        this.genres = props.genres
+        this.languages = props.languages
+        this.countries = props.countries
     }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -244,7 +244,7 @@ export class Movie {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-04-19T12:36:57.348Z
+                at 2023-04-19T19:35:51.140Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

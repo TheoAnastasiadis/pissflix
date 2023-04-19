@@ -1,0 +1,16 @@
+{
+    "parent": "7714b2e1-b548-4c74-a730-c96246b61422",
+    "pid": 12128,
+    "argv": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\theoa\\Documents\\pissflix\\node_modules\\jest\\bin\\jest.js"
+    ],
+    "execArgv": [],
+    "cwd": "C:\\Users\\theoa\\Documents\\pissflix",
+    "time": 1681898440130,
+    "ppid": 6128,
+    "coverageFilename": "C:\\Users\\theoa\\Documents\\pissflix\\.nyc_output\\a99e3440-cbeb-4b48-8da6-24f3a0b26d9b.json",
+    "externalId": "",
+    "uuid": "a99e3440-cbeb-4b48-8da6-24f3a0b26d9b",
+    "files": []
+}

@@ -1,25 +1,25 @@
 import { Image } from "../../../../shared/Objects/image"
 
 export abstract class MovieImage implements Image {
-    baseURL = ""
-    filePath = ""
-    variations: [String, String, String]
+    baseURL: string
+    filePath: string
+    variations: [string, string, string] | undefined
     constructor(
-        baseUrl: string,
-        filePath: string,
-        variations: [string, string, string]
+        baseUrl: string = "",
+        filePath: string = "",
+        variations: [string, string, string] | undefined = undefined
     ) {
         this.baseURL = baseUrl
         this.filePath = filePath
         this.variations = variations
     }
-    getDefaultQuality(): String {
+    getDefaultQuality(): string {
         throw new Error("Method not implemented.")
     }
-    getHighestQuality(): String {
+    getHighestQuality(): string {
         throw new Error("Method not implemented.")
     }
-    getLowestQuality(): String {
+    getLowestQuality(): string {
         throw new Error("Method not implemented.")
     }
 }

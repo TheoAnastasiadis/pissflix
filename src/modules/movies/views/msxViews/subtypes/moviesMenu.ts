@@ -3,7 +3,6 @@ import {
     MsxMenuItem,
 } from "../../../../../shared/ui/msxUIComponents/menuObject"
 import { MovieRoutes } from "./routes.enum"
-import { ControlerFunction } from "../../../../../shared/Objects/controlerFunction"
 import { ViewsHandler } from "../../../../../shared/Objects/views"
 import { Result } from "../../../../../shared/Objects/result"
 

@@ -3,7 +3,7 @@ import { Result } from "../../../shared/Objects/result"
 import { Movie } from "../entities/movie.entity"
 import { IMoviesRepo } from "../repos/movies.repo.interface"
 
-export function getMoviesByGenre(
+export function getMoviesByDecade(
     repo: IMoviesRepo,
     firstYearOfDecade: Year
 ): Promise<Result<Movie[]>> {
@@ -12,6 +12,6 @@ export function getMoviesByGenre(
     //analytics
     return repo.getMoviesByRealeaseDate(
         new Date(firstYearOfDecade, 0, 0),
-        new Date(firstYearOfDecade + 9, 31)
+        new Date(firstYearOfDecade + 9, 11, 30)
     )
 }

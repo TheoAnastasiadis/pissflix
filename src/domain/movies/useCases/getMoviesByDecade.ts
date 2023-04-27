@@ -7,7 +7,7 @@ import { IMoviesRepo } from "../repos/movies.repo"
 export function getMoviesByDecade(
     repo: IMoviesRepo,
     firstYearOfDecade: Year,
-    pagination: paginationParams = {page: 1, limit: 20}
+    pagination: paginationParams = { page: 1, limit: 20 }
 ): Promise<Result<Movie[]>> {
     return repo.getMoviesByRealeaseDate(
         new Date(firstYearOfDecade, 0, 0),

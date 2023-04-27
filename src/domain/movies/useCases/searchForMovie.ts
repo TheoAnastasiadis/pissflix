@@ -6,7 +6,7 @@ import { IMoviesRepo } from "../repos/movies.repo"
 export function getMoviesByRegion(
     repo: IMoviesRepo,
     query: string,
-    pagination: paginationParams = {page: 1, limit: 20}
+    pagination: paginationParams = { page: 1, limit: 20 }
 ): Promise<Result<Movie[]>> {
     return repo.searchForMovie(query, pagination)
 }

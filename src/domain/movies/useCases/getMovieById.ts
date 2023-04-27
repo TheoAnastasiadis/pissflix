@@ -6,6 +6,7 @@ export const getMovieById = (
     repo: IMoviesRepo,
     id?: number
 ): Promise<Result<Movie>> => {
-    if (!id) return Promise.resolve(new Result(false, "No movie id provided"))
+    if (typeof id == "undefined")
+        return Promise.resolve(new Result(false, "No movie id provided"))
     return repo.getMovieById(id)
 }

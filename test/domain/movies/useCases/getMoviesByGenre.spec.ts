@@ -1,4 +1,4 @@
-import { mock, when, instance } from "ts-mockito"
+import { mock, when, instance, anything } from "ts-mockito"
 import { Result } from "../../../../src/core/sharedObjects/result"
 import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { Movie } from "../../../../src/domain/movies/entities/movie.entity"
@@ -18,10 +18,10 @@ const invalidGenre: Genre = {
 }
 
 const mockedRepo: IMoviesRepo = mock(TMDBRepo)
-when(mockedRepo.getMoviesByGenre(validGenre)).thenReturn(
+when(mockedRepo.getMoviesByGenre(validGenre, anything())).thenReturn(
     Promise.resolve(new Result<Movie[]>(true, undefined, [succesfullMovie]))
 )
-when(mockedRepo.getMoviesByGenre(invalidGenre)).thenReturn(
+when(mockedRepo.getMoviesByGenre(invalidGenre, anything())).thenReturn(
     Promise.resolve(new Result<Movie[]>(false, "Invalid Genre"))
 )
 const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)

@@ -5,7 +5,7 @@ export type paginationParams = {
      */
     page: number
     /**
-     *The number of results per page
+     *The number of results per page. This will not always be fulffiled.
      * @type {number}
      */
     limit: number

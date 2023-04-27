@@ -1,3 +1,4 @@
+import { paginationParams } from "../../../../src/core/sharedObjects/paginationHandler"
 import { Result } from "../../../../src/core/sharedObjects/result"
 import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { Movie } from "../../../../src/domain/movies/entities/movie.entity"
@@ -11,6 +12,7 @@ const repo = new TMDBRepo()
 
 const validTMDBId = 550
 const invalidTMDBId = 0
+const pagination: paginationParams = { page: 1, limit: 5 }
 
 describe("getMovieById(id)", () => {
     test("given a valid TMDB id returns a movie", async () => {
@@ -53,7 +55,8 @@ describe("getMoviesByRealeaseDate(startDate, endDate)", () => {
     test("given valid start and end dates TMDB returns an array of movies", async () => {
         const result: Result<Movie[]> = await repo.getMoviesByRealeaseDate(
             validStartDate,
-            validEndDate
+            validEndDate,
+            pagination
         )
         expect(result.isSuccess).toBe(true)
         expect(result.getValue()).toBeDefined()
@@ -78,7 +81,8 @@ describe("getMoviesByRealeaseDate(startDate, endDate)", () => {
     test("given invalid dates returns an error", async () => {
         const result: Result<Movie[]> = await repo.getMoviesByRealeaseDate(
             invalidStartDate,
-            validEndDate
+            validEndDate,
+            pagination
         )
         expect(result.isFailure).toBe(true)
         expect(result.errorValue()).toBeDefined()
@@ -92,7 +96,8 @@ const invalidLanguage = new Language("--", "639-1")
 describe("getMoviesByLanguage(language)", () => {
     test("given a valid language returns an array of movies", async () => {
         const result: Result<Movie[]> = await repo.getMoviesByLanguage(
-            firstLanguage
+            firstLanguage,
+            pagination
         )
         expect(result.isSuccess).toBe(true)
         expect(result.getValue()).toBeDefined()
@@ -116,7 +121,10 @@ describe("getMoviesByLanguage(language)", () => {
     })
     test("given an array of valid languages returns an array of movies", async () => {
         const result: Result<Movie[] | undefined> =
-            await repo.getMoviesByLanguage([firstLanguage, secondLanguage])
+            await repo.getMoviesByLanguage(
+                [firstLanguage, secondLanguage],
+                pagination
+            )
         expect(result.isSuccess).toBe(true)
         expect(result.getValue()).toBeDefined()
         for (const movie of result.getValue() || []) {
@@ -139,7 +147,7 @@ describe("getMoviesByLanguage(language)", () => {
     })
     test("given an invalid language return error result", async () => {
         const result: Result<Movie[] | undefined> =
-            await repo.getMoviesByLanguage(invalidLanguage)
+            await repo.getMoviesByLanguage(invalidLanguage, pagination)
         expect(result.isFailure).toBe(true)
         expect(result.errorValue()).toBeDefined()
     })
@@ -150,7 +158,10 @@ const invalidGenre: Genre = { uniqueId: 0, name: "Non existent genre" }
 
 describe("getMoviesByGenre(genre)", () => {
     test("given a valid genre returns an array of movies", async () => {
-        const result: Result<Movie[]> = await repo.getMoviesByGenre(validGenre)
+        const result: Result<Movie[]> = await repo.getMoviesByGenre(
+            validGenre,
+            pagination
+        )
         expect(result.isSuccess).toBe(true)
         expect(result.getValue()).toBeDefined()
         for (const movie of result.getValue() || []) {
@@ -174,7 +185,8 @@ describe("getMoviesByGenre(genre)", () => {
 
     test("given an invalid genre return error result", async () => {
         const result: Result<Movie[] | undefined> = await repo.getMoviesByGenre(
-            invalidGenre
+            invalidGenre,
+            pagination
         )
         expect(result.isFailure).toBe(true)
         expect(result.errorValue()).toBeDefined()

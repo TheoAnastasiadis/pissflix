@@ -7,7 +7,6 @@ import {
 import { IMoviesRepo } from "../../../../domain/movies/repos/movies.repo"
 import { TMDBBackgroundImage, TMDBPosterImage } from "./subtypes/tmdbImage"
 import {
-    TMDBResult,
     successfullTMDBResponse,
     SuccesfullTMDBAggregateResponse,
 } from "./subtypes/tmdbSchemas"
@@ -16,6 +15,13 @@ import { Result } from "../../../../core/sharedObjects/result"
 import { Movie } from "../../../../domain/movies/entities/movie.entity"
 import { paginationParams } from "../../../../core/sharedObjects/paginationHandler"
 import { tmdbGenres } from "./subtypes/tmdbGenres"
+import {
+    defaultBackground,
+    defaultPoster,
+    resultToMovie,
+} from "./helpers/resultToMovie"
+import { ErrorResult } from "./helpers/errors"
+import { paginationParser } from "./helpers/pagination"
 
 const api = axios.create({
     headers: {
@@ -23,47 +29,6 @@ const api = axios.create({
     },
 })
 const baseURL = "https://api.themoviedb.org/3/"
-const defaultBackground = new TMDBBackgroundImage("")
-const defaultPoster = new TMDBPosterImage("")
-
-const resultToMovieProps = (result: TMDBResult) =>
-    new Movie({
-        adult: result.adult,
-        background: result.backdrop_path
-            ? new TMDBBackgroundImage(result.backdrop_path)
-            : defaultBackground,
-        genres: result.genre_ids.map((genre) => ({
-            name: "",
-            uniqueId: genre,
-        })),
-        id: result.id,
-        imdbId: null,
-        languages: [new Language(result.original_language, "639-1")],
-        title: result.original_title,
-        overview: result.overview,
-        popularity: result.popularity,
-        poster: result.poster_path
-            ? new TMDBPosterImage(result.poster_path)
-            : defaultPoster,
-        countries: [],
-        release: new Date(result.release_date),
-        runtime: 0,
-        status: "Released",
-        tagline: "",
-        rating: result.vote_average,
-    })
-
-class ErrorResult<T> {
-    invalidCredentials = (): Result<T> =>
-        new Result<T>(false, "TMDB API: Invalid credentials")
-    noResults = (message: string): Result<T> =>
-        new Result<T>(false, `TMDB API: No results (info:{${message})}`)
-    notResponding = (): Result<T> =>
-        new Result<T>(
-            false,
-            "Unexpected Error: Connection to TMDB server could not be made"
-        )
-}
 
 export class TMDBRepo implements IMoviesRepo {
     getGenres(): Result<Genre[]> {
@@ -73,14 +38,17 @@ export class TMDBRepo implements IMoviesRepo {
         type: "day" | "week",
         pagination: paginationParams
     ): Promise<Result<Movie[]>> {
+        const [page, startIdx] = paginationParser(pagination)
         try {
-            const response = await api.get(baseURL + "trending/movie/" + type)
+            const response = await api.get(
+                baseURL + "trending/movie/" + type + `?page=${page}`
+            )
             if (response.status == 200 && response.data.results.length > 0) {
                 const data: SuccesfullTMDBAggregateResponse = response.data
                 return new Result(
                     true,
                     undefined,
-                    data.results.map(resultToMovieProps)
+                    data.results.slice(startIdx).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -98,14 +66,17 @@ export class TMDBRepo implements IMoviesRepo {
         query: string,
         pagination: paginationParams
     ): Promise<Result<Movie[]>> {
+        const [page, startIdx] = paginationParser(pagination)
         try {
-            const response = await api.get(baseURL + "search/movie/" + query)
+            const response = await api.get(
+                baseURL + "search/movie/" + `?query=${query}` + `&page=${page}`
+            )
             if (response.status == 200 && response.data.results.length > 0) {
                 const data: SuccesfullTMDBAggregateResponse = response.data
                 return new Result(
                     true,
                     undefined,
-                    data.results.map(resultToMovieProps)
+                    data.results.slice(startIdx).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -175,8 +146,10 @@ export class TMDBRepo implements IMoviesRepo {
     }
     async getMoviesByRealeaseDate(
         startDate: Date,
-        endDate: Date
+        endDate: Date,
+        pagination: paginationParams
     ): Promise<Result<Movie[]>> {
+        const [page, startIdx] = paginationParser(pagination)
         try {
             const response = await api.get(
                 baseURL +
@@ -187,7 +160,8 @@ export class TMDBRepo implements IMoviesRepo {
                             "$3"
                         )}&primary_release_date.lte=${endDate
                         .toLocaleDateString("en-US")
-                        .replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/gm, "$3")}` //TMDB API bug: 2020-01-01 --> no results, 2020 --> 20 results
+                        .replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/gm, "$3")}` + //TMDB API bug: 2020-01-01 --> no results, 2020 --> 20 results
+                    `&page=${page}`
             )
             if (response.status == 200 && response.data.results.length > 0) {
                 //Empty results should return error Result
@@ -195,7 +169,7 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.map(resultToMovieProps)
+                    data.results.slice(startIdx).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -211,7 +185,12 @@ export class TMDBRepo implements IMoviesRepo {
             return new ErrorResult<Movie[]>().notResponding()
         }
     }
-    async getMoviesByGenre(genre: Genre | Genre[]): Promise<Result<Movie[]>> {
+
+    async getMoviesByGenre(
+        genre: Genre | Genre[],
+        pagination: paginationParams
+    ): Promise<Result<Movie[]>> {
+        const [page, startIdx] = paginationParser(pagination)
         try {
             const response = await api.get(
                 baseURL +
@@ -219,14 +198,15 @@ export class TMDBRepo implements IMoviesRepo {
                         Array.isArray(genre)
                             ? genre.map((g) => g.uniqueId).join("|")
                             : genre.uniqueId
-                    }`
+                    }` +
+                    `&page=${page}`
             )
             if (response.status == 200 && response.data.results.length > 0) {
                 const data: SuccesfullTMDBAggregateResponse = response.data
                 return new Result(
                     true,
                     undefined,
-                    data.results.map(resultToMovieProps)
+                    data.results.slice(startIdx).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -239,8 +219,10 @@ export class TMDBRepo implements IMoviesRepo {
         }
     }
     async getMoviesByLanguage(
-        language: Language | Language[]
+        language: Language | Language[],
+        pagination: paginationParams
     ): Promise<Result<Movie[]>> {
+        const [page, startIdx] = paginationParser(pagination)
         try {
             const response = await api.get(
                 baseURL +
@@ -248,14 +230,15 @@ export class TMDBRepo implements IMoviesRepo {
                         Array.isArray(language)
                             ? language.map((lang) => lang.isoCode).join("|")
                             : language.isoCode
-                    }`
+                    }` +
+                    `&page=${page}`
             )
             if (response.status == 200 && response.data.results.length > 0) {
                 const data: SuccesfullTMDBAggregateResponse = response.data
                 return new Result(
                     true,
                     undefined,
-                    data.results.map(resultToMovieProps)
+                    data.results.slice(startIdx).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||

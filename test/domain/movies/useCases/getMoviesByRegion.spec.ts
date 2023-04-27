@@ -14,7 +14,7 @@ const region: Region = {
     languages: ["ln"],
 }
 const mockedRepo: IMoviesRepo = mock(TMDBRepo)
-when(mockedRepo.getMoviesByLanguage(anything())).thenReturn(
+when(mockedRepo.getMoviesByLanguage(anything(), anything())).thenReturn(
     Promise.resolve(new Result<Movie[]>(true, undefined, [succesfullMovie]))
 )
 const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)
@@ -22,9 +22,9 @@ const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)
 describe("getMoviesByDecade(repo, Region)", () => {
     test("When region has one language", async () => {
         const result = await getMoviesByRegion(mockedRepoInstance, region)
-        const languages = capture(mockedRepo.getMoviesByLanguage).last()
+        const languages = capture(mockedRepo.getMoviesByLanguage).last()[0] //first argument is languages, second is pagination
         expect(languages).toHaveLength(1)
-        verify(mockedRepo.getMoviesByLanguage(anything())).once()
+        verify(mockedRepo.getMoviesByLanguage(anything(), anything())).once()
         expect(result.getValue()).toHaveLength(1)
         expect(result.getValue()).toEqual([succesfullMovie])
     })

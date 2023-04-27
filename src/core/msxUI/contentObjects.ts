@@ -12,7 +12,7 @@ export type ContentRootProps = {
     wrap: boolean
     compress: boolean
     transparent: Transparent
-    type: "pages" | "items"
+    type: "pages" | "list"
     preload: "none" | "next" | "prev" | "full"
     headline: string
     background: string
@@ -43,7 +43,7 @@ export class ContentRootItem {
     wrap: boolean
     compress: boolean
     transparent: Transparent
-    type: "pages" | "items"
+    type: "pages" | "list"
     preload: "none" | "next" | "prev" | "full"
     headline: string
     background: string
@@ -82,14 +82,12 @@ export class ContentRootItem {
     }
 
     addItem(item: ContentItem) {
-        if (this.type != "items")
-            throw "MSX UI Error: Cannot asign items to content with type 'pages'"
+        if (!this.template)
+            throw "MSX UI Error: Cannot asign items to non-templated content"
         this.items?.push(item)
     }
 
     addPage(page: ContentPage) {
-        if (this.type != "pages")
-            throw "MSX UI Error: Cannot asign pages to content with type 'items'"
         this.pages?.push(page)
     }
 }
@@ -97,8 +95,8 @@ export class ContentRootItem {
 export type ContentItemProps = {
     id: string
     type: "default" | "teaser" | "button" | "separate" | "space" | "control"
-    key: string //TODO: define keyboard keys enum
-    layout: `${number},${number},${number},${number}`
+    key: string | null //TODO: define keyboard keys enum
+    layout: `${number},${number},${number},${number}` | null
     area: `${number},${number},${number},${number}` | null
     offset: `${number},${number},${number},${number}` | null
     display: boolean
@@ -141,7 +139,7 @@ export type ContentItemProps = {
     imageScreenFiller: string
     imageBoundary: false
     playerLabel: string
-    background: string
+    background: string | null
     extensionIcon: string
     extensionLabel: string
     action: Action | null
@@ -155,7 +153,7 @@ export type ContentItemProps = {
 export class ContentItem {
     id: string
     type: string
-    key: string
+    key: string | null
     layout: string | null
     area: string | null
     offset: string | null
@@ -196,7 +194,7 @@ export class ContentItem {
     imageScreenFiller: string
     imageBoundary: false
     playerLabel: string
-    background: string
+    background: string | null
     extensionIcon: string
     extensionLabel: string
     action: Action | null

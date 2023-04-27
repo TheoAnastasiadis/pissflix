@@ -1,9 +1,9 @@
 export interface Image {
-    baseURL: String
-    filePath: String | ""
-    variations: String[] | undefined
+    baseURL: string
+    filePath: string | ""
+    variations: string[] | undefined
 
-    getDefaultQuality(): String
-    getHighestQuality(): String
-    getLowestQuality(): String
+    getDefaultQuality(): string
+    getHighestQuality(): string
+    getLowestQuality(): string
 }

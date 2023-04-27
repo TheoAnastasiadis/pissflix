@@ -1,14 +1,11 @@
 import { Result } from "../../../core/sharedObjects/result"
-import { UseCase } from "../../../core/sharedObjects/useCase"
 import { Movie } from "../entities/movie.entity"
 import { IMoviesRepo } from "../repos/movies.repo"
 
-export const getMovieById: UseCase<IMoviesRepo, number, Result<Movie>> = (
+export const getMovieById = (
     repo: IMoviesRepo,
-    id: number
+    id?: number
 ): Promise<Result<Movie>> => {
-    //validate id
-    //history
-    //analytics
+    if (!id) return Promise.resolve(new Result(false, "No movie id provided"))
     return repo.getMovieById(id)
 }

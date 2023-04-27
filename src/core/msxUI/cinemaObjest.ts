@@ -1,5 +1,5 @@
-import { Image } from "../sharedObjects/image";
-import { ContentItem} from "./contentObjects";
+import { Image } from "../sharedObjects/image"
+import { ContentItem } from "./contentObjects"
 
 // export const poster = (title: string, year: Date, description: string | null = null, poster: Image, action: string) : ContentItem => new ContentItem({
 //     id: `${title.replace(/\/).toLowerCase()}_poster`,

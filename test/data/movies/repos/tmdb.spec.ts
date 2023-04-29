@@ -194,7 +194,7 @@ describe("getMoviesByGenre(genre)", () => {
     })
 })
 
-const validGenres : Genre[] = tmdbGenres
+const validGenres: Genre[] = tmdbGenres
 describe("getGenres()", () => {
     test("returns the correct array of tmdb genres", () => {
         const result = repo.getGenres()
@@ -225,7 +225,6 @@ describe("getTrendingMovies(day | week)", () => {
             expect(movie.tagline).toBeDefined()
             expect(movie.rating).toBeDefined()
         }
-
     })
     test("returns the trending movies of the week", async () => {
         const result = await repo.getTrendingMovies("week", pagination)
@@ -250,13 +249,22 @@ describe("getTrendingMovies(day | week)", () => {
         }
     })
     test("respects the page number and limit given in the paginations params", async () => {
-        const page1 = await repo.getTrendingMovies("day", {page: 1, limit: 5})
-        const page2 = await repo.getTrendingMovies("day", {page: 2, limit: 5})
-        const fullPage = await repo.getTrendingMovies("day", {page: 1, limit: 20})
-        expect(page1.isSuccess && page2.isSuccess && fullPage.isSuccess).toBeTruthy()
-        for (const movie of page1.getValue() || []){
-            expect(JSON.stringify(movie)).not.toBe(JSON.stringify(page2.getValue()?.splice(0,1)[0])) //page1 and page2 must have different entries
-            expect(JSON.stringify(movie)).toBe(JSON.stringify(fullPage.getValue()?.splice(0,1)[0] || [])) //full page should contain all entries of page1
+        const page1 = await repo.getTrendingMovies("day", { page: 1, limit: 5 })
+        const page2 = await repo.getTrendingMovies("day", { page: 2, limit: 5 })
+        const fullPage = await repo.getTrendingMovies("day", {
+            page: 1,
+            limit: 20,
+        })
+        expect(
+            page1.isSuccess && page2.isSuccess && fullPage.isSuccess
+        ).toBeTruthy()
+        for (const movie of page1.getValue() || []) {
+            expect(JSON.stringify(movie)).not.toBe(
+                JSON.stringify(page2.getValue()?.splice(0, 1)[0])
+            ) //page1 and page2 must have different entries
+            expect(JSON.stringify(movie)).toBe(
+                JSON.stringify(fullPage.getValue()?.splice(0, 1)[0] || [])
+            ) //full page should contain all entries of page1
         }
     })
 })

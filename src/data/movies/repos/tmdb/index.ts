@@ -13,7 +13,7 @@ import {
 import tmdbConfig from "../../../../core/config/tmdb.config"
 import { Result } from "../../../../core/sharedObjects/result"
 import { Movie } from "../../../../domain/movies/entities/movie.entity"
-import { paginationParams } from "../../../../core/sharedObjects/paginationHandler"
+import { paginationParams } from "../../../../core/sharedObjects/pagination"
 import { tmdbGenres } from "./subtypes/tmdbGenres"
 import {
     defaultBackground,
@@ -48,7 +48,9 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
+                    data.results
+                        .slice(startIdx, pagination.limit)
+                        .map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -76,7 +78,9 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
+                    data.results
+                        .slice(startIdx, pagination.limit)
+                        .map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -169,7 +173,9 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
+                    data.results
+                        .slice(startIdx, pagination.limit)
+                        .map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -206,7 +212,9 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
+                    data.results
+                        .slice(startIdx, pagination.limit)
+                        .map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -238,7 +246,9 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
+                    data.results
+                        .slice(startIdx, pagination.limit)
+                        .map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||

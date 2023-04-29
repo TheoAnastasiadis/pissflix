@@ -1,4 +1,4 @@
-import { paginationParams } from "../../../core/sharedObjects/paginationHandler"
+import { paginationParams } from "../../../core/sharedObjects/pagination"
 import { Region } from "../../../core/sharedObjects/regions"
 import { Result } from "../../../core/sharedObjects/result"
 import { Movie } from "../entities/movie.entity"

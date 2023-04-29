@@ -1,4 +1,4 @@
-import { paginationParams } from "../../../../../core/sharedObjects/paginationHandler"
+import { paginationParams } from "../../../../../core/sharedObjects/pagination"
 
 const TMDB_RESULTS_LIMIT = 20 //this is hardcoded into the API
 const TMDB_MAX_PAGES = 1000 // this is hardcoded into the API
@@ -28,10 +28,9 @@ export const paginationParser: (
         currentTMDBResultsPage(pagination.page, pagination.limit),
         TMDB_MAX_PAGES
     )
-    const startIdx =
-        Math.min(
-            currentTMDBResult(pagination.page, pagination.limit),
-            TMDB_RESULTS_LIMIT
-        ) //this will not work well for limits > TMDB_RESULTS_LIMIT
+    const startIdx = Math.min(
+        currentTMDBResult(pagination.page, pagination.limit),
+        TMDB_RESULTS_LIMIT
+    ) //this will not work well for limits > TMDB_RESULTS_LIMIT
     return [page, startIdx]
 }

@@ -1,5 +1,5 @@
 import { Year } from "../../../core/sharedObjects/decades"
-import { paginationParams } from "../../../core/sharedObjects/paginationHandler"
+import { paginationParams } from "../../../core/sharedObjects/pagination"
 import { Result } from "../../../core/sharedObjects/result"
 import { Movie } from "../entities/movie.entity"
 import { IMoviesRepo } from "../repos/movies.repo"

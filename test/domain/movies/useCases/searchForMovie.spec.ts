@@ -4,15 +4,17 @@ import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { Movie } from "../../../../src/domain/movies/entities/movie.entity"
 import { IMoviesRepo } from "../../../../src/domain/movies/repos/movies.repo"
 import { exampleMovie } from "./testObjects"
-import {searchForMovie} from '../../../../src/domain/movies/useCases/searchForMovie'
+import { searchForMovie } from "../../../../src/domain/movies/useCases/searchForMovie"
 
-const mockedRepo : IMoviesRepo = mock(TMDBRepo)
+const mockedRepo: IMoviesRepo = mock(TMDBRepo)
 const succesfullMovie: Movie = exampleMovie
 const searchQuery = "query"
-when(mockedRepo.searchForMovie(searchQuery, anything())).thenResolve(new Result<Movie[]>(true, undefined, [succesfullMovie]))
+when(mockedRepo.searchForMovie(searchQuery, anything())).thenResolve(
+    new Result<Movie[]>(true, undefined, [succesfullMovie])
+)
 const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)
 
-describe('searchForMovie()', () => {
+describe("searchForMovie()", () => {
     test("returns list of movies that match the query", async () => {
         const result = await searchForMovie(mockedRepoInstance, searchQuery)
         expect(result.isSuccess).toBe(true)

@@ -48,7 +48,7 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx).map(resultToMovie)
+                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -76,7 +76,7 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx).map(resultToMovie)
+                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -169,7 +169,7 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx).map(resultToMovie)
+                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -206,7 +206,7 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx).map(resultToMovie)
+                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||
@@ -238,7 +238,7 @@ export class TMDBRepo implements IMoviesRepo {
                 return new Result(
                     true,
                     undefined,
-                    data.results.slice(startIdx).map(resultToMovie)
+                    data.results.slice(startIdx, pagination.limit).map(resultToMovie)
                 )
             } else {
                 return response.status == 404 ||

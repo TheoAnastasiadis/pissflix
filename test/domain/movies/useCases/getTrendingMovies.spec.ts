@@ -4,15 +4,19 @@ import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { IMoviesRepo } from "../../../../src/domain/movies/repos/movies.repo"
 import { exampleMovie } from "./testObjects"
 import { Movie } from "../../../../src/domain/movies/entities/movie.entity"
-import {getTrendingMovies} from '../../../../src/domain/movies/useCases/getTrendingMovies'
+import { getTrendingMovies } from "../../../../src/domain/movies/useCases/getTrendingMovies"
 
-const mockedRepo : IMoviesRepo = mock(TMDBRepo)
+const mockedRepo: IMoviesRepo = mock(TMDBRepo)
 const succesfullMovie: Movie = exampleMovie
-when(mockedRepo.getTrendingMovies("day", anything())).thenResolve(new Result<Movie[]>(true, undefined, [succesfullMovie, succesfullMovie]))
-when(mockedRepo.getTrendingMovies("week", anything())).thenResolve(new Result<Movie[]>(true, undefined, [succesfullMovie]))
+when(mockedRepo.getTrendingMovies("day", anything())).thenResolve(
+    new Result<Movie[]>(true, undefined, [succesfullMovie, succesfullMovie])
+)
+when(mockedRepo.getTrendingMovies("week", anything())).thenResolve(
+    new Result<Movie[]>(true, undefined, [succesfullMovie])
+)
 const mockedRepoInstance: IMoviesRepo = instance(mockedRepo)
 
-describe('getTrendingMovies()', () => {
+describe("getTrendingMovies()", () => {
     test("returns list of trending movies for the day", async () => {
         const result = await getTrendingMovies(mockedRepoInstance, "day")
         expect(result.isSuccess).toBe(true)

@@ -32,6 +32,6 @@ export const paginationParser: (
         Math.min(
             currentTMDBResult(pagination.page, pagination.limit),
             TMDB_RESULTS_LIMIT
-        ) - 1 //this will not work well for limits > TMDB_RESULTS_LIMIT
+        ) //this will not work well for limits > TMDB_RESULTS_LIMIT
     return [page, startIdx]
 }

@@ -3,7 +3,7 @@ import { Result } from "../../../core/sharedObjects/result"
 import { Movie } from "../entities/movie.entity"
 import { IMoviesRepo } from "../repos/movies.repo"
 
-export function getMoviesByRegion(
+export function getTrendingMovies(
     repo: IMoviesRepo,
     type: "day" | "week",
     pagination: paginationParams = { page: 1, limit: 20 }

@@ -5,35 +5,35 @@ type MovieProps = {
     adult: Boolean
     background: Image
     genres: Genre[]
-    id: Number
+    id: number
     imdbId: `tt${number}` | null
     languages: Language[]
-    title: String
-    overview: String
-    popularity: Number
+    title: string
+    overview: string
+    popularity: number
     poster: Image
     countries: Country[]
     release: Date
-    runtime: Number
+    runtime: number
     status: Status
-    tagline: String
-    rating: Number
+    tagline: string
+    rating: number
 }
 
 export class Movie {
     public adult: Boolean
     public background: Image
-    public id: Number
-    public overview: String
-    public popularity: Number
+    public id: number
+    public overview: string
+    public popularity: number
     public poster: Image
     public release: Date
-    public runtime: Number
-    public tagline: String
-    public imdbId: String | null
-    public status: String
-    public rating: Number
-    public title: String
+    public runtime: number
+    public tagline: string
+    public imdbId: string | null
+    public status: string
+    public rating: number
+    public title: string
     public genres: Genre[]
     public languages: Language[]
     public countries: Country[]

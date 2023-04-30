@@ -1,4 +1,5 @@
 import { Action } from "./action"
+import { Icon } from "./icon"
 import { Data, Transparent } from "./menuObject"
 
 export type MsxContentRootProps = {
@@ -97,7 +98,7 @@ export type MsxContentItemProps = {
     titleHeader?: string
     titleFooter?: string
     label?: string
-    icon?: string
+    icon?: Icon
     iconSize?: "small" | "medium" | "large" | "extra-large"
     headline?: string
     text?: string
@@ -125,7 +126,7 @@ export type MsxContentItemProps = {
     imageBoundary?: false
     playerLabel?: string
     background?: string
-    extensionIcon?: string
+    extensionIcon?: Icon
     extensionLabel?: string
     action?: Action
     data?: Data

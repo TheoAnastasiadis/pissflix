@@ -1,4 +1,5 @@
-import { Action, Data, Transparent } from "./menuObject"
+import { Action } from "./action"
+import { Data, Transparent } from "./menuObject"
 
 export type ContentRootProps = {
     name: string
@@ -32,7 +33,7 @@ export type ContentRootProps = {
     //caption: "opt/menu"
 }
 
-export class ContentRootItem {
+export class MsxContentRoot {
     name: string
     version: "1.0.0"
     flag: string

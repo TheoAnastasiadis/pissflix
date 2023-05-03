@@ -1,6 +1,8 @@
 import { Action } from "./action"
+import { Data } from "./data"
 import { Icon } from "./icon"
-import { Data, Transparent } from "./menuObject"
+import { Transparent } from "./menuObject"
+import { Selection } from "./selection"
 
 export type MsxContentRootProps = {
     name?: string
@@ -26,9 +28,9 @@ export type MsxContentRootProps = {
     //"underlay": null,
     action?: Action
     data?: Data
-    ready?: { action: Action; data: Data } | null
+    ready?: { action: Action; data: Data }
     options?: any
-    //caption: "opt/menu"
+    // caption?: any
 }
 
 export class MsxContentRoot {
@@ -115,7 +117,19 @@ export type MsxContentItemProps = {
     progressColor?: string
     wrapperColor?: string
     image?: string
-    imageFiller?: string
+    imageFiller?:
+        | "default"
+        | "width"
+        | "width-top"
+        | "width-center"
+        | "width-bottom"
+        | "height"
+        | "height-left"
+        | "height-center"
+        | "height-right"
+        | "fit"
+        | "cover"
+        | "smart"
     // imageWidth?: -1
     // imageHeight?: -1
     // imageOverlay?: -1
@@ -132,7 +146,7 @@ export type MsxContentItemProps = {
     data?: Data
     properties?: any
     live?: any
-    selection?: any
+    selection?: Selection
     options?: any
 }
 
@@ -205,7 +219,7 @@ export type MsxContentPageProps = {
     action?: Action
     data?: Data
     options?: any
-    // caption: "opt/menu"
+    // caption?: any
 }
 
 export class MsxContentPage {

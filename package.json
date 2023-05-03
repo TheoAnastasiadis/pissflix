@@ -24,7 +24,7 @@
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^29.5.0",
-        "@types/node": "^18.15.11",
+        "@types/node": "^18.16.3",
         "nodemon": "^2.0.22",
         "nyc": "^15.1.0",
         "prettier": "2.8.7",

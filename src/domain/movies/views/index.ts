@@ -8,7 +8,7 @@ export const MovieRelativePaths = {
     genres: "genres/",
     eras: "eras/",
     regions: "regions/",
-    trendingPaginated: "trending/",
+    resultsPanel: "results_panel/",
 }
 
 export type MovieViews = {

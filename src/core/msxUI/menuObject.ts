@@ -1,11 +1,6 @@
 import { Action } from "./action"
 import { Icon } from "./icon"
-
-export type Data =
-    | {
-          ["key"]: string
-      }
-    | string
+import { Data } from "./data"
 
 export type Transparent = "0" | "1" | "2" | true | false
 export type Style =
@@ -18,7 +13,7 @@ export type Style =
 export type MsxMenuProps = {
     name?: string
     version?: "1.0.0"
-    //"reference": "http://link.to.menu",
+    // reference?: any,
     flag?: string
     reuse?: boolean
     cache?: boolean
@@ -93,7 +88,7 @@ export type MsxMenuItemProps = {
     extensionIcon?: Icon
     extensionLabel?: string
     lineColor?: string
-    data?: Data
+    data?: any
     options?: any
 }
 

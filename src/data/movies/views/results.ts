@@ -3,6 +3,7 @@ import {
     MsxContentRoot,
 } from "../../../core/msxUI/contentObjects"
 import { Year } from "../../../core/sharedObjects/decades"
+import { Region, regions } from "../../../core/sharedObjects/regions"
 import { Result } from "../../../core/sharedObjects/result"
 import { URLMaker } from "../../../core/sharedObjects/urlMaker"
 import { View } from "../../../core/sharedObjects/view"
@@ -11,6 +12,7 @@ import { Genre } from "../../../domain/movies/entities/subentities"
 import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
 import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
 import { getMoviesByGenre } from "../../../domain/movies/useCases/getMoviesByGenre"
+import { getMoviesByRegion } from "../../../domain/movies/useCases/getMoviesByRegion"
 import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
 
 const populateContent = (content: MsxContentRoot, movies: Movie[]) => {
@@ -118,6 +120,14 @@ export class ResultsPanel extends View<MsxContentRoot> {
         } else if (type.startsWith("era:")) {
             const decade: Year = parseInt(type.substring(4)) as Year
             moviesResult = await getMoviesByDecade(this.repo, decade, {
+                page,
+                limit: 20,
+            })
+        } else if (type.startsWith("region:")) {
+            const region: Region = regions.find(
+                (r) => r.name == type.substring(7)
+            ) || { name: "blank", languages: [], isoType: "639-1" }
+            moviesResult = await getMoviesByRegion(this.repo, region, {
                 page,
                 limit: 20,
             })

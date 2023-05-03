@@ -1,5 +1,5 @@
 import { MsxContentRoot } from "../../../core/msxUI/contentObjects"
-import { Region, regions } from "../../../core/sharedObjects/regions"
+import { regions } from "../../../core/sharedObjects/regions"
 import { Result } from "../../../core/sharedObjects/result"
 import { URLMaker } from "../../../core/sharedObjects/urlMaker"
 import { View } from "../../../core/sharedObjects/view"

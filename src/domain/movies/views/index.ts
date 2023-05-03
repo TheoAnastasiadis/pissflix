@@ -9,6 +9,7 @@ export const MovieRelativePaths = {
     eras: "eras/",
     regions: "regions/",
     resultsPanel: "results_panel/",
+    search: "search/",
 }
 
 export type MovieViews = {

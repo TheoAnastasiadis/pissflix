@@ -22,10 +22,10 @@ export type MsxContentRootProps = {
     background?: string
     extension?: string
     //"dictionary": "http://link.to.dictionary",
-    header?: MsxContentItem
-    footer?: MsxContentItem
-    //"overlay": null,
-    //"underlay": null,
+    header?: MsxContentPage
+    footer?: MsxContentPage
+    overlay?: MsxContentPage,
+    underlay?: MsxContentPage,
     action?: Action
     data?: Data
     ready?: { action: Action; data: Data }
@@ -51,6 +51,8 @@ export class MsxContentRoot {
     extension?: MsxContentRootProps["extension"]
     header?: MsxContentRootProps["header"]
     footer?: MsxContentRootProps["footer"]
+    overlay?: MsxContentRootProps["overlay"]
+    underlay?: MsxContentRootProps["underlay"]
     action?: MsxContentRootProps["action"]
     data?: MsxContentRootProps["data"]
     ready?: MsxContentRootProps["ready"]

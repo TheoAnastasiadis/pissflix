@@ -5,7 +5,7 @@ export class URLMaker {
         externalUrl: string,
         groupUrl: string,
         specialUrl: string,
-        params: { [key: string]: string | number | boolean },
+        params: { [key: string]: string | number | boolean } = {},
         user: any = {}
     ) => {
         const url = `${externalUrl}/${groupUrl}/${specialUrl}`

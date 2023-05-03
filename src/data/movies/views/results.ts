@@ -2,12 +2,29 @@ import {
     MsxContentItem,
     MsxContentRoot,
 } from "../../../core/msxUI/contentObjects"
+import { Year } from "../../../core/sharedObjects/decades"
 import { Result } from "../../../core/sharedObjects/result"
 import { URLMaker } from "../../../core/sharedObjects/urlMaker"
 import { View } from "../../../core/sharedObjects/view"
 import { Movie } from "../../../domain/movies/entities/movie.entity"
+import { Genre } from "../../../domain/movies/entities/subentities"
 import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
+import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
+import { getMoviesByGenre } from "../../../domain/movies/useCases/getMoviesByGenre"
 import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
+
+const populateContent = (content: MsxContentRoot, movies: Movie[]) => {
+    for (const movie of movies) {
+        content.addItem(
+            new MsxContentItem({
+                image: movie.poster.getDefaultQuality(),
+                title: movie.title,
+                titleFooter: movie.release.getFullYear().toString(),
+                selection: { action: `info:${movie.overview}` },
+            })
+        )
+    }
+}
 
 export class ResultsPanel extends View<MsxContentRoot> {
     repo: IMoviesRepo
@@ -39,7 +56,11 @@ export class ResultsPanel extends View<MsxContentRoot> {
         params
     ) => {
         //params
-        const type = params?.type as "day" | "week"
+        const type = params?.type as
+            | "day"
+            | "week"
+            | `genre:${number}`
+            | `era:${Year}`
         const page = params?.page as number
 
         const flag = "results_panel"
@@ -77,36 +98,41 @@ export class ResultsPanel extends View<MsxContentRoot> {
             )
         }
 
-        switch (type) {
-            case "day" || "week":
-                const movies: Result<Movie[]> = await getTrendingMovies(
-                    this.repo,
-                    type,
-                    { page, limit: 20 }
-                )
-                if (movies.isSuccess) {
-                    for (const movie of movies.getValue() || []) {
-                        content.addItem(
-                            new MsxContentItem({
-                                image: movie.poster.getDefaultQuality(),
-                                title: movie.title,
-                                titleFooter: movie.release
-                                    .getFullYear()
-                                    .toString(),
-                                selection: { action: `info:${movie.overview}` },
-                            })
-                        )
-                    }
-                } else {
-                    return new Result<MsxContentRoot>(false, movies.error)
-                }
-                break
+        let moviesResult: Result<Movie[]>
+        let movies: Movie[]
 
-            case "week":
-                break
+        if (type == "day" || type == "week") {
+            moviesResult = await getTrendingMovies(this.repo, type, {
+                page,
+                limit: 20,
+            })
+        } else if (type.startsWith("genre:")) {
+            const genre: Genre = {
+                name: null,
+                uniqueId: parseInt(type.substring(6)),
+            }
+            moviesResult = await getMoviesByGenre(this.repo, genre, {
+                page,
+                limit: 20,
+            })
+        } else if (type.startsWith("era:")) {
+            const decade: Year = parseInt(type.substring(4)) as Year
+            moviesResult = await getMoviesByDecade(this.repo, decade, {
+                page,
+                limit: 20,
+            })
+        } else {
+            return new Result<MsxContentRoot>(
+                false,
+                `Invalid 'type' parameter: ${type}`
+            )
+        }
 
-            default:
-                break
+        if (moviesResult.isSuccess) {
+            movies = moviesResult.getValue() || []
+            populateContent(content, movies)
+        } else {
+            return new Result<MsxContentRoot>(false, moviesResult.errorValue())
         }
 
         content.addItem(

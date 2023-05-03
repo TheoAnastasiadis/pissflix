@@ -1,5 +1,6 @@
 import { MsxMenu, MsxMenuItem } from "../../../core/msxUI/menuObject"
 import { Result } from "../../../core/sharedObjects/result"
+import { URLMaker } from "../../../core/sharedObjects/urlMaker"
 import { View } from "../../../core/sharedObjects/view"
 import { MovieRelativePaths } from "../../../domain/movies/views"
 
@@ -18,10 +19,11 @@ export class MainMovieMenu extends View<MsxMenu> {
                 type: "default",
                 extensionIcon: "auto-awesome",
                 label: "Your Content",
-                data:
-                    this.externalUrl +
-                    this.groupUrl +
-                    MovieRelativePaths.discover,
+                data: URLMaker.make(
+                    this.externalUrl,
+                    this.groupUrl,
+                    MovieRelativePaths.discover
+                ),
             })
         )
 
@@ -39,10 +41,11 @@ export class MainMovieMenu extends View<MsxMenu> {
                 type: "default",
                 extensionIcon: "auto-awesome",
                 label: "Genre",
-                data:
-                    this.externalUrl +
-                    this.groupUrl +
-                    MovieRelativePaths.genres,
+                data: URLMaker.make(
+                    this.externalUrl,
+                    this.groupUrl,
+                    MovieRelativePaths.genres
+                ),
             })
         )
 
@@ -52,8 +55,11 @@ export class MainMovieMenu extends View<MsxMenu> {
                 type: "default",
                 extensionIcon: "auto-awesome",
                 label: "Era",
-                data:
-                    this.externalUrl + this.groupUrl + MovieRelativePaths.eras,
+                data: URLMaker.make(
+                    this.externalUrl,
+                    this.groupUrl,
+                    MovieRelativePaths.eras
+                ),
             })
         )
 
@@ -63,10 +69,11 @@ export class MainMovieMenu extends View<MsxMenu> {
                 type: "default",
                 extensionIcon: "auto-awesome",
                 label: "Region",
-                data:
-                    this.externalUrl +
-                    this.groupUrl +
-                    MovieRelativePaths.regions,
+                data: URLMaker.make(
+                    this.externalUrl,
+                    this.groupUrl,
+                    MovieRelativePaths.regions
+                ),
             })
         )
 

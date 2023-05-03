@@ -3,8 +3,12 @@ import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
 import { MovieRelativePaths, MovieViews } from "../../../domain/movies/views"
 import { TMDBRepo } from "../repos/tmdb"
 import { DiscoverPage } from "./discover"
+import { ErasPage } from "./eras"
+import { GenresPage } from "./genres"
 import { MainMovieMenu } from "./menu"
+import { RegionsPage } from "./regions"
 import { ResultsPanel } from "./results"
+import { SearchPage } from "./search"
 
 const externalUrl = routesConfig.externalUrl
 const moviesUrl = routesConfig.movieUrl
@@ -25,7 +29,28 @@ export const movieViews: MovieViews = {
         MovieRelativePaths.resultsPanel,
         moviesRepo
     ),
-    genres: undefined,
-    eras: undefined,
-    regions: undefined,
+    genres: new GenresPage(
+        externalUrl,
+        moviesUrl,
+        MovieRelativePaths.genres,
+        moviesRepo
+    ),
+    eras: new ErasPage(
+        externalUrl,
+        moviesUrl,
+        MovieRelativePaths.eras,
+        moviesRepo
+    ),
+    regions: new RegionsPage(
+        externalUrl,
+        moviesUrl,
+        MovieRelativePaths.regions,
+        moviesRepo
+    ),
+    search: new SearchPage(
+        externalUrl,
+        moviesUrl,
+        MovieRelativePaths.search,
+        moviesRepo
+    ),
 }

@@ -24,8 +24,8 @@ export type MsxContentRootProps = {
     //"dictionary": "http://link.to.dictionary",
     header?: MsxContentPage
     footer?: MsxContentPage
-    overlay?: MsxContentPage,
-    underlay?: MsxContentPage,
+    overlay?: MsxContentPage
+    underlay?: MsxContentPage
     action?: Action
     data?: Data
     ready?: { action: Action; data: Data }

@@ -1,19 +1,25 @@
-import { paginationParams } from "../../../core/sharedObjects/pagination"
+import { pipe } from "fp-ts/lib/function"
+import { paginationParamsT } from "../../../core/sharedObjects/pagination"
 import { Region } from "../../../core/sharedObjects/regions"
-import { Result } from "../../../core/sharedObjects/result"
-import { Movie } from "../entities/movie.entity"
-import { Language } from "../entities/subentities"
-import { IMoviesRepo } from "../repos/movies.repo"
+import { MoviesRepoT } from "../repos/movies.repo"
+import * as E from "fp-ts/Either"
+import * as O from "fp-ts/Option"
+import * as A from "fp-ts/Array"
+import { Language } from "../entities/language"
 
-export function getMoviesByRegion(
-    repo: IMoviesRepo,
-    region: Region,
-    pagination: paginationParams = { page: 1, limit: 20 }
-): Promise<Result<Movie[]>> {
-    return repo.getMoviesByLanguage(
-        region.languages.map(
-            (language) => new Language(language, region.isoType)
-        ),
-        pagination
-    )
-}
+export const getMoviesByRegion =
+    (region: Region) =>
+    (pagination: paginationParamsT) =>
+    (repo: MoviesRepoT) =>
+        pipe(
+            region,
+            O.of,
+            O.map((r) => r.languages),
+            A.fromOption,
+            A.filter(Language.is),
+            O.fromPredicate((l) => l.length > 0),
+            E.fromOption(() => `Region ${region} contains no valid languages`),
+            E.map((filteredLangs) =>
+                repo.findMany({ language: filteredLangs }, pagination)
+            )
+        )

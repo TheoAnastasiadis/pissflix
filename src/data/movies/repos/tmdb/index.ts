@@ -3,7 +3,7 @@ import {
     Language,
     Country,
     Genre,
-} from "../../../../domain/movies/entities/subentities"
+} from "../../../../domain/movies/entities/subentities-tbd"
 import { IMoviesRepo } from "../../../../domain/movies/repos/movies.repo"
 import { TMDBBackgroundImage, TMDBPosterImage } from "./subtypes/tmdbImage"
 import {
@@ -12,7 +12,7 @@ import {
 } from "./subtypes/tmdbSchemas"
 import tmdbConfig from "../../../../core/config/tmdb.config"
 import { Result } from "../../../../core/sharedObjects/result"
-import { Movie } from "../../../../domain/movies/entities/movie.entity"
+import { Movie } from "../../../../domain/movies/entities/movie"
 import { paginationParams } from "../../../../core/sharedObjects/pagination"
 import { tmdbGenres } from "./subtypes/tmdbGenres"
 import {

@@ -13,7 +13,6 @@ import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { Movie } from "../../../../src/domain/movies/entities/movie.entity"
 import { getMoviesByDecade } from "../../../../src/domain/movies/useCases/getMoviesByDecade"
 import { exampleMovie } from "./testObjects"
-import { paginationParams } from "../../../../src/core/sharedObjects/paginationHandler"
 
 const succesfullMovie: Movie = exampleMovie
 const decade: Year = 2020

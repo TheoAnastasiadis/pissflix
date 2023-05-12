@@ -1,36 +1,36 @@
 export type successfullTMDBResponse = {
-    adult: Boolean
-    backdrop_path: String | null
-    belongs_to_collection: String | Object
-    budget: Number
+    adult: boolean
+    backdrop_path: string | null
+    belongs_to_collection: string | Object
+    budget: number
     genres: {
-        id: Number
-        name: String
+        id: number
+        name: string
     }[]
-    homepage: String | null
-    id: Number
+    homepage: string | null
+    id: number
     imdb_id: `tt${number}` | null
-    original_language: String
-    original_title: String
-    overview: String | null
-    popularity: Number
-    poster_path: String | null
+    original_language: string
+    original_title: string
+    overview: string | null
+    popularity: number
+    poster_path: string | null
     production_companies: {
-        id: Number
-        logo_path: String | null
-        name: String
-        origin_country: String
+        id: number
+        logo_path: string | null
+        name: string
+        origin_country: string
     }[]
     production_countries: {
-        iso_3166_1: String
-        name: String
+        iso_3166_1: string
+        name: string
     }[]
-    release_date: String
-    revenue: Number
-    runtime: Number | null
+    release_date: string
+    revenue: number
+    runtime: number | null
     spoken_languages: {
-        iso_639_1: String
-        name: String
+        iso_639_1: string
+        name: string
     }[]
     status:
         | "Rumored"
@@ -39,17 +39,17 @@ export type successfullTMDBResponse = {
         | "Post Production"
         | "Released"
         | "Canceled"
-    tagline: String
-    title: String
-    video: Boolean
-    vote_average: Number
-    vote_count: Number
+    tagline: string
+    title: string
+    video: boolean
+    vote_average: number
+    vote_count: number
 }
 
 export type UnsuccesfullTMDBResponse = {
-    status_message: String
-    success: Boolean | undefined
-    status_code: Number
+    status_message: string
+    success: boolean | undefined
+    status_code: number
 }
 
 export type SuccesfullTMDBAggregateResponse = {

@@ -1,7 +1,7 @@
 import { MsxContentRoot } from "../../../core/msxUI/contentObjects"
 import { Result } from "../../../core/sharedObjects/result"
 import { View } from "../../../core/sharedObjects/view"
-import { Movie } from "../../../domain/movies/entities/movie.entity"
+import { Movie } from "../../../domain/movies/entities/movie"
 import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
 import { getGenres } from "../../../domain/movies/useCases/getGenres"
 import { getMoviesByGenre } from "../../../domain/movies/useCases/getMoviesByGenre"

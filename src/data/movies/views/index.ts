@@ -13,9 +13,9 @@ import { SearchPage } from "./search"
 const externalUrl = routesConfig.externalUrl
 const moviesUrl = routesConfig.movieUrl
 
-const moviesRepo: IMoviesRepo = new TMDBRepo()
-
-export const movieViews: MovieViews = {
+export const movieViews: (moviesRepo: IMoviesRepo) => MovieViews = (
+    moviesRepo
+) => ({
     menu: new MainMovieMenu(externalUrl, moviesUrl, MovieRelativePaths.menu),
     discover: new DiscoverPage(
         externalUrl,
@@ -53,4 +53,4 @@ export const movieViews: MovieViews = {
         MovieRelativePaths.search,
         moviesRepo
     ),
-}
+})

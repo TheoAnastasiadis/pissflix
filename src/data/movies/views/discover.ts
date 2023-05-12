@@ -6,7 +6,7 @@ import {
 import { Result } from "../../../core/sharedObjects/result"
 import { URLMaker } from "../../../core/sharedObjects/urlMaker"
 import { View } from "../../../core/sharedObjects/view"
-import { Movie } from "../../../domain/movies/entities/movie.entity"
+import { Movie } from "../../../domain/movies/entities/movie"
 import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
 import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
 import { MovieRelativePaths } from "../../../domain/movies/views"
@@ -58,6 +58,8 @@ export class DiscoverPage extends View<MsxContentRoot> {
                     )
                 )
             )
+        } else {
+            console.error(dailyTrendingMovies.errorValue())
         }
 
         if (weeklyTrendingMovies.isSuccess) {
@@ -75,6 +77,8 @@ export class DiscoverPage extends View<MsxContentRoot> {
                     )
                 )
             )
+        } else {
+            console.error(weeklyTrendingMovies.errorValue())
         }
 
         return new Result<MsxContentRoot>(true, undefined, content)

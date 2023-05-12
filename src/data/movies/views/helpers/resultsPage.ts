@@ -2,7 +2,7 @@ import {
     MsxContentPage,
     MsxContentItem,
 } from "../../../../core/msxUI/contentObjects"
-import { Movie } from "../../../../domain/movies/entities/movie.entity"
+import { Movie } from "../../../../domain/movies/entities/movie"
 
 export const resultsPage = (
     headline: string,

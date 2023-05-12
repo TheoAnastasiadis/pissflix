@@ -7,8 +7,8 @@ import { Region, regions } from "../../../core/sharedObjects/regions"
 import { Result } from "../../../core/sharedObjects/result"
 import { URLMaker } from "../../../core/sharedObjects/urlMaker"
 import { View } from "../../../core/sharedObjects/view"
-import { Movie } from "../../../domain/movies/entities/movie.entity"
-import { Genre } from "../../../domain/movies/entities/subentities"
+import { Movie } from "../../../domain/movies/entities/movie"
+import { Genre } from "../../../domain/movies/entities/subentities-tbd"
 import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
 import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
 import { getMoviesByGenre } from "../../../domain/movies/useCases/getMoviesByGenre"
@@ -63,6 +63,7 @@ export class ResultsPanel extends View<MsxContentRoot> {
             | "week"
             | `genre:${number}`
             | `era:${Year}`
+            | `genre:${string}`
         const page = params?.page as number
 
         const flag = "results_panel"
@@ -126,7 +127,13 @@ export class ResultsPanel extends View<MsxContentRoot> {
         } else if (type.startsWith("region:")) {
             const region: Region = regions.find(
                 (r) => r.name == type.substring(7)
-            ) || { name: "blank", languages: [], isoType: "639-1" }
+            ) || { name: "blank region", languages: [], isoType: "639-1" }
+            if (region.languages.length == 0) {
+                return new Result<MsxContentRoot>(
+                    false,
+                    `Unknown 'region' parameter : ${type.substring(7)}`
+                )
+            }
             moviesResult = await getMoviesByRegion(this.repo, region, {
                 page,
                 limit: 20,

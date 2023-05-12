@@ -1,4 +1,4 @@
-import { MovieImage } from "../../../../../domain/movies/entities/subentities"
+import { MovieImage } from "../../../../../domain/movies/entities/subentities-tbd"
 
 export class TMDBBackgroundImage extends MovieImage {
     baseURL!: string

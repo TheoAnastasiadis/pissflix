@@ -1,5 +1,5 @@
-import { Movie } from "../../../../../domain/movies/entities/movie.entity"
-import { Language } from "../../../../../domain/movies/entities/subentities"
+import { Movie } from "../../../../../domain/movies/entities/movie"
+import { Language } from "../../../../../domain/movies/entities/subentities-tbd"
 import { TMDBBackgroundImage, TMDBPosterImage } from "../subtypes/tmdbImage"
 import { TMDBResult } from "../subtypes/tmdbSchemas"
 

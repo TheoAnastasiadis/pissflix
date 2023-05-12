@@ -1,4 +1,4 @@
-import { paginationParams } from "../../../../src/core/sharedObjects/paginationHandler"
+import { paginationParams } from "../../../../src/core/sharedObjects/pagination"
 import { Result } from "../../../../src/core/sharedObjects/result"
 import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { tmdbGenres } from "../../../../src/data/movies/repos/tmdb/subtypes/tmdbGenres"

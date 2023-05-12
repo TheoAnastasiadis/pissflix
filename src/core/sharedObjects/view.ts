@@ -3,8 +3,6 @@ import { MsxContentRoot } from "../msxUI/contentObjects"
 import { MsxMenu } from "../msxUI/menuObject"
 import { Result } from "./result"
 
-type urlParams = { [key: string]: string | number | boolean }
-
 export abstract class View<T extends MsxMenu | MsxContentRoot> {
     externalUrl: `${string}/` //https://www.example.com/
     groupUrl: `${string}/` //movie/
@@ -28,10 +26,17 @@ export abstract class View<T extends MsxMenu | MsxContentRoot> {
         [key: string]: string | number | boolean
     }) => Promise<Result<T>> | Result<T>
     render = (params?: { [key: string]: string | number | boolean }) => {
-        for (const param of this.requiredParams || []) {
-            assert(params && params[param.name])
-            assert(params && typeof params[param.name] == param.type)
+        try {
+            for (const param of this.requiredParams || []) {
+                assert(params && params[param.name])
+                assert(params && typeof params[param.name] == param.type)
+            }
+            return params ? this.renderer(params) : this.renderer()
+        } catch (e) {
+            return new Result<T>(
+                false,
+                `Invalid parameters: ${params}. Expected: ${this.requiredParams}`
+            )
         }
-        return params ? this.renderer(params) : this.renderer()
     }
 }

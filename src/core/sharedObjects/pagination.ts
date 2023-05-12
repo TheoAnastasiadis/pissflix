@@ -1,12 +1,10 @@
-export type paginationParams = {
-    /**
-     *The idx of the results page (staring from 1)
-     * @type {number}
-     */
-    page: number
-    /**
-     *The number of results per page. This will not always be fulffiled.
-     * @type {number}
-     */
-    limit: number
-}
+import * as t from "io-ts"
+
+const PaginationParams = t.type({
+    page: t.number,
+    limit: t.number,
+})
+
+type paginationParamsT = t.TypeOf<typeof PaginationParams>
+
+export { PaginationParams, paginationParamsT }

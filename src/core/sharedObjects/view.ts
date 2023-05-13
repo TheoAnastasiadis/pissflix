@@ -1,42 +1,37 @@
-import assert from "assert"
+import { pipe } from "fp-ts/lib/function"
+import * as O from "fp-ts/Option"
+import * as t from "io-ts"
 import { MsxContentRoot } from "../msxUI/contentObjects"
 import { MsxMenu } from "../msxUI/menuObject"
-import { Result } from "./result"
 
-export abstract class View<T extends MsxMenu | MsxContentRoot> {
-    externalUrl: `${string}/` //https://www.example.com/
-    groupUrl: `${string}/` //movie/
-    specialUrl: `${string}/` //menu/
-    requiredParams?: { name: string; type: "string" | "number" | "boolean" }[]
-    constructor(
-        externalUrl: string,
-        groupUrl: string,
-        specialUrl: string,
-        requiredParams?: {
-            name: string
-            type: "string" | "number" | "boolean"
-        }[]
-    ) {
-        this.externalUrl = `${externalUrl}/`
-        this.groupUrl = `${groupUrl}/`
-        this.specialUrl = `${specialUrl}/`
-        if (requiredParams) this.requiredParams = requiredParams
-    }
-    renderer!: (params?: {
-        [key: string]: string | number | boolean
-    }) => Promise<Result<T>> | Result<T>
-    render = (params?: { [key: string]: string | number | boolean }) => {
-        try {
-            for (const param of this.requiredParams || []) {
-                assert(params && params[param.name])
-                assert(params && typeof params[param.name] == param.type)
-            }
-            return params ? this.renderer(params) : this.renderer()
-        } catch (e) {
-            return new Result<T>(
-                false,
-                `Invalid parameters: ${params}. Expected: ${this.requiredParams}`
-            )
-        }
-    }
+type View<ArgsType extends any[]> = {
+    _name: string
+    render: (...args: ArgsType) => (params: any) => MsxContentRoot | MsxMenu //no validation of the parameters should happen here
 }
+
+type ErrorMessage = (s: string) => MsxContentRoot | MsxMenu
+
+const viewRenderer =
+    <A extends any[], P extends t.TypeC<any> | t.UnionC<any> = t.TypeC<{}>>(
+        view: View<A>
+    ) =>
+    (args: A) =>
+    (paramsType: P) =>
+    (onError: ErrorMessage) =>
+    (recievedParams: unknown) => {
+        const validateParams = (type: P) => (params: unknown) => type.is(params)
+
+        return pipe(
+            recievedParams,
+            O.fromPredicate(validateParams(paramsType)),
+            O.match(
+                () =>
+                    onError(
+                        `Params {${recievedParams}} do not match required params`
+                    ),
+                view.render(...args)
+            )
+        )
+    }
+
+export { viewRenderer, View }

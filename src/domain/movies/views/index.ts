@@ -1,19 +1,46 @@
-import { MsxContentRoot } from "../../../core/msxUI/contentObjects"
-import { MsxMenu } from "../../../core/msxUI/menuObject"
-import { View } from "../../../core/sharedObjects/view"
+import * as t from "io-ts"
+import { View, viewRenderer } from "../../../core/sharedObjects/view"
+import { MoviesRepoT } from "../repos/movies.repo"
 
-export const MovieRelativePaths = {
-    menu: "menu/",
-    discover: "discover/",
-    genres: "genres/",
-    eras: "eras/",
-    regions: "regions/",
-    resultsPanel: "results_panel/",
-    search: "search/",
+const panelParams = {
+    optional: {
+        discoverType: t.union([t.literal("day"), t.literal("week")]),
+        genreId: t.number,
+        era: t.number,
+        region: t.string,
+        query: t.string,
+    },
+    mandatory: {
+        page: t.number,
+        limit: t.number,
+    },
 }
 
-export type MovieViews = {
-    [Property in keyof typeof MovieRelativePaths]: View<
-        MsxMenu | MsxContentRoot
-    >
+const infoParams = {
+    id: t.number,
 }
+
+type MovieViews = {
+    menu: {
+        relativePath: "menu/"
+        view: View<[MoviesRepoT]>
+        params: t.TypeC<{}>
+    }
+    resultsPanel: {
+        relativePath: "results_panel/"
+        view: View<[MoviesRepoT]>
+        params: t.UnionC<
+            [
+                t.PartialC<typeof panelParams.optional>,
+                t.TypeC<typeof panelParams.mandatory>
+            ]
+        >
+    }
+    info: {
+        relativePath: "info/"
+        view: View<[MoviesRepoT]>
+        params: t.TypeC<typeof infoParams>
+    }
+}
+
+export { MovieViews, panelParams, infoParams }

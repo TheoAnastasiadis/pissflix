@@ -1,4 +1,4 @@
-import { Image } from "../../../../core/sharedObjects/image"
+import { Image } from "../../../../core/sharedObjects/image.ts-tbd"
 
 export abstract class MovieImage implements Image {
     baseURL: string

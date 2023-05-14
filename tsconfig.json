@@ -113,7 +113,10 @@
     "include": [
         "**/*.ts",
         "src/core/sharedObjects/image.ts-tbd",
-        "src/core/sharedObjects/repo.ts-tbd"
+        "src/core/sharedObjects/repo.ts-tbd",
+        "src/data/movies/repos/tmdb/subtypes/tmdbImage.ts-tbd",
+        "src/data/movies/repos/tmdb/helpers/resultToMovie.ts-tbd",
+        "src/data/movies/repos/tmdb/helpers/pagination.ts"
     ],
     "exclude": ["test/**/*.ts"]
 }

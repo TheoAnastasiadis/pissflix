@@ -1,5 +1,7 @@
-import { TaskEither } from "fp-ts/lib/TaskEither"
+import * as TE from "fp-ts/TaskEither"
+import * as E from "fp-ts/Either"
 import * as O from "fp-ts/Option"
+import * as t from "io-ts"
 
 import { paginationParamsT } from "../../../core/sharedObjects/pagination"
 import { MovieT } from "../entities/movie"
@@ -7,21 +9,22 @@ import { GenreT } from "../entities/genre"
 import { LanguageT } from "../entities/language"
 import { DateBrandType } from "../entities/date"
 
-export type MoviesRepoT = {
-    findOne(id: number): TaskEither<string, MovieT>
+type MovieParamsT = {
+    genre?: GenreT | Array<GenreT>
+    startDate?: Date
+    endDate?: Date
+    language?: LanguageT | Array<LanguageT>
+    trendingType?: "day" | "week"
+    query?: string
+}
+
+type MoviesRepoT = {
+    findOne(id: number): E.Either<string, MovieT>
     findMany(
-        params:
-            | (
-                  | { genre: GenreT | Array<GenreT> }
-                  | (
-                        | { startDate: DateBrandType; endDate?: DateBrandType } //one of
-                        | { startDate?: DateBrandType; endDate: DateBrandType }
-                    )
-                  | { language: LanguageT | Array<LanguageT> }
-              )
-            | { trendingType: "day" | "week" }
-            | { query?: string },
+        params: MovieParamsT,
         pagination: paginationParamsT
-    ): TaskEither<string, Array<MovieT>>
+    ): E.Either<string, Array<MovieT>>
     getGenres(): O.Option<Array<GenreT>>
 }
+
+export { MoviesRepoT, MovieParamsT }

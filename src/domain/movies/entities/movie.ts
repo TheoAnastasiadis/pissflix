@@ -2,7 +2,6 @@ import * as t from "io-ts"
 import { Country } from "./country"
 import { Genre } from "./genre"
 import { ImdbId } from "./imdbId"
-import { DateBrand } from "./date"
 import { Language } from "./language"
 import { Image } from "./image"
 
@@ -17,7 +16,7 @@ const Movie = t.union([
             overview: t.string,
             poster: Image,
             countries: t.array(Country),
-            release: DateBrand,
+            release: t.number,
             runtime: t.number,
             tagline: t.string,
         })

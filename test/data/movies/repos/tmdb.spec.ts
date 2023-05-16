@@ -5,6 +5,8 @@ import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import * as E from "fp-ts/Either"
 import * as T from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
+import { MovieT } from "../../../../src/domain/movies/entities/movie"
+import moment from "moment"
 
 const validTMDBId = 550
 const invalidTMDBId = 0
@@ -17,23 +19,28 @@ describe("find one movie by id", () => {
     })
     test("given an invalid TMDB id returns an error", async () => {
         const movie = await TMDBRepo.findOne(invalidTMDBId)()
-        console.error(movie)
         expect(E.isRight(movie)).toBe(false)
     })
 })
 
-// const validStartDate = new Date(2000, 0, 0)
-// const validEndDate = new Date(2001, 7, 7)
-// const invalidStartDate = new Date(2080, 0, 0) //very far into the future
+const startDate = moment("1980-1-1").unix()
+const endDate = moment("1980-1-6").unix()
 
-// describe("getMoviesByRealeaseDate(startDate, endDate)", () => {
-//     test("given valid start and end dates TMDB returns an array of movies", async () => {
-
-//     })
-//     test("given invalid dates returns an error", async () => {
-
-//     })
-// })
+describe("getMoviesByRealeaseDate(startDate, endDate)", () => {
+    test("given valid start and end dates TMDB returns an array of movies", async () => {
+        const movies = await TMDBRepo.findMany(
+            { startDate, endDate },
+            pagination
+        )()
+        expect(E.isRight(movies)).toBeTruthy
+        const movieSvalue = E.getOrElse(() => [] as MovieT[])(movies)
+        expect(movieSvalue).toHaveLength(pagination.limit)
+        for (const movie of movieSvalue) {
+            expect(movie.release).toBeGreaterThanOrEqual(startDate)
+            expect(movie.release).toBeLessThanOrEqual(endDate)
+        }
+    })
+})
 
 // const firstLanguage = new Language("en", "639-1")
 // const secondLanguage = new Language("fr", "639-1")

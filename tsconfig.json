@@ -116,7 +116,7 @@
         "src/core/sharedObjects/repo.ts-tbd",
         "src/data/movies/repos/tmdb/subtypes/tmdbImage.ts-tbd",
         "src/data/movies/repos/tmdb/helpers/resultToMovie.ts-tbd",
-        "src/data/movies/repos/tmdb/helpers/pagination.ts",
+        "src/data/movies/repos/tmdb/helpers/paginationHandlers.ts",
         "test/domain/movies/useCases/testObjects",
         "test/domain/movies/useCases/searchForMovie.spec",
         "test/domain/movies/useCases/getTrendingMovies.spec",

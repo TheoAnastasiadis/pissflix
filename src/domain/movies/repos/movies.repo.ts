@@ -1,18 +1,15 @@
 import * as TE from "fp-ts/TaskEither"
-import * as E from "fp-ts/Either"
 import * as O from "fp-ts/Option"
-import * as t from "io-ts"
 
 import { paginationParamsT } from "../../../core/sharedObjects/pagination"
 import { MovieT } from "../entities/movie"
 import { GenreT } from "../entities/genre"
 import { LanguageT } from "../entities/language"
-import { DateBrandType } from "../entities/date"
 
 type MovieParamsT = {
     genre?: GenreT | Array<GenreT>
-    startDate?: Date
-    endDate?: Date
+    startDate?: number
+    endDate?: number
     language?: LanguageT | Array<LanguageT>
     trendingType?: "day" | "week"
     query?: string

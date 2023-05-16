@@ -2,6 +2,8 @@ import { pipe } from "fp-ts/lib/function"
 import * as t from "io-ts"
 import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
+import * as E from "fp-ts/Either"
+
 import {
     SuccesfullTMDBAggregateResponse,
     successfullTMDBResponse,
@@ -10,17 +12,17 @@ import { Language } from "../../../../../domain/movies/entities/language"
 import { Country } from "../../../../../domain/movies/entities/country"
 import { MovieT } from "../../../../../domain/movies/entities/movie"
 import { tmdbGenres } from "./tmdbGenres"
+import moment from "moment"
 
 const defaultPoster: string = ""
 const defaultBackground: string = ""
 
-const parseReleaseDate = (s: string | null) =>
+const parseReleaseDate = (dateString: string | null) =>
     pipe(
-        s,
-        O.fromNullable,
-        O.map(Date.parse),
-        O.chain(O.fromPredicate(isNaN)),
-        O.getOrElse(() => Date.parse("1821"))
+        dateString,
+        O.fromPredicate((s) => moment(s).isValid()),
+        O.map((s) => moment(s).unix()),
+        O.getOrElse(() => 0)
     )
 
 const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
@@ -37,7 +39,7 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
     genres:
         data.genres?.map((genre) => ({
             uniqueId: genre.id || 0,
-            name: genre.name || '',
+            name: genre.name || "",
         })) || [],
     id: data.id || 0,
     languages: pipe(
@@ -64,21 +66,23 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
         A.fromOption,
         A.flatten,
         A.map((obj) => obj.name),
-        A.filter(Country.is)
+        A.map(Country.decode),
+        A.filter(E.isRight),
+        A.map((c) => c.right)
     ),
     release: parseReleaseDate(data.release_date),
     runtime: data.runtime || 0,
     tagline: data.tagline || "",
+    imdbId: data.imdb_id || null,
 })
 
 const toMovies: (
     data: t.TypeOf<typeof SuccesfullTMDBAggregateResponse>
 ) => MovieT[] = (data) =>
     pipe(
-        data.results,
-        O.fromNullable,
-        O.map(
-            A.map((result) => ({
+        data,
+        (response) => response.results || [], //results array can be empty
+        A.map((result) => ({
             background: {
                 economicQuality: result.backdrop_path
                     ? "https://image.tmdb.org/t/p/w300/" + result.backdrop_path
@@ -111,8 +115,8 @@ const toMovies: (
             countries: [],
             runtime: 0,
             tagline: "",
-        }))),
-        O.getOrElseW(() => []),
+            imdbId: null,
+        }))
     )
 
 export { toMovie, toMovies }

@@ -80,24 +80,27 @@ const UnsuccesfullTMDBResponse = t.type({
 
 const SuccesfullTMDBAggregateResponse = t.type({
     page: t.union([t.number, t.null]),
-    results: t.union([t.array(
-        t.type({
-            poster_path: t.union([t.string, t.null]),
-            adult: t.union([t.boolean, t.null]),
-            overview: t.union([t.string, t.null]),
-            release_date: t.union([t.string, t.null]),
-            genre_ids: t.union([t.array(t.number), t.null]),
-            id: t.union([t.number, t.null]),
-            original_title: t.union([t.string, t.null]),
-            original_language: t.union([t.string, t.null]),
-            title: t.union([t.string, t.null]),
-            backdrop_path: t.union([t.string, t.null]),
-            popularity: t.union([t.number, t.null]),
-            vote_count: t.union([t.number, t.null]),
-            video: t.union([t.boolean, t.null]),
-            vote_average: t.union([t.number, t.null]),
-        })
-    ), t.null]),
+    results: t.union([
+        t.array(
+            t.type({
+                poster_path: t.union([t.string, t.null]),
+                adult: t.union([t.boolean, t.null]),
+                overview: t.union([t.string, t.null]),
+                release_date: t.union([t.string, t.null]),
+                genre_ids: t.union([t.array(t.number), t.null]),
+                id: t.union([t.number, t.null]),
+                original_title: t.union([t.string, t.null]),
+                original_language: t.union([t.string, t.null]),
+                title: t.union([t.string, t.null]),
+                backdrop_path: t.union([t.string, t.null]),
+                popularity: t.union([t.number, t.null]),
+                vote_count: t.union([t.number, t.null]),
+                video: t.union([t.boolean, t.null]),
+                vote_average: t.union([t.number, t.null]),
+            })
+        ),
+        t.null,
+    ]),
     total_results: t.union([t.number, t.null]),
     total_pages: t.union([t.number, t.null]),
 })

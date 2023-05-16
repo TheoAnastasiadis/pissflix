@@ -14,7 +14,7 @@ import { tmdbGenres } from "./tmdbGenres"
 const defaultPoster: string = ""
 const defaultBackground: string = ""
 
-const parseReleaseDate = (s?: string) =>
+const parseReleaseDate = (s: string | null) =>
     pipe(
         s,
         O.fromNullable,
@@ -36,8 +36,8 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
     },
     genres:
         data.genres?.map((genre) => ({
-            uniqueId: genre.id,
-            name: genre.name,
+            uniqueId: genre.id || 0,
+            name: genre.name || '',
         })) || [],
     id: data.id || 0,
     languages: pipe(
@@ -75,11 +75,10 @@ const toMovies: (
     data: t.TypeOf<typeof SuccesfullTMDBAggregateResponse>
 ) => MovieT[] = (data) =>
     pipe(
-        data,
-        (data) => data.results,
-        A.of,
-        A.flatten,
-        A.map((result) => ({
+        data.results,
+        O.fromNullable,
+        O.map(
+            A.map((result) => ({
             background: {
                 economicQuality: result.backdrop_path
                     ? "https://image.tmdb.org/t/p/w300/" + result.backdrop_path
@@ -112,7 +111,8 @@ const toMovies: (
             countries: [],
             runtime: 0,
             tagline: "",
-        }))
+        }))),
+        O.getOrElseW(() => []),
     )
 
 export { toMovie, toMovies }

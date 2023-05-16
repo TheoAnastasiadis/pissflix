@@ -2,12 +2,14 @@ import {
     MovieParamsT,
     MoviesRepoT,
 } from "../../../../domain/movies/repos/movies.repo"
-import axios from "axios"
+import axios, { AxiosError, AxiosResponse, ResponseType } from "axios"
 import tmdbConfig from "../../../../core/config/tmdb.config"
-import { identity, pipe } from "fp-ts/lib/function"
+import { identity, pipe, flow } from "fp-ts/lib/function"
 import * as TE from "fp-ts/TaskEither"
-import * as O from "fp-ts/Option"
+import * as IO from "fp-ts/IO"
 import * as E from "fp-ts/Either"
+import * as O from "fp-ts/Option"
+import { PathReporter } from "io-ts/PathReporter"
 import {
     SuccesfullTMDBAggregateResponse,
     UnsuccesfullTMDBResponse,
@@ -20,6 +22,13 @@ import { GenreT } from "../../../../domain/movies/entities/genre"
 import { toMovies, toMovie } from "./helpers/resultToMovies"
 import { paginationParamsT } from "../../../../core/sharedObjects/pagination"
 import { resultsEnd, resultsPage, resultsStart } from "./helpers/pagination"
+import { sequenceT } from "fp-ts/lib/Apply"
+
+const log =
+    <A>(message: string) =>
+    (r: A) =>
+    () =>
+        console.log(`${message}: ${JSON.stringify(r, undefined, 2)}`)
 
 const api = axios.create({
     headers: {
@@ -42,6 +51,7 @@ const fromTrending =
                     ),
                 () => `Unkown Error Occured`
             ),
+            IO.chainFirst((a) => () => (a: unknown) => console.log(a)),
             TE.map((response) => response.data),
             E.fromPredicate(SuccesfullTMDBAggregateResponse.is, identity),
             E.mapLeft((data) =>
@@ -59,7 +69,12 @@ const fromQuery = (pagination: paginationParamsT) => (query: string) =>
     pipe(
         query,
         TE.tryCatchK(
-            (s) => api.get("search/movie/" + `?query=${s}`),
+            (s) =>
+                api.get(
+                    "search/movie/" +
+                        `?query=${s}` +
+                        `&page=${resultsPage(pagination)}`
+                ),
             () => ``
         ),
         TE.map((response) => response.data),
@@ -114,7 +129,7 @@ const fromParams =
                     params.language
                         ? `with_original_language=${languageToQueryValue(
                               params.language
-                          )}`
+                          )}&`
                         : ""
                 }`
             )
@@ -124,7 +139,13 @@ const fromParams =
             params,
             toQuery,
             TE.tryCatchK(
-                (s) => api.get(baseURL + "discover/movie" + s),
+                (s) =>
+                    api.get(
+                        baseURL +
+                            "discover/movie" +
+                            s +
+                            `page=${resultsPage(pagination)}`
+                    ),
                 () => `Unkown Error Occured`
             ),
             TE.map((response) => response.data),
@@ -144,24 +165,41 @@ const fromParams =
 const TMDBRepo: MoviesRepoT = {
     findOne: (id: number) =>
         pipe(
-            id,
-            TE.tryCatchK(
+            TE.tryCatch(
                 () => api.get(baseURL + "movie/" + id),
-                () => `Server could not establish connection to TMDB.`
+                (error) => (error as AxiosError).response?.data
             ),
             TE.map((response) => response.data),
-            E.fromPredicate(successfullTMDBResponse.is, identity),
-            E.mapLeft((data) =>
-                UnsuccesfullTMDBResponse.is(data)
-                    ? `TMDB API Error: message: ${data.status_message}, code: ${data.status_code}`
-                    : `Unkonwn Error`
+            TE.chain((response) =>
+                pipe(
+                    successfullTMDBResponse.decode(response),
+                    E.match(
+                        () => TE.left(response),
+                        () => TE.right(response)
+                    )
+                )
             ),
-            E.map(toMovie)
+            TE.mapLeft((response) =>
+                pipe(
+                    response,
+                    UnsuccesfullTMDBResponse.decode,
+                    E.match(
+                        (errors) =>
+                            `Unexpected Error. Response was recieved but did not conform to expected format. Payload : ${JSON.stringify(response)}`,
+                        () =>
+                            `TMDB request was not succesful. Reason: ${JSON.stringify(response)}`
+                    )
+                )
+            ),
+            TE.map(toMovie)
         ),
     findMany: (params: any, pagination: paginationParamsT) =>
         pipe(
             params,
-            E.fromPredicate((params) => "trending" in params, identity),
+            E.of,
+            E.chain(
+                E.fromPredicate((params) => "trending" in params, identity)
+            ),
             E.chain(fromTrending(pagination)),
             E.alt(() =>
                 pipe(
@@ -170,7 +208,8 @@ const TMDBRepo: MoviesRepoT = {
                     E.chain(fromQuery(pagination))
                 )
             ),
-            E.alt(() => pipe(params, E.of, E.chain(fromParams(pagination))))
+            E.alt(() => pipe(params, E.of, E.chain(fromParams(pagination)))),
+            TE.fromEither
         ),
     getGenres: () => pipe(O.of(tmdbGenres)),
 }

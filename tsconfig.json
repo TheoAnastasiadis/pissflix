@@ -32,9 +32,9 @@
         // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
         // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
         // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
-        // "rootDirs": [
-        //     "src"
-        // ] /* Allow multiple folders to be treated as one when resolving modules. */,
+        "rootDirs": [
+            "src"
+        ] /* Allow multiple folders to be treated as one when resolving modules. */,
         // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
         // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
         // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
@@ -116,7 +116,17 @@
         "src/core/sharedObjects/repo.ts-tbd",
         "src/data/movies/repos/tmdb/subtypes/tmdbImage.ts-tbd",
         "src/data/movies/repos/tmdb/helpers/resultToMovie.ts-tbd",
-        "src/data/movies/repos/tmdb/helpers/pagination.ts"
+        "src/data/movies/repos/tmdb/helpers/pagination.ts",
+        "test/domain/movies/useCases/testObjects",
+        "test/domain/movies/useCases/searchForMovie.spec",
+        "test/domain/movies/useCases/getTrendingMovies.spec",
+        "test/domain/movies/useCases/getMoviesByRegion.spec",
+        "test/domain/movies/useCases/getMoviesByGenre.spec",
+        "test/domain/movies/useCases/getMoviesByDecade.spec",
+        "test/domain/movies/useCases/getMovieById.spec",
+        "test/domain/movies/useCases/getGenres.spec",
+        "src/core/sharedObjects/urlMaker.ts-tbd",
+        "src/core/sharedObjects/result.ts-tbd"
     ],
     "exclude": ["test/**/*.ts"]
 }

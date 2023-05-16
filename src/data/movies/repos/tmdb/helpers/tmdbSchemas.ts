@@ -1,90 +1,105 @@
 import * as t from "io-ts"
 
-const successfullTMDBResponse = t.partial({
-    adult: t.boolean,
-    backdrop_path: t.string,
-    belongs_to_collection: t.string,
-    budget: t.number,
-    genres: t.array(
-        t.type({
-            id: t.number,
-            name: t.string,
-        })
-    ),
-    homepage: t.string,
-    id: t.number,
-    imdb_id: t.string,
-    original_language: t.string,
-    original_title: t.string,
-    overview: t.string,
-    popularity: t.number,
-    poster_path: t.string,
-    production_companies: t.array(
-        t.type({
-            id: t.number,
-            logo_path: t.string,
-            name: t.string,
-            origin_country: t.string,
-        })
-    ),
-    production_countries: t.array(
-        t.type({
-            iso_3166_1: t.string,
-            name: t.string,
-        })
-    ),
-    release_date: t.string,
-    revenue: t.number,
-    runtime: t.number,
-    spoken_languages: t.array(
-        t.type({
-            iso_639_1: t.string,
-            name: t.string,
-        })
-    ),
-    status: t.union([
-        t.literal("Rumored"),
-        t.literal("Planned"),
-        t.literal("In Production"),
-        t.literal("Post Production"),
-        t.literal("Released"),
-        t.literal("Canceled"),
+const successfullTMDBResponse = t.type({
+    adult: t.union([t.boolean, t.null]),
+    backdrop_path: t.union([t.string, t.null]),
+    belongs_to_collection: t.union([t.string, t.null]),
+    budget: t.union([t.number, t.null]),
+    genres: t.union([
+        t.array(
+            t.type({
+                id: t.union([t.number, t.null]),
+                name: t.union([t.string, t.null]),
+            })
+        ),
+        t.null,
     ]),
-    tagline: t.string,
-    title: t.string,
-    video: t.boolean,
-    vote_average: t.number,
-    vote_count: t.number,
+    homepage: t.union([t.string, t.null]),
+    id: t.union([t.number, t.null]),
+    imdb_id: t.union([t.string, t.null]),
+    original_language: t.union([t.string, t.null]),
+    original_title: t.union([t.string, t.null]),
+    overview: t.union([t.string, t.null]),
+    popularity: t.union([t.number, t.null]),
+    poster_path: t.union([t.string, t.null]),
+    production_companies: t.union([
+        t.array(
+            t.type({
+                id: t.union([t.number, t.null]),
+                logo_path: t.union([t.string, t.null]),
+                name: t.union([t.string, t.null]),
+                origin_country: t.union([t.string, t.null]),
+            })
+        ),
+        t.null,
+    ]),
+    production_countries: t.union([
+        t.array(
+            t.type({
+                iso_3166_1: t.union([t.string, t.null]),
+                name: t.union([t.string, t.null]),
+            })
+        ),
+        t.null,
+    ]),
+    release_date: t.union([t.string, t.null]),
+    revenue: t.union([t.number, t.null]),
+    runtime: t.union([t.number, t.null]),
+    spoken_languages: t.union([
+        t.array(
+            t.partial({
+                iso_639_1: t.union([t.string, t.null]),
+                name: t.union([t.string, t.null]),
+            })
+        ),
+        t.null,
+    ]),
+    status: t.union([
+        t.union([
+            t.literal("Rumored"),
+            t.literal("Planned"),
+            t.literal("In Production"),
+            t.literal("Post Production"),
+            t.literal("Released"),
+            t.literal("Canceled"),
+        ]),
+        t.null,
+    ]),
+    tagline: t.union([t.string, t.null]),
+    title: t.union([t.string, t.null]),
+    video: t.union([t.boolean, t.null]),
+    vote_average: t.union([t.number, t.null]),
+    vote_count: t.union([t.number, t.null]),
 })
 
-const UnsuccesfullTMDBResponse = t.partial({
-    status_message: t.string,
-    success: t.boolean,
-    status_code: t.number,
+const UnsuccesfullTMDBResponse = t.type({
+    status_message: t.union([t.string, t.null]),
+    success: t.union([t.boolean, t.null]),
+    status_code: t.union([t.number, t.null]),
 })
 
 const SuccesfullTMDBAggregateResponse = t.type({
-    page: t.number,
-    results: t.array(
-        t.partial({
-            poster_path: t.string,
-            adult: t.boolean,
-            overview: t.string,
-            release_date: t.string,
-            genre_ids: t.array(t.number),
-            id: t.number,
-            original_title: t.string,
-            original_language: t.string,
-            title: t.string,
-            backdrop_path: t.string,
-            popularity: t.number,
-            vote_count: t.number,
-            video: t.boolean,
-            vote_average: t.number,
+    page: t.union([t.number, t.null]),
+    results: t.union([t.array(
+        t.type({
+            poster_path: t.union([t.string, t.null]),
+            adult: t.union([t.boolean, t.null]),
+            overview: t.union([t.string, t.null]),
+            release_date: t.union([t.string, t.null]),
+            genre_ids: t.union([t.array(t.number), t.null]),
+            id: t.union([t.number, t.null]),
+            original_title: t.union([t.string, t.null]),
+            original_language: t.union([t.string, t.null]),
+            title: t.union([t.string, t.null]),
+            backdrop_path: t.union([t.string, t.null]),
+            popularity: t.union([t.number, t.null]),
+            vote_count: t.union([t.number, t.null]),
+            video: t.union([t.boolean, t.null]),
+            vote_average: t.union([t.number, t.null]),
         })
-    ),
-    total_results: t.number,
-    total_pages: t.number,
+    ), t.null]),
+    total_results: t.union([t.number, t.null]),
+    total_pages: t.union([t.number, t.null]),
 })
 
 export {

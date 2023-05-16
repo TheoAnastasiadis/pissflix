@@ -43,7 +43,7 @@ const resultsStart = (pagination: paginationParamsT) =>
 
 const resultsEnd = (pagination: paginationParamsT) =>
     pipe(resultsStart(pagination), (startId) =>
-        Math.min(startId + pagination.limit, TMDB_RESULTS_LIMIT)
+        Math.min(startId + pagination.limit + 1, TMDB_RESULTS_LIMIT)
     )
 
 export { resultsPage, resultsStart, resultsEnd }

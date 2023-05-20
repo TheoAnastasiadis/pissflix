@@ -5,12 +5,12 @@ import * as O from "fp-ts/Option"
 import * as E from "fp-ts/Either"
 
 export const searchForMovie =
-    (query: string) => (pagination: paginationParamsT) => (repo: MoviesRepoT) =>
+    (repo: MoviesRepoT) => (pagination: paginationParamsT) => (query: string) =>
         pipe(
             query,
             O.fromPredicate((s) => s.trim().length > 0),
             O.map((trimmedString) =>
                 repo.findMany({ query: trimmedString }, pagination)
             ),
-            E.fromOption(() => "Make sure to use a suitable query string.")
+            E.fromOption(() => "Provide a search keyword")
         )

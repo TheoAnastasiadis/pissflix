@@ -1,6 +1,8 @@
 import { Action } from "./action"
 import { Icon } from "./icon"
 import { Data } from "./data"
+import { pipe } from "fp-ts/lib/function"
+import * as O from "fp-ts/Option"
 
 export type Transparent = "0" | "1" | "2" | true | false
 export type Style =
@@ -10,7 +12,7 @@ export type Style =
     | "overlay"
     | "overlay-separator"
 
-export type MsxMenuProps = {
+export type MsxMenu = {
     name?: string
     version?: "1.0.0"
     // reference?: any,
@@ -30,50 +32,22 @@ export type MsxMenuProps = {
     data?: Data
     ready?: { action: Action; data: Data }
     options?: any
+    menu?: MsxMenuItem[]
 }
 
-export class MsxMenu {
-    name?: MsxMenuProps["name"]
-    version?: MsxMenuProps["version"]
-    flag?: MsxMenuProps["flag"]
-    reuse?: MsxMenuProps["reuse"]
-    cache?: MsxMenuProps["cache"]
-    restore?: MsxMenuProps["restore"]
-    transparent?: MsxMenuProps["transparent"]
-    style?: MsxMenuProps["style"]
-    logo?: MsxMenuProps["logo"]
-    logoSize?: MsxMenuProps["logoSize"]
-    headline?: MsxMenuProps["headline"]
-    background?: MsxMenuProps["background"]
-    extension?: MsxMenuProps["extension"]
-    action?: MsxMenuProps["action"]
-    data?: MsxMenuProps["data"]
-    ready?: MsxMenuProps["ready"]
-    options?: MsxMenuProps["options"]
-    menu: MsxMenuItem[] = []
-    constructor(props: MsxMenuProps) {
-        let key: keyof typeof props
-        for (key in props) {
-            this[key] = props[key]
-        }
-    }
+export const addItemToMenu = (menu: MsxMenu) => (item: MsxMenuItem) =>
+    pipe(
+        item,
+        O.fromPredicate((item) =>
+            menu.menu ? menu.menu.map((it) => it.id).includes(item.id) : true
+        ),
+        O.map((item) => ({
+            ...menu,
+            menu: menu.menu ? menu.menu?.concat(item) : [item],
+        }))
+    )
 
-    addItem(item: MsxMenuItem): void {
-        if (this.menu.map((it) => it.id).includes(item.id)) {
-            //cannot add item with same id as existing item
-            throw `MSX UI Error: Duplicate id: ${item.id}`
-        }
-        if (
-            this.menu.map((it) => it.focus).reduce((p, c) => p || c) ==
-            item.focus
-        ) {
-            throw `MSX UI Error: Cannot add more than one focused items`
-        }
-        this.menu.push(item)
-    }
-}
-
-export type MsxMenuItemProps = {
+export type MsxMenuItem = {
     id?: string
     type?: "default" | "separator" | "settings"
     display?: boolean
@@ -90,29 +64,4 @@ export type MsxMenuItemProps = {
     lineColor?: string
     data?: any
     options?: any
-}
-
-export class MsxMenuItem {
-    id?: MsxMenuItemProps["id"]
-    type?: MsxMenuItemProps["type"]
-    display?: MsxMenuItemProps["display"]
-    enable?: MsxMenuItemProps["enable"]
-    focus?: MsxMenuItemProps["focus"]
-    execute?: MsxMenuItemProps["execute"]
-    transparent?: MsxMenuItemProps["transparent"]
-    icon?: MsxMenuItemProps["icon"]
-    image?: MsxMenuItemProps["image"]
-    label?: MsxMenuItemProps["label"]
-    background?: MsxMenuItemProps["background"]
-    extensionIcon?: MsxMenuItemProps["extensionIcon"]
-    extensionLabel?: MsxMenuItemProps["extensionLabel"]
-    lineColor?: MsxMenuItemProps["lineColor"]
-    data?: MsxMenuItemProps["data"]
-    options?: MsxMenuItemProps["options"]
-    constructor(props: MsxMenuItemProps) {
-        let key: keyof typeof props
-        for (key in props) {
-            this[key] = props[key]
-        }
-    }
 }

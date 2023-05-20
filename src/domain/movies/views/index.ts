@@ -1,46 +1,43 @@
-import * as t from "io-ts"
-import { View, viewRenderer } from "../../../core/sharedObjects/view"
+import { View } from "../../../core/sharedObjects/view"
+import { Language } from "../entities/language"
 import { MoviesRepoT } from "../repos/movies.repo"
+import * as t from "io-ts"
 
-const panelParams = {
-    optional: {
-        discoverType: t.union([t.literal("day"), t.literal("week")]),
-        genreId: t.number,
-        era: t.number,
+export type MoviePaths = {
+    menu: `${string}/movies/menu`
+    panel: `${string}/movies/panel`
+    genres: `${string}/movies/genres`
+    eras: `${string}/movies/eras`
+    regions: `${string}/movies/regions`
+    search: `${string}/movies/search`
+    info: `${string}/movie/`
+    discover: `${string}/discover/`
+}
+
+export const panelParams = t.intersection([
+    t.partial({
+        decade: t.number,
         region: t.string,
-        query: t.string,
-    },
-    mandatory: {
+        genre: t.number,
+        trending: t.union([t.literal("day"), t.literal("week")]),
+    }),
+    t.type({
         page: t.number,
         limit: t.number,
-    },
-}
+    }),
+])
 
-const infoParams = {
+export const infoParams = t.type({
     id: t.number,
-}
+})
 
-type MovieViews = {
-    menu: {
-        relativePath: "menu/"
-        view: View<[MoviesRepoT]>
-        params: t.TypeC<{}>
-    }
-    resultsPanel: {
-        relativePath: "results_panel/"
-        view: View<[MoviesRepoT]>
-        params: t.UnionC<
-            [
-                t.PartialC<typeof panelParams.optional>,
-                t.TypeC<typeof panelParams.mandatory>
-            ]
-        >
-    }
-    info: {
-        relativePath: "info/"
-        view: View<[MoviesRepoT]>
-        params: t.TypeC<typeof infoParams>
-    }
-}
-
-export { MovieViews, panelParams, infoParams }
+export type MovieViews = {
+    menu: View<{ paths: MoviePaths }>
+    panel: View<{ repo: MoviesRepoT }, typeof panelParams>
+    genres: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+    eras: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+    regions: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+    search: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+    info: View<{ repo: MoviesRepoT }, typeof infoParams>
+    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+} & Record<keyof MoviePaths, View<any, any>>

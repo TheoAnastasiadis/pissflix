@@ -3,7 +3,7 @@ import { MoviesRepoT } from "../repos/movies.repo"
 import * as E from "fp-ts/Either"
 
 export const getTrendingMovies =
-    (type: "day" | "week") =>
-    (pagination: paginationParamsT) =>
     (repo: MoviesRepoT) =>
-        E.of(repo.findMany({ trendingType: type }, pagination))
+    (pagination: paginationParamsT) =>
+    (type: "day" | "week") =>
+        repo.findMany({ trendingType: type }, pagination)

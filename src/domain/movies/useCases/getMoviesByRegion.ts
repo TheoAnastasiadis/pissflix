@@ -8,18 +8,14 @@ import * as A from "fp-ts/Array"
 import { Language } from "../entities/language"
 
 export const getMoviesByRegion =
-    (region: Region) =>
-    (pagination: paginationParamsT) =>
     (repo: MoviesRepoT) =>
+    (pagination: paginationParamsT) =>
+    (region: Region) =>
         pipe(
             region,
-            O.of,
-            O.map((r) => r.languages),
-            A.fromOption,
-            A.filter(Language.is),
-            O.fromPredicate((l) => l.length > 0),
-            E.fromOption(() => `Region ${region} contains no valid languages`),
-            E.map((filteredLangs) =>
-                repo.findMany({ language: filteredLangs }, pagination)
-            )
+            (r) => r.languages,
+            A.map(Language.decode),
+            A.filter(E.isRight),
+            A.map((langValidation) => langValidation.right),
+            (languages) => repo.findMany({ language: languages }, pagination)
         )

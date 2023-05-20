@@ -1,86 +1,45 @@
-// import {
-//     MsxContentItem,
-//     MsxContentPage,
-//     MsxContentRoot,
-// } from "../../../core/msxUI/contentObjects"
-// import { Result } from "../../../core/sharedObjects/result"
-// import { URLMaker } from "../../../core/sharedObjects/urlMaker"
-// import { View } from "../../../core/sharedObjects/view"
-// import { Movie } from "../../../domain/movies/entities/movie"
-// import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
-// import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
-// import { MovieRelativePaths } from "../../../domain/movies/views"
-// import { resultsPage } from "./helpers/resultsPage"
+import { pipe } from "fp-ts/lib/function"
+import { View } from "../../../core/sharedObjects/view"
+import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
+import { MoviePaths } from "../../../domain/movies/views"
+import * as t from "io-ts"
+import * as TE from "fp-ts/TaskEither"
+import { resultsPage } from "./helpers/resultsPage"
+import { errorPage } from "./helpers/errorPage"
+import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
 
-// export class DiscoverPage extends View<MsxContentRoot> {
-//     repo: IMoviesRepo
-//     constructor(
-//         externalUrl: string,
-//         moviesUrl: string,
-//         discoverPageUrl: string,
-//         moviesRepo: IMoviesRepo
-//     ) {
-//         super(externalUrl, moviesUrl, discoverPageUrl)
-//         this.repo = moviesRepo
-//     }
-
-//     renderer = async () => {
-//         const dailyTrendingMovies = await getTrendingMovies(this.repo, "day", {
-//             page: 0,
-//             limit: 5,
-//         })
-//         const weeklyTrendingMovies = await getTrendingMovies(
-//             this.repo,
-//             "week",
-//             {
-//                 page: 0,
-//                 limit: 5,
-//             }
-//         )
-
-//         const content = new MsxContentRoot({
-//             headline: "Discover Popular Content",
-//             type: "list",
-//         })
-
-//         if (dailyTrendingMovies.isSuccess) {
-//             const movies = dailyTrendingMovies.getValue() || []
-//             content.addPage(
-//                 resultsPage(
-//                     "Movies Trending Today", //title
-//                     "", //subtitle
-//                     movies,
-//                     URLMaker.make(
-//                         this.externalUrl,
-//                         this.groupUrl,
-//                         MovieRelativePaths.resultsPanel,
-//                         { type: "day", page: 0 }
-//                     )
-//                 )
-//             )
-//         } else {
-//             console.error(dailyTrendingMovies.errorValue())
-//         }
-
-//         if (weeklyTrendingMovies.isSuccess) {
-//             const movies = weeklyTrendingMovies.getValue() || []
-//             content.addPage(
-//                 resultsPage(
-//                     "Movies Trending This Week",
-//                     "",
-//                     movies,
-//                     URLMaker.make(
-//                         this.externalUrl,
-//                         this.groupUrl,
-//                         MovieRelativePaths.resultsPanel,
-//                         { type: "week", page: 0 }
-//                     )
-//                 )
-//             )
-//         } else {
-//             console.error(weeklyTrendingMovies.errorValue())
-//         }
-
-//         return new Result<MsxContentRoot>(true, undefined, content)
-//     }
-// }
+export const discoverView: View<{
+    repo: MoviesRepoT
+    paths: MoviePaths
+}> =
+    (context: { paths: MoviePaths; repo: MoviesRepoT }) =>
+    (decoder: t.Type<{}>) =>
+    (params: {}) =>
+        pipe(
+            TE.Do,
+            TE.bind("moviesOfTheDay", () =>
+                getTrendingMovies(context.repo)({ limit: 5, page: 0 })("day")
+            ),
+            TE.bind("moviesOfTheWeek", () =>
+                getTrendingMovies(context.repo)({ limit: 5, page: 0 })("week")
+            ),
+            TE.map(({ moviesOfTheDay, moviesOfTheWeek }) => ({
+                headline: "Discover Popular Content",
+                type: "list",
+                pages: [
+                    resultsPage(
+                        "Movies Trending Today",
+                        "Most views in the last 24 hours",
+                        moviesOfTheDay,
+                        context.paths.panel
+                    ),
+                    resultsPage(
+                        "Movies Trending This Week",
+                        "Popular movies of the last few days",
+                        moviesOfTheWeek,
+                        context.paths.panel
+                    ),
+                ],
+            })),
+            TE.mapLeft(errorPage)
+        )

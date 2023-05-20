@@ -1,10 +1,12 @@
+import { pipe } from "fp-ts/lib/function"
 import { Action } from "./action"
 import { Data } from "./data"
 import { Icon } from "./icon"
 import { Transparent } from "./menuObject"
 import { Selection } from "./selection"
+import * as O from "fp-ts/Option"
 
-export type MsxContentRootProps = {
+export type MsxContentRoot = {
     name?: string
     version?: "1.0.0"
     //"reference": "http://link.to.content",
@@ -31,58 +33,35 @@ export type MsxContentRootProps = {
     ready?: { action: Action; data: Data }
     options?: any
     // caption?: any
-}
-
-export class MsxContentRoot {
-    name?: MsxContentRootProps["name"]
-    version?: MsxContentRootProps["version"]
-    flag?: MsxContentRootProps["flag"]
-    reuse?: MsxContentRootProps["reuse"]
-    cache?: MsxContentRootProps["cache"]
-    restore?: MsxContentRootProps["restore"]
-    important?: MsxContentRootProps["important"]
-    wrap?: MsxContentRootProps["wrap"]
-    compress?: MsxContentRootProps["compress"]
-    transparent?: MsxContentRootProps["transparent"]
-    type?: MsxContentRootProps["type"]
-    preload?: MsxContentRootProps["preload"]
-    headline?: MsxContentRootProps["headline"]
-    background?: MsxContentRootProps["background"]
-    extension?: MsxContentRootProps["extension"]
-    header?: MsxContentRootProps["header"]
-    footer?: MsxContentRootProps["footer"]
-    overlay?: MsxContentRootProps["overlay"]
-    underlay?: MsxContentRootProps["underlay"]
-    action?: MsxContentRootProps["action"]
-    data?: MsxContentRootProps["data"]
-    ready?: MsxContentRootProps["ready"]
-    options?: MsxContentRootProps["options"]
-    template?: MsxContentItem
     items?: MsxContentItem[]
     pages?: MsxContentPage[]
-    constructor(props: MsxContentRootProps) {
-        let key: keyof typeof props
-        for (key in props) {
-            this[key] = props[key]
-        }
-    }
-
-    addTemplate(template: MsxContentItem) {
-        this.template = template
-    }
-
-    addItem(item: MsxContentItem) {
-        if (!this.template)
-            throw "MSX UI Error: Cannot asign items to non-templated content"
-        this.items?.push(item)
-    }
-
-    addPage(page: MsxContentPage) {
-        this.pages?.push(page)
-    }
+    template?: MsxContentItem
 }
 
-export type MsxContentItemProps = {
+export const addTemplate =
+    (content: MsxContentRoot) => (template: MsxContentItem) => ({
+        ...content,
+        template,
+    })
+
+export const addItemToContent =
+    (content: MsxContentRoot) => (item: MsxContentItem) =>
+        pipe(
+            item,
+            O.fromPredicate(() => !!content.template), //Cannot asign items to non-templated content"
+            O.map(() => ({
+                ...content,
+                items: content.items ? content.items.concat(item) : [item],
+            }))
+        )
+
+export const addPageToContent =
+    (content: MsxContentRoot) => (page: MsxContentPage) => ({
+        ...content,
+        pages: content.pages ? content.pages.concat(page) : [page],
+    })
+
+export type MsxContentItem = {
     id?: string
     type?: "default" | "teaser" | "button" | "separate" | "space" | "control"
     key?: string //TODO?: define keyboard keys
@@ -152,64 +131,7 @@ export type MsxContentItemProps = {
     options?: any
 }
 
-export class MsxContentItem {
-    id?: MsxContentItemProps["id"]
-    type?: MsxContentItemProps["type"]
-    key?: MsxContentItemProps["key"]
-    layout?: MsxContentItemProps["layout"]
-    area?: MsxContentItemProps["area"]
-    offset?: MsxContentItemProps["offset"]
-    display?: MsxContentItemProps["display"]
-    enable?: MsxContentItemProps["enable"]
-    focus?: MsxContentItemProps["focus"]
-    execute?: MsxContentItemProps["execute"]
-    enumerate?: MsxContentItemProps["enumerate"]
-    compress?: MsxContentItemProps["compress"]
-    shortcut?: MsxContentItemProps["shortcut"]
-    group?: MsxContentItemProps["group"]
-    color?: MsxContentItemProps["color"]
-    title?: MsxContentItemProps["title"]
-    titleHeader?: MsxContentItemProps["titleHeader"]
-    titleFooter?: MsxContentItemProps["titleFooter"]
-    label?: MsxContentItemProps["label"]
-    icon?: MsxContentItemProps["icon"]
-    iconSize?: MsxContentItemProps["iconSize"]
-    headline?: MsxContentItemProps["headline"]
-    text?: MsxContentItemProps["text"]
-    tag?: MsxContentItemProps["tag"]
-    tagColor?: MsxContentItemProps["tagColor"]
-    badge?: MsxContentItemProps["badge"]
-    badgeColor?: MsxContentItemProps["badgeColor"]
-    stamp?: MsxContentItemProps["stamp"]
-    stampColor?: MsxContentItemProps["stampColor"]
-    progress?: MsxContentItemProps["progress"]
-    progressColor?: MsxContentItemProps["progressColor"]
-    wrapperColor?: MsxContentItemProps["wrapperColor"]
-    image?: MsxContentItemProps["image"]
-    imageFiller?: MsxContentItemProps["imageFiller"]
-    imageLabel?: MsxContentItemProps["imageLabel"]
-    imageColor?: MsxContentItemProps["imageColor"]
-    imageScreenFiller?: MsxContentItemProps["imageScreenFiller"]
-    imageBoundary?: MsxContentItemProps["imageBoundary"]
-    playerLabel?: MsxContentItemProps["playerLabel"]
-    background?: MsxContentItemProps["background"]
-    extensionIcon?: MsxContentItemProps["extensionIcon"]
-    extensionLabel?: MsxContentItemProps["extensionLabel"]
-    action?: MsxContentItemProps["action"]
-    data?: MsxContentItemProps["data"]
-    properties?: MsxContentItemProps["properties"]
-    live?: MsxContentItemProps["live"]
-    selection?: MsxContentItemProps["selection"]
-    options?: MsxContentItemProps["options"]
-    constructor(props: MsxContentItemProps) {
-        let key: keyof typeof props
-        for (key in props) {
-            this[key] = props[key]
-        }
-    }
-}
-
-export type MsxContentPageProps = {
+export type MsxContentPage = {
     display?: boolean
     important?: boolean
     wrap?: boolean
@@ -222,31 +144,11 @@ export type MsxContentPageProps = {
     data?: Data
     options?: any
     // caption?: any
+    items?: MsxContentItem[]
 }
 
-export class MsxContentPage {
-    display?: MsxContentPageProps["display"]
-    important?: MsxContentPageProps["important"]
-    wrap?: MsxContentPageProps["wrap"]
-    compress?: MsxContentPageProps["compress"]
-    transparent?: MsxContentPageProps["transparent"]
-    headline?: MsxContentPageProps["headline"]
-    background?: MsxContentPageProps["background"]
-    offset?: MsxContentPageProps["offset"]
-    items?: MsxContentItem[]
-    action?: MsxContentPageProps["action"]
-    data?: MsxContentPageProps["data"]
-    options?: MsxContentPageProps["options"]
-    constructor(props: MsxContentPageProps) {
-        let key: keyof typeof props
-        for (key in props) {
-            this[key] = props[key]
-        }
-    }
-    addItem(item: MsxContentItem) {
-        if (this.items && this.items.map((it) => it.id).includes(item.id))
-            throw `MSX UI Error: Duplicate item with id ${item.id}`
-        if (this.items) this.items.push(item)
-        else this.items = [item]
-    }
-}
+export const addItemToPage =
+    (page: MsxContentPage) => (item: MsxContentItem) => ({
+        ...page,
+        items: page.items ? page.items.concat(item) : [item],
+    })

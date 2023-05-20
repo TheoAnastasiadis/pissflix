@@ -1,60 +1,58 @@
-// import { MsxContentRoot } from "../../../core/msxUI/contentObjects"
-// import { Year } from "../../../core/sharedObjects/decades"
-// import { Result } from "../../../core/sharedObjects/result"
-// import { URLMaker } from "../../../core/sharedObjects/urlMaker"
-// import { View } from "../../../core/sharedObjects/view"
-// import { Movie } from "../../../domain/movies/entities/movie"
-// import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
-// import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
-// import { MovieRelativePaths } from "../../../domain/movies/views"
-// import { resultsPage } from "./helpers/resultsPage"
+import { pipe } from "fp-ts/lib/function"
+import { View } from "../../../core/sharedObjects/view"
+import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
+import { MoviePaths } from "../../../domain/movies/views"
+import * as t from "io-ts"
+import * as A from "fp-ts/Array"
+import * as TE from "fp-ts/TaskEither"
+import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
+import {
+    MsxContentRoot,
+    addPageToContent,
+} from "../../../core/msxUI/contentObjects"
+import { errorPage } from "./helpers/errorPage"
+import { resultsPage } from "./helpers/resultsPage"
 
-// export class ErasPage extends View<MsxContentRoot> {
-//     repo: IMoviesRepo
-//     constructor(
-//         externalUrl: string,
-//         moviesUrl: string,
-//         genresUrl: string,
-//         repo: IMoviesRepo
-//     ) {
-//         super(externalUrl, moviesUrl, genresUrl)
-//         this.repo = repo
-//     }
-
-//     renderer = async () => {
-//         const content = new MsxContentRoot({
-//             headline: "Discover Content By Specific Time Period",
-//             type: "list",
-//         })
-
-//         const eras: Year[] = Array(10).map((v, i) => (1920 + i) as Year)
-//         const movieResults: Result<Movie[]>[] = await Promise.all(
-//             eras.map((decade) =>
-//                 getMoviesByDecade(this.repo, decade, { limit: 5, page: 0 })
-//             )
-//         )
-//         for (const idx in eras) {
-//             if (movieResults[idx].isSuccess) {
-//                 const movies = movieResults[idx].getValue() || []
-//                 content.addPage(
-//                     resultsPage(
-//                         eras[idx].toString(),
-//                         "", //eras subtitle
-//                         movies,
-//                         URLMaker.make(
-//                             this.externalUrl,
-//                             this.groupUrl,
-//                             MovieRelativePaths.resultsPanel,
-//                             {
-//                                 type: `era:${eras[idx]}`,
-//                                 page: 0,
-//                             }
-//                         )
-//                     )
-//                 )
-//             } //if some decade didn't return, we just skip it.
-//         }
-
-//         return new Result<MsxContentRoot>(true, undefined, content)
-//     }
-// }
+export const erasView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
+    (context: { paths: MoviePaths; repo: MoviesRepoT }) =>
+    (decoder: t.Type<{}>) =>
+    (params: {}) =>
+        pipe(
+            TE.Do,
+            TE.bind("decades", () =>
+                pipe(
+                    Array(10),
+                    A.mapWithIndex((i, a) => 1920 + i * 10),
+                    (decades) => TE.right(decades)
+                )
+            ),
+            TE.bind("movies", ({ decades }) =>
+                pipe(
+                    decades,
+                    A.traverse(TE.ApplicativePar)(
+                        getMoviesByDecade(context.repo)({ page: 0, limit: 1 })
+                    )
+                )
+            ),
+            TE.map(({ decades, movies }) =>
+                pipe(
+                    decades,
+                    A.mapWithIndex((i, decade) =>
+                        resultsPage(
+                            `Movies from the ${decade}s`,
+                            `Selected just for you`,
+                            movies[i],
+                            context.paths.panel
+                        )
+                    ),
+                    A.reduce(
+                        {
+                            headline: "Discover Movies By Era",
+                            type: "list",
+                        } as MsxContentRoot,
+                        (content, page) => addPageToContent(content)(page)
+                    )
+                )
+            ),
+            TE.mapLeft(errorPage)
+        )

@@ -1,82 +1,54 @@
-// import { MsxMenu, MsxMenuItem } from "../../../core/msxUI/menuObject"
-// import { Result } from "../../../core/sharedObjects/result"
-// import { URLMaker } from "../../../core/sharedObjects/urlMaker"
-// import { View } from "../../../core/sharedObjects/view"
-// import { MovieRelativePaths } from "../../../domain/movies/views"
+import { MsxMenu } from "../../../core/msxUI/menuObject"
+import { View } from "../../../core/sharedObjects/view"
+import { MoviePaths } from "../../../domain/movies/views"
+import * as t from "io-ts"
+import * as TE from "fp-ts/TaskEither"
 
-// export class MainMovieMenu extends View<MsxMenu> {
-//     constructor(externalUrl: string, moviesUrl: string, viewUrl: string) {
-//         super(externalUrl, moviesUrl, viewUrl)
-//     }
-//     renderer = () => {
-//         const menu = new MsxMenu({
-//             headline: "Movies",
-//         })
+const menuView: View<{ paths: MoviePaths }> =
+    (context: { paths: MoviePaths }) =>
+    (
+        decoder: t.Type<{}, {}, unknown> //no decoding
+    ) =>
+    (
+        params: object //params are irrelevant
+    ) =>
+        TE.right({
+            headline: "Movies",
+            menu: [
+                {
+                    id: "0",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Your Content",
+                    data: context.paths.discover,
+                },
+                {
+                    id: "1",
+                    type: "separator",
+                    label: "Discover by",
+                },
+                {
+                    id: "2",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Genre",
+                    data: context.paths.genres,
+                },
+                {
+                    id: "3",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Era",
+                    data: context.paths.eras,
+                },
+                {
+                    id: "4",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Region",
+                    data: context.paths.regions,
+                },
+            ],
+        } satisfies MsxMenu)
 
-//         menu.addItem(
-//             new MsxMenuItem({
-//                 id: "0",
-//                 type: "default",
-//                 extensionIcon: "auto-awesome",
-//                 label: "Your Content",
-//                 data: URLMaker.make(
-//                     this.externalUrl,
-//                     this.groupUrl,
-//                     MovieRelativePaths.discover
-//                 ),
-//             })
-//         )
-
-//         menu.addItem(
-//             new MsxMenuItem({
-//                 id: "1",
-//                 type: "separator",
-//                 label: "Discover by",
-//             })
-//         )
-
-//         menu.addItem(
-//             new MsxMenuItem({
-//                 id: "2",
-//                 type: "default",
-//                 extensionIcon: "auto-awesome",
-//                 label: "Genre",
-//                 data: URLMaker.make(
-//                     this.externalUrl,
-//                     this.groupUrl,
-//                     MovieRelativePaths.genres
-//                 ),
-//             })
-//         )
-
-//         menu.addItem(
-//             new MsxMenuItem({
-//                 id: "3",
-//                 type: "default",
-//                 extensionIcon: "auto-awesome",
-//                 label: "Era",
-//                 data: URLMaker.make(
-//                     this.externalUrl,
-//                     this.groupUrl,
-//                     MovieRelativePaths.eras
-//                 ),
-//             })
-//         )
-
-//         menu.addItem(
-//             new MsxMenuItem({
-//                 id: "4",
-//                 type: "default",
-//                 extensionIcon: "auto-awesome",
-//                 label: "Region",
-//                 data: URLMaker.make(
-//                     this.externalUrl,
-//                     this.groupUrl,
-//                     MovieRelativePaths.regions
-//                 ),
-//             })
-//         )
-
-//         return new Result<MsxMenu>(true, undefined, menu)
-//     }
-// }
+export { menuView }

@@ -1,60 +1,53 @@
-// import { MsxContentRoot } from "../../../core/msxUI/contentObjects"
-// import { regions } from "../../../core/sharedObjects/regions"
-// import { Result } from "../../../core/sharedObjects/result"
-// import { URLMaker } from "../../../core/sharedObjects/urlMaker"
-// import { View } from "../../../core/sharedObjects/view"
-// import { Movie } from "../../../domain/movies/entities/movie"
-// import { IMoviesRepo } from "../../../domain/movies/repos/movies.repo"
-// import { getMoviesByRegion } from "../../../domain/movies/useCases/getMoviesByRegion"
-// import { MovieRelativePaths } from "../../../domain/movies/views"
-// import { resultsPage } from "./helpers/resultsPage"
+import { View } from "../../../core/sharedObjects/view"
+import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
+import { MoviePaths } from "../../../domain/movies/views"
+import * as t from "io-ts"
+import * as TE from "fp-ts/TaskEither"
+import * as A from "fp-ts/Array"
+import { regions } from "../../../core/sharedObjects/regions"
+import { pipe } from "fp-ts/lib/function"
+import { getMoviesByRegion } from "../../../domain/movies/useCases/getMoviesByRegion"
+import { resultsPage } from "./helpers/resultsPage"
+import {
+    MsxContentRoot,
+    addPageToContent,
+} from "../../../core/msxUI/contentObjects"
+import { errorPage } from "./helpers/errorPage"
 
-// export class RegionsPage extends View<MsxContentRoot> {
-//     repo: IMoviesRepo
-//     constructor(
-//         externalUrl: string,
-//         moviesUrl: string,
-//         genresUrl: string,
-//         repo: IMoviesRepo
-//     ) {
-//         super(externalUrl, moviesUrl, genresUrl)
-//         this.repo = repo
-//     }
-
-//     renderer = async () => {
-//         const content = new MsxContentRoot({
-//             headline: "Discover Content From Across The World",
-//             type: "list",
-//         })
-
-//         //const regions: Region[]
-//         const movieResults: Result<Movie[]>[] = await Promise.all(
-//             regions.map((region) =>
-//                 getMoviesByRegion(this.repo, region, { limit: 5, page: 0 })
-//             )
-//         )
-//         for (const idx in regions) {
-//             if (movieResults[idx].isSuccess) {
-//                 const movies = movieResults[idx].getValue() || []
-//                 content.addPage(
-//                     resultsPage(
-//                         regions[idx].name,
-//                         "", //regions subtitle
-//                         movies,
-//                         URLMaker.make(
-//                             this.externalUrl,
-//                             this.groupUrl,
-//                             MovieRelativePaths.resultsPanel,
-//                             {
-//                                 type: `region:${regions[idx].name}`,
-//                                 page: 0,
-//                             }
-//                         )
-//                     )
-//                 )
-//             } //if some region didn't return, we just skip it.
-//         }
-
-//         return new Result<MsxContentRoot>(true, undefined, content)
-//     }
-// }
+export const regionsView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
+    (context: { paths: MoviePaths; repo: MoviesRepoT }) =>
+    (decoder: t.Type<{}>) =>
+    (params: {}) =>
+        pipe(
+            TE.Do,
+            TE.bind("regions", () => TE.right(regions)),
+            TE.bind("movies", ({ regions }) =>
+                pipe(
+                    regions,
+                    A.traverse(TE.ApplicativePar)(
+                        getMoviesByRegion(context.repo)({ limit: 5, page: 0 })
+                    )
+                )
+            ),
+            TE.map(({ regions, movies }) =>
+                pipe(
+                    regions,
+                    A.mapWithIndex((i, region) =>
+                        resultsPage(
+                            `Movies from ${region.name}`,
+                            `Selected just for you`,
+                            movies[i],
+                            context.paths.panel
+                        )
+                    ),
+                    A.reduce(
+                        {
+                            headline: "Discover Movies By Genre",
+                            type: "list",
+                        } as MsxContentRoot,
+                        (content, page) => addPageToContent(content)(page)
+                    )
+                )
+            ),
+            TE.mapLeft(errorPage)
+        )

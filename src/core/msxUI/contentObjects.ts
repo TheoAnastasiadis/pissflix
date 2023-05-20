@@ -85,7 +85,7 @@ export type MsxContentItem = {
     iconSize?: "small" | "medium" | "large" | "extra-large"
     headline?: string
     text?: string
-    // alignment ?: string, TODO?: define those
+    alignment ?: "left" | "center" | "right" | "justify", 
     // truncation ?: string,
     // centration ?: string,
     tag?: string

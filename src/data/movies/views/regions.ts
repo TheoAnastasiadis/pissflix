@@ -37,7 +37,7 @@ export const regionsView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
                             `Movies from ${region.name}`,
                             `Selected just for you`,
                             movies[i],
-                            context.paths.panel
+                            `${context.paths.panel}?${new URLSearchParams({region: region.name}).toString()}`
                         )
                     ),
                     A.reduce(

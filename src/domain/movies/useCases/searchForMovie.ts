@@ -2,7 +2,7 @@ import { pipe } from "fp-ts/lib/function"
 import { paginationParamsT } from "../../../core/sharedObjects/pagination"
 import { MoviesRepoT } from "../repos/movies.repo"
 import * as O from "fp-ts/Option"
-import * as E from "fp-ts/Either"
+import * as TE from "fp-ts/TaskEither"
 
 export const searchForMovie =
     (repo: MoviesRepoT) => (pagination: paginationParamsT) => (query: string) =>
@@ -12,5 +12,5 @@ export const searchForMovie =
             O.map((trimmedString) =>
                 repo.findMany({ query: trimmedString }, pagination)
             ),
-            E.fromOption(() => "Provide a search keyword")
+            O.getOrElseW(() => TE.left("Provide a search keyword"))
         )

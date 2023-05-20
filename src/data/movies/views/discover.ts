@@ -31,13 +31,13 @@ export const discoverView: View<{
                         "Movies Trending Today",
                         "Most views in the last 24 hours",
                         moviesOfTheDay,
-                        context.paths.panel
+                        `${context.paths.panel}?${new URLSearchParams({trending: "day"}).toString()}`
                     ),
                     resultsPage(
                         "Movies Trending This Week",
                         "Popular movies of the last few days",
                         moviesOfTheWeek,
-                        context.paths.panel
+                        `${context.paths.panel}?${new URLSearchParams({trending: "week"}).toString()}`
                     ),
                 ],
             })),

@@ -46,7 +46,7 @@ export const genresView: View<{
                             `Movies with ${genre.name}`,
                             `Selected just for you`,
                             movies[i],
-                            context.paths.panel
+                            `${context.paths.panel}?${new URLSearchParams({genre: String(genre.uniqueId)}).toString()}`
                         )
                     ),
                     A.reduce(

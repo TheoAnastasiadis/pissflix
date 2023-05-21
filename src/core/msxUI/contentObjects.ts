@@ -38,13 +38,17 @@ export type MsxContentRoot = {
     template?: MsxContentItem
 }
 
-export const addTemplate =
+export const addTemplate: (
+    content: MsxContentRoot
+) => (template: MsxContentItem) => MsxContentRoot =
     (content: MsxContentRoot) => (template: MsxContentItem) => ({
         ...content,
         template,
     })
 
-export const addItemToContent =
+export const addItemToContent: (
+    content: MsxContentRoot
+) => (item: MsxContentItem) => MsxContentRoot =
     (content: MsxContentRoot) => (item: MsxContentItem) =>
         pipe(
             item,
@@ -52,10 +56,13 @@ export const addItemToContent =
             O.map(() => ({
                 ...content,
                 items: content.items ? content.items.concat(item) : [item],
-            }))
+            })),
+            O.getOrElse(() => content)
         )
 
-export const addPageToContent =
+export const addPageToContent: (
+    content: MsxContentRoot
+) => (page: MsxContentPage) => MsxContentRoot =
     (content: MsxContentRoot) => (page: MsxContentPage) => ({
         ...content,
         pages: content.pages ? content.pages.concat(page) : [page],
@@ -85,7 +92,7 @@ export type MsxContentItem = {
     iconSize?: "small" | "medium" | "large" | "extra-large"
     headline?: string
     text?: string
-    alignment ?: "left" | "center" | "right" | "justify", 
+    alignment?: "left" | "center" | "right" | "justify"
     // truncation ?: string,
     // centration ?: string,
     tag?: string
@@ -147,8 +154,9 @@ export type MsxContentPage = {
     items?: MsxContentItem[]
 }
 
-export const addItemToPage =
-    (page: MsxContentPage) => (item: MsxContentItem) => ({
-        ...page,
-        items: page.items ? page.items.concat(item) : [item],
-    })
+export const addItemToPage: (
+    page: MsxContentPage
+) => (item: MsxContentItem) => MsxContentPage = (page) => (item) => ({
+    ...page,
+    items: page.items ? page.items.concat(item) : [item],
+})

@@ -28,7 +28,7 @@ export const panelParams = t.intersection([
 ])
 
 export const infoParams = t.type({
-    id: t.number
+    id: t.number,
 })
 
 export const searchParams = t.type({
@@ -41,7 +41,7 @@ export type MovieViews = {
     genres: View<{ repo: MoviesRepoT; paths: MoviePaths }>
     eras: View<{ repo: MoviesRepoT; paths: MoviePaths }>
     regions: View<{ repo: MoviesRepoT; paths: MoviePaths }>
-    search: View<{ repo: MoviesRepoT; paths: MoviePaths}, typeof searchParams>
+    search: View<{ repo: MoviesRepoT; paths: MoviePaths }, typeof searchParams>
     info: View<{ repo: MoviesRepoT }, typeof infoParams>
-    discover: View<{ repo: MoviesRepoT; paths: MoviePaths}>
+    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>
 } & Record<keyof MoviePaths, View<any, any>>

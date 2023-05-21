@@ -42,7 +42,9 @@ export const erasView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
                             `Movies from the ${decade}s`,
                             `Selected just for you`,
                             movies[i],
-                            `${context.paths.panel}?${new URLSearchParams({decade: String(decade)}).toString()}`
+                            `${context.paths.panel}?${new URLSearchParams({
+                                decade: String(decade),
+                            }).toString()}`
                         )
                     ),
                     A.reduce(

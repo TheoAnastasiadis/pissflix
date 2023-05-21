@@ -114,9 +114,8 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                                                 .format("YYYY"),
                                         }),
                                         addItemToContent(content),
-                                        O.getOrElse(() => content)
                                     )
-                            )
+                            ),
                         )
                     ),
                     TE.mapLeft((error) => errorPage(error))

@@ -45,7 +45,7 @@ export type Action =
     | `close`
     | `close`
     | `close:${string}`
-    | `close:content_flag`
+    | `close:${string}`
     | `content:${string}`
     | `content:data`
     | `content:request:interaction:${string}`
@@ -287,19 +287,19 @@ export type Action =
     | `invalidate:content:${string}`
     | `invalidate:content:content_item_id`
     | `invalidate:content:flag:${string}`
-    | `invalidate:content:flag:content_flag`
+    | `invalidate:content:flag:${string}`
     | `invalidate:content:overlay:${string}`
     | `invalidate:content:overlay:content_item_id`
     | `invalidate:content:underlay:${string}`
     | `invalidate:content:underlay:content_item_id`
     | `invalidate:menu`
     | `invalidate:menu:flag:${string}`
-    | `invalidate:menu:flag:content_flag`
+    | `invalidate:menu:flag:${string}`
     | `invalidate:menu:${string}`
     | `invalidate:menu:menu_item_id`
     | `invalidate:panel`
     | `invalidate:panel:flag:${string}`
-    | `invalidate:panel:flag:content_flag`
+    | `invalidate:panel:flag:${string}`
     | `invalidate:panel:${string}`
     | `invalidate:panel:content_item_id`
     | `invalidate:panel:overlay:${string}`
@@ -686,19 +686,18 @@ export type Action =
     | `reopen:${string}`
     | `reopen:key1=value1&amp;key2=value2`
     | `replace:content:${string}:${string}`
-    | `replace:content:content_flag:user:${string}`
-    | `replace:content:content_flag:request:interaction:${string}`
-    | `replace:content:content_flag:request:interaction:${string}@${string}`
+    | `replace:content:${string}:user:${string}`
+    | `replace:content:${string}:request:interaction:${string}`
+    | `replace:content:${string}:request:interaction:${string}@${string}`
     | `replace:menu:${string}:${string}`
-    | `replace:menu:content_flag:user:${string}`
-    | `replace:menu:content_flag:request:interaction:${string}`
-    | `replace:menu:content_flag:request:interaction:${string}@${string}`
+    | `replace:menu:${string}:user:${string}`
+    | `replace:menu:${string}:request:interaction:${string}`
+    | `replace:menu:${string}:request:interaction:${string}@${string}`
     | `replace:panel:${string}:${string}`
-    | `replace:panel:content_flag:user:${string}`
-    | `replace:panel:content_flag:request:interaction:${string}`
-    | `replace:panel:content_flag:request:interaction:${string}@${string}`
+    | `replace:panel:${string}:user:${string}`
+    | `replace:panel:${string}:request:interaction:${string}`
+    | `replace:panel:${string}:request:interaction:${string}@${string}`
     | `response:${string}`
-    | `response:rq10_1541593729708`
     | `restart`
     | `resume:cancel`
     | `resume:clear`
@@ -726,31 +725,15 @@ export type Action =
     | `settings:animate:2`
     | `settings:hover_effect`
     | `settings:hover_effect:${string}`
-    | `settings:hover_effect:0`
-    | `settings:hover_effect:1`
-    | `settings:hover_effect:2`
     | `settings:immersive_mode`
     | `settings:immersive_mode:${string}`
-    | `settings:immersive_mode:0`
-    | `settings:immersive_mode:1`
     | `settings:input`
     | `settings:input:${string}`
-    | `settings:input:0`
-    | `settings:input:1`
-    | `settings:input:2`
-    | `settings:input:3`
     | `settings:layout`
     | `settings:layout:${string}`
-    | `settings:layout:0.5`
-    | `settings:layout:0.75`
-    | `settings:layout:1`
-    | `settings:layout:1.5`
-    | `settings:layout:3`
     | `settings:menu_button`
     | `settings:random_playback`
     | `settings:random_playback:${string}`
-    | `settings:random_playback:0`
-    | `settings:random_playback:1`
     | `settings:remote`
     | `settings:remote:${string}`
     | `settings:remote:0`

@@ -25,7 +25,7 @@ const createSearchBarPage: (query: string) => MsxContentPage = (query) => ({
             label: query && query.length > 0 ? query : "Start typing...",
             type: "control",
             action: "reload:content",
-        }
+        },
     ],
 })
 
@@ -44,11 +44,13 @@ const addKeyboardToPage: (
                     label: char,
                     alignment: "center",
                     color: "msx-gray",
-                    action: `replace:content:${FLAG}:${(
-                        context.paths.search
-                    + '?' + new URLSearchParams({
-                        query: query + char,
-                    }).toString())}`,
+                    action: `replace:content:${FLAG}:${
+                        context.paths.search +
+                        "?" +
+                        new URLSearchParams({
+                            query: query + char,
+                        }).toString()
+                    }`,
                 })
             )("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")), //alpha characters
         (page) =>

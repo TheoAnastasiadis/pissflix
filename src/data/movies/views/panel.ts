@@ -113,9 +113,9 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                                                 .unix(movie.release)
                                                 .format("YYYY"),
                                         }),
-                                        addItemToContent(content),
+                                        addItemToContent(content)
                                     )
-                            ),
+                            )
                         )
                     ),
                     TE.mapLeft((error) => errorPage(error))

@@ -4,18 +4,16 @@ import * as E from "fp-ts/Either"
 import * as t from "io-ts"
 import axios from "axios"
 import { succesfullTorrentIOResponse } from "./helpers/torrentioSchemas"
-import { TorrentT } from "../../../../domain/torrents/entities/torrent"
 import torrentTitleParser from "parse-torrent-title"
-import {
-    Resolution,
-    VideoResolution,
-    fuzzyMatchResolution,
-} from "../../../../domain/torrents/entities/resolution"
+
 import ParseTorrent from "parse-torrent"
+import { fuzzyMatchResolution, Resolution, VideoResolution } from "../../../domain/common/entities/resolution"
+import { TorrentT } from "../../../domain/common/entities/torrent"
+import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 
 const api = axios.create()
 
-export const toTorrent: (
+const toTorrent: (
     data: t.TypeOf<typeof succesfullTorrentIOResponse>
 ) => TorrentT[] = (data) =>
     data.streams.map((torrent) => ({
@@ -38,7 +36,8 @@ export const toTorrent: (
         ),
     }))
 
-export const getTorrentsByImdbId = (imdbId: string) =>
+export const TorrentIoRepo : TorrentRepo = {
+    getTorrentsByImdbId: (imdbId: string) =>
     pipe(
         TE.tryCatch(
             () =>
@@ -61,3 +60,6 @@ export const getTorrentsByImdbId = (imdbId: string) =>
         ),
         TE.map(toTorrent)
     )
+}
+
+

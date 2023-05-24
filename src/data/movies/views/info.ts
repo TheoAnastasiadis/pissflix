@@ -11,11 +11,11 @@ import { errorPage } from "./helpers/errorPage"
 import { MsxContentPage, MsxContentRoot } from "../../../core/msxUI/contentObjects"
 import moment from "moment"
 import { MovieT } from "../../../domain/movies/entities/movie"
-import { TorrentT } from "../../../domain/torrents/entities/torrent"
-import { getTorrentsById } from "../../../domain/torrents/useCases/getTorrentById"
-import { TorrentRepo } from "../../../domain/torrents/repos/torrent.repo"
-import { indexOfResolution } from "../../../domain/torrents/entities/resolution"
+import { TorrentT } from "../../../domain/common/entities/torrent"
+
 import _ from 'lodash/fp'
+import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
+import { getTorrentsById } from "../../../domain/common/useCases/getTorrentById"
 
 const infoPage : (movie: MovieT) => MsxContentPage = (movie) => ( {
     background:
@@ -81,18 +81,10 @@ const infoPage : (movie: MovieT) => MsxContentPage = (movie) => ( {
     ],
 })
 
-const linksPages : (torrents: TorrentT[]) => MsxContentPage[] = (torrents) => pipe(
-    torrents,
-    _.sortBy((torrent) => indexOfResolution(torrent.resolution)),
-    _.chunk()
-    g => ([{}])
-)
-
 const toContent : (movie: MovieT, torrents: TorrentT[]) => MsxContentRoot = (movie, torrents) => ({
     type: "pages",
     pages: [
         infoPage(movie),
-        ...linksPages(torrents)
     ],
 })
 

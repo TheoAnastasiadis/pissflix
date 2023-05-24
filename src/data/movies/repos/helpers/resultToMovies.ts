@@ -8,9 +8,9 @@ import {
     SuccesfullTMDBAggregateResponse,
     successfullTMDBResponse,
 } from "./tmdbSchemas"
-import { Language } from "../../../../../domain/movies/entities/language"
-import { Country } from "../../../../../domain/movies/entities/country"
-import { MovieT } from "../../../../../domain/movies/entities/movie"
+import { Language } from "../../../../domain/movies/entities/language"
+import { Country } from "../../../../domain/movies/entities/country"
+import { MovieT } from "../../../../domain/movies/entities/movie"
 import { tmdbGenres } from "./tmdbGenres"
 import moment from "moment"
 

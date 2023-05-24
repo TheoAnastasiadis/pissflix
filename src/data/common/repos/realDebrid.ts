@@ -3,13 +3,15 @@ import * as TE from "fp-ts/TaskEither"
 import * as E from "fp-ts/Either"
 import * as t from "io-ts"
 import axios from "axios"
-import { MagnetURI } from "../../../../domain/torrents/entities/magnetURI"
-import realDebridApiKey from "../../../../core/config/debrid.config"
+import realDebridApiKey from '../../../core/config/debrid.config'
+
 import {
     addTorrentResponse,
     getTorrentInfoResponse,
     unrestrictLinkResponse,
 } from "./helpers/realDebridSchemas"
+import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
+import { MagnetURI } from "../../../domain/common/entities/magnetURI"
 
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
@@ -95,10 +97,9 @@ const unrestrictLink = (link: string) =>
         )
     )
 
-export const getStreamingLink: (
-    magnet: MagnetURI
-) => (fileIdx: number) => TE.TaskEither<string, string> =
-    (magnet) => (fileIdx) =>
+
+export const RealDebridRepo: DebridProviderRepo = {
+    getStreamingLink: (magnet) => (fileIdx) =>
         pipe(
             TE.of(magnet),
             TE.chain(addMagnet),
@@ -106,3 +107,5 @@ export const getStreamingLink: (
             TE.chain(getLink),
             TE.chain(unrestrictLink)
         )
+}
+        

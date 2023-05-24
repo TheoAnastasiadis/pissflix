@@ -1,9 +1,4 @@
-import {
-    MovieParamsT,
-    MoviesRepoT,
-} from "../../../../domain/movies/repos/movies.repo"
 import axios, { AxiosError, AxiosResponse, ResponseType } from "axios"
-import tmdbConfig from "../../../../core/config/tmdb.config"
 import { identity, pipe, flow, absurd } from "fp-ts/lib/function"
 import * as TE from "fp-ts/TaskEither"
 import * as IO from "fp-ts/IO"
@@ -15,16 +10,18 @@ import {
     successfullTMDBResponse,
 } from "./helpers/tmdbSchemas"
 import { tmdbGenres } from "./helpers/tmdbGenres"
-import { LanguageT } from "../../../../domain/movies/entities/language"
-import { GenreT } from "../../../../domain/movies/entities/genre"
 import { toMovies, toMovie } from "./helpers/resultToMovies"
-import { paginationParamsT } from "../../../../core/sharedObjects/pagination"
 import {
     resultsEnd,
     resultsPage,
     resultsStart,
 } from "./helpers/paginationHandlers"
 import moment from "moment"
+import { paginationParamsT } from "../../../core/sharedObjects/pagination"
+import { GenreT } from "../../../domain/movies/entities/genre"
+import { LanguageT } from "../../../domain/movies/entities/language"
+import tmdbConfig from "../../../core/config/tmdb.config"
+import { MovieParamsT, MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 
 const log =
     <A>(message: string) =>

@@ -1,6 +1,5 @@
 import { paginationParamsT } from "../../../../src/core/sharedObjects/pagination"
-import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
-
+import {TMDBRepo} from '../../../../src/data/movies/repos/tmdb'
 import * as E from "fp-ts/Either"
 import * as O from "fp-ts/Option"
 
@@ -8,7 +7,7 @@ import { MovieT } from "../../../../src/domain/movies/entities/movie"
 import moment from "moment"
 import { Language } from "../../../../src/domain/movies/entities/language"
 import { GenreT } from "../../../../src/domain/movies/entities/genre"
-import { tmdbGenres } from "../../../../src/data/movies/repos/tmdb/helpers/tmdbGenres"
+import { tmdbGenres } from "../../../../src/data/movies/repos/helpers/tmdbGenres"
 
 const validTMDBId = 550
 const invalidTMDBId = 0

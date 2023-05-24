@@ -7,6 +7,7 @@ import { menuView } from "./menu"
 import { panelView } from "./panel"
 import { regionsView } from "./regions"
 import { searchView } from "./search"
+import { watchView } from "./watch"
 
 export const movieViews: MovieViews = {
     menu: menuView,
@@ -17,4 +18,5 @@ export const movieViews: MovieViews = {
     search: searchView,
     info: infoView,
     discover: discoverView,
+    watch: watchView
 }

@@ -1,5 +1,5 @@
 import { pipe } from "fp-ts/lib/function"
-import { paginationParamsT } from "../../../../../core/sharedObjects/pagination"
+import { paginationParamsT } from "../../../../core/sharedObjects/pagination"
 
 import * as O from "fp-ts/Option"
 

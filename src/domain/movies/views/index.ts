@@ -1,5 +1,5 @@
 import { View } from "../../../core/sharedObjects/view"
-import { TorrentRepo } from "../../torrents/repos/torrent.repo"
+import { TorrentRepo } from "../../common/repos/torrent.repo"
 import { Language } from "../entities/language"
 import { MoviesRepoT } from "../repos/movies.repo"
 import * as t from "io-ts"
@@ -36,6 +36,11 @@ export const searchParams = t.type({
     query: t.string,
 })
 
+export const watchParams = t.type({
+    imdbId: t.string,
+    player: t.union([t.literal('remote'), t.literal('local')])
+})
+
 export type MovieViews = {
     menu: View<{ paths: MoviePaths }>
     panel: View<{ repo: MoviesRepoT }, typeof panelParams>
@@ -47,5 +52,6 @@ export type MovieViews = {
         { moviesRepo: MoviesRepoT; torrentsRepo: TorrentRepo },
         typeof infoParams
     >
-    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>,
+    watch: View<{repo: TorrentRepo}, typeof watchParams>
 } & Record<keyof MoviePaths, View<any, any>>

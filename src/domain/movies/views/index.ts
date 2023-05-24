@@ -11,8 +11,8 @@ export type MoviePaths = {
     eras: `${string}/movies/eras`
     regions: `${string}/movies/regions`
     search: `${string}/movies/search`
-    info: `${string}/movie/`
-    discover: `${string}/discover/`
+    info: `${string}/movie`
+    discover: `${string}/movies/discover`
 }
 
 export const panelParams = t.intersection([
@@ -38,7 +38,7 @@ export const searchParams = t.type({
 
 export const watchParams = t.type({
     imdbId: t.string,
-    player: t.union([t.literal('remote'), t.literal('local')])
+    player: t.union([t.literal("remote"), t.literal("local")]),
 })
 
 export type MovieViews = {
@@ -52,6 +52,6 @@ export type MovieViews = {
         { moviesRepo: MoviesRepoT; torrentsRepo: TorrentRepo },
         typeof infoParams
     >
-    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>,
-    watch: View<{repo: TorrentRepo}, typeof watchParams>
+    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>
+    watch: View<{ repo: TorrentRepo }, typeof watchParams>
 } & Record<keyof MoviePaths, View<any, any>>

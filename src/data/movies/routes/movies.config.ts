@@ -1,0 +1,11 @@
+import { MovieConfigOptions } from "../../../domain/movies/routes";
+import { TorrentIoRepo } from "../../common/repos/torrentioIO";
+import { TMDBRepo } from "../repos/tmdb";
+import { movieViews } from "../views";
+
+export const movieConfig : (externalUrl: string) => MovieConfigOptions = (externalUrl) => ({
+    views: movieViews,
+    externalUrl, 
+    moviesRepo : TMDBRepo,
+    torrentsRepo: TorrentIoRepo
+})

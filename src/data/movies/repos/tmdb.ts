@@ -21,7 +21,10 @@ import { paginationParamsT } from "../../../core/sharedObjects/pagination"
 import { GenreT } from "../../../domain/movies/entities/genre"
 import { LanguageT } from "../../../domain/movies/entities/language"
 import tmdbConfig from "../../../core/config/tmdb.config"
-import { MovieParamsT, MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
+import {
+    MovieParamsT,
+    MoviesRepoT,
+} from "../../../domain/movies/repos/movies.repo"
 
 const log =
     <A>(message: string) =>

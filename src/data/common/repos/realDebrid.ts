@@ -3,7 +3,7 @@ import * as TE from "fp-ts/TaskEither"
 import * as E from "fp-ts/Either"
 import * as t from "io-ts"
 import axios from "axios"
-import realDebridApiKey from '../../../core/config/debrid.config'
+import realDebridApiKey from "../../../core/config/debrid.config"
 
 import {
     addTorrentResponse,
@@ -97,7 +97,6 @@ const unrestrictLink = (link: string) =>
         )
     )
 
-
 export const RealDebridRepo: DebridProviderRepo = {
     getStreamingLink: (magnet) => (fileIdx) =>
         pipe(
@@ -106,6 +105,5 @@ export const RealDebridRepo: DebridProviderRepo = {
             TE.chainFirst(selectFile(fileIdx)),
             TE.chain(getLink),
             TE.chain(unrestrictLink)
-        )
+        ),
 }
-        

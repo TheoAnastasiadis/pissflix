@@ -18,5 +18,5 @@ export const movieViews: MovieViews = {
     search: searchView,
     info: infoView,
     discover: discoverView,
-    watch: watchView
+    watch: watchView,
 }

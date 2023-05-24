@@ -8,18 +8,20 @@ import * as A from "fp-ts/Array"
 
 import { getMovieById } from "../../../domain/movies/useCases/getMovieById"
 import { errorPage } from "./helpers/errorPage"
-import { MsxContentPage, MsxContentRoot } from "../../../core/msxUI/contentObjects"
+import {
+    MsxContentPage,
+    MsxContentRoot,
+} from "../../../core/msxUI/contentObjects"
 import moment from "moment"
 import { MovieT } from "../../../domain/movies/entities/movie"
 import { TorrentT } from "../../../domain/common/entities/torrent"
 
-import _ from 'lodash/fp'
+import _ from "lodash/fp"
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 import { getTorrentsById } from "../../../domain/common/useCases/getTorrentById"
 
-const infoPage : (movie: MovieT) => MsxContentPage = (movie) => ( {
-    background:
-        movie.background.bestQuality,
+const infoPage: (movie: MovieT) => MsxContentPage = (movie) => ({
+    background: movie.background.bestQuality,
     items: [
         {
             layout: "0,0,4,6",
@@ -52,18 +54,12 @@ const infoPage : (movie: MovieT) => MsxContentPage = (movie) => ( {
                 .reduce(
                     (p, c) => p + ", " + c
                 )}}{tb}{ico:volume-down-alt}{txt:msx-white:${movie.languages
-                .map((language) =>
-                    language.toString()
-                )
+                .map((language) => language.toString())
                 .reduce(
                     (p, c) => p + ", " + c
                 )}}{tb}{ico:language}{txt:msx-white:${movie.countries
-                .map((country) =>
-                    country.toString()
-                )
-                .reduce(
-                    (p, c) => p + ", " + c
-                )}}`,
+                .map((country) => country.toString())
+                .reduce((p, c) => p + ", " + c)}}`,
             type: "space",
         },
         {
@@ -81,29 +77,39 @@ const infoPage : (movie: MovieT) => MsxContentPage = (movie) => ( {
     ],
 })
 
-const toContent : (movie: MovieT, torrents: TorrentT[]) => MsxContentRoot = (movie, torrents) => ({
+const toContent: (movie: MovieT, torrents: TorrentT[]) => MsxContentRoot = (
+    movie,
+    torrents
+) => ({
     type: "pages",
-    pages: [
-        infoPage(movie),
-    ],
+    pages: [infoPage(movie)],
 })
 
-export const infoView: View<{ moviesRepo: MoviesRepoT, torrentsRepo: TorrentRepo }, typeof infoParams> =
-    (context: { moviesRepo: MoviesRepoT, torrentsRepo: TorrentRepo }) =>
+export const infoView: View<
+    { moviesRepo: MoviesRepoT; torrentsRepo: TorrentRepo },
+    typeof infoParams
+> =
+    (context: { moviesRepo: MoviesRepoT; torrentsRepo: TorrentRepo }) =>
     (decoder: typeof infoParams) =>
     (params: any) =>
-    pipe(
-        params,
-        decoder.decode,
-        E.mapLeft(() => `Please provide a valid movie id (integer)`),
-        E.map((searchParams) =>
-            pipe(
-                TE.Do,
-                TE.bind("movie", () => getMovieById(context.moviesRepo)(searchParams.id)),
-                TE.bind("torrents", ({movie}) => getTorrentsById(context.torrentsRepo)(movie.imdbId || '')),
-                TE.map(({movie, torrents}) => toContent(movie, torrents)),
-                TE.mapLeft(errorPage)
-            )
-        ),
-        E.getOrElse((errorMessage) => TE.left(errorPage(errorMessage)))
-    )
+        pipe(
+            params,
+            decoder.decode,
+            E.mapLeft(() => `Please provide a valid movie id (integer)`),
+            E.map((searchParams) =>
+                pipe(
+                    TE.Do,
+                    TE.bind("movie", () =>
+                        getMovieById(context.moviesRepo)(searchParams.id)
+                    ),
+                    TE.bind("torrents", ({ movie }) =>
+                        getTorrentsById(context.torrentsRepo)(
+                            movie.imdbId || ""
+                        )
+                    ),
+                    TE.map(({ movie, torrents }) => toContent(movie, torrents)),
+                    TE.mapLeft(errorPage)
+                )
+            ),
+            E.getOrElse((errorMessage) => TE.left(errorPage(errorMessage)))
+        )

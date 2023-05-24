@@ -1,5 +1,5 @@
 import { paginationParamsT } from "../../../../src/core/sharedObjects/pagination"
-import {TMDBRepo} from '../../../../src/data/movies/repos/tmdb'
+import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import * as E from "fp-ts/Either"
 import * as O from "fp-ts/Option"
 

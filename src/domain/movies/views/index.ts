@@ -1,4 +1,5 @@
 import { View } from "../../../core/sharedObjects/view"
+import { TorrentRepo } from "../../torrents/repos/torrent.repo"
 import { Language } from "../entities/language"
 import { MoviesRepoT } from "../repos/movies.repo"
 import * as t from "io-ts"
@@ -42,6 +43,9 @@ export type MovieViews = {
     eras: View<{ repo: MoviesRepoT; paths: MoviePaths }>
     regions: View<{ repo: MoviesRepoT; paths: MoviePaths }>
     search: View<{ repo: MoviesRepoT; paths: MoviePaths }, typeof searchParams>
-    info: View<{ repo: MoviesRepoT }, typeof infoParams>
+    info: View<
+        { moviesRepo: MoviesRepoT; torrentsRepo: TorrentRepo },
+        typeof infoParams
+    >
     discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>
 } & Record<keyof MoviePaths, View<any, any>>

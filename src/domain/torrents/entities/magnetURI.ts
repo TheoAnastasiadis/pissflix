@@ -15,3 +15,5 @@ export const MagnetURI = new t.Type<string, string, unknown>(
             : t.failure(input, context),
     t.identity
 )
+
+export type MagnetURI = t.TypeOf<typeof MagnetURI>

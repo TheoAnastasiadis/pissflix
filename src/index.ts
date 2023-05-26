@@ -1,15 +1,16 @@
-import express from 'express'
-import { movieRouter } from './domain/movies/routes'
-import { movieConfig } from './data/movies/routes/movies.config'
+import express from "express"
+import { movieRouter } from "./domain/movies/routes"
+import { createMoviesConfig } from "./data/movies/routes/createMoviesConfig"
 
 const PORT = 8080
-const EXTERNAL_URL = ''
+const EXTERNAL_URL = ""
 
-const app =  express()
+const app = express()
 
 //movies
-app.use(movieRouter(movieConfig(EXTERNAL_URL)))
+const movieConfig = createMoviesConfig(EXTERNAL_URL)
+app.use(movieRouter(movieConfig))
 
 app.listen(PORT, () => {
-    console.log(`[${Date().toLocaleLowerCase()}]App runnig on port ${PORT}.`)
+    console.log(`[${Date().toLocaleLowerCase()}] App runnig on port ${PORT}.`)
 })

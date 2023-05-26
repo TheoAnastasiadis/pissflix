@@ -1864,4 +1864,4 @@ export type Icon =
     | "zoom-in"
     | "zoom-out"
     | "zoom-out-map"
-    | ""
+    | "blank"

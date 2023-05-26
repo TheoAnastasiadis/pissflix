@@ -1,7 +1,6 @@
 import { pipe } from "fp-ts/lib/function"
 import * as TE from "fp-ts/TaskEither"
 import * as E from "fp-ts/Either"
-import * as t from "io-ts"
 import axios from "axios"
 import realDebridApiKey from "../../../core/config/debrid.config"
 
@@ -12,6 +11,7 @@ import {
 } from "./helpers/realDebridSchemas"
 import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
 import { MagnetURI } from "../../../domain/common/entities/magnetURI"
+import ParseTorrent from "parse-torrent"
 
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
@@ -106,4 +106,13 @@ export const RealDebridRepo: DebridProviderRepo = {
             TE.chain(getLink),
             TE.chain(unrestrictLink)
         ),
+    checkIfAvailable: (magnet: MagnetURI) => pipe(
+        TE.tryCatch(() => axios.get(
+            `${BASE_URL}/torrents/instantAvailability/${ParseTorrent(magnet).infoHash}`) , 
+            () => `Connection could not be established`),
+        TE.map(response => response.data),
+        TE.chain(TE.fromPredicate((data) => (Object.entries(data)[0][1] as Array<any>).length == 0, () => `Torrent not available`)),
+        TE.getOrElse(() => () => Promise.reject()),
+        task => task(), 
+    )
 }

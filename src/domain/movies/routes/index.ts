@@ -28,10 +28,7 @@ export type MovieConfigOptions = {
     torrentsRepo: TorrentRepo
 }
 
-export const movieRouter = (
-    options: MovieConfigOptions
-) => {
-
+export const movieRouter = (options: MovieConfigOptions) => {
     const router = Router()
 
     const noParams = {}

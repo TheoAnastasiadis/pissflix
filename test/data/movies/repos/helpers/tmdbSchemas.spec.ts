@@ -2,7 +2,7 @@ import * as E from "fp-ts/Either"
 import {
     UnsuccesfullTMDBResponse,
     successfullTMDBResponse,
-} from "../../../../../src/data/movies/repos/tmdb/helpers/tmdbSchemas"
+} from "../../../../../src/data/movies/repos/helpers/tmdbSchemas"
 import { PathReporter } from "io-ts/lib/PathReporter"
 
 const exampleSuccess = {

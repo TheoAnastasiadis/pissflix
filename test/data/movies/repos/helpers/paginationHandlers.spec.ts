@@ -3,7 +3,7 @@ import {
     resultsPage,
     resultsStart,
     resultsEnd,
-} from "../../../../../src/data/movies/repos/tmdb/helpers/paginationHandlers"
+} from "../../../../../src/data/movies/repos/helpers/paginationHandlers"
 
 const page = 5
 const limit = 5

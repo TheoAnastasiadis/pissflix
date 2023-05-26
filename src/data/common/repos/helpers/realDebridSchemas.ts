@@ -36,9 +36,9 @@ export const getTorrentInfoResponse = t.type({
         })
     ),
     links: t.array(t.string),
-    ended: t.string, // !! Only present when finished, jsonDate
-    speed: t.number, // !! Only present in downloading, compressing, uploading status
-    seeders: t.number, // !! Only present in downloading, magnet_conversion status
+    ended: t.union([t.string, t.undefined]), // !! Only present when finished, jsonDate
+    speed: t.union([t.number, t.undefined]), // !! Only present in downloading, compressing, uploading status
+    seeders: t.union([t.number, t.undefined]), // !! Only present in downloading, magnet_conversion status
 })
 
 export const unrestrictLinkResponse = t.type({
@@ -53,3 +53,18 @@ export const unrestrictLinkResponse = t.type({
     download: t.string, // Generated link
     streamable: t.number, // Is the file streamable on website
 })
+
+/**
+ * This cannot be represented by an io-ts runtime type due to variable key names.
+*/
+export type availablityT = {
+    [key: string]: { //hash
+        [key: string]: //host
+            {
+                [key: string]: { //fileIdx
+                    filename: string,
+                    filesize: number
+                }
+            }[]
+    }
+}

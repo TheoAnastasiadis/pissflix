@@ -21,6 +21,9 @@ const mockedMoviesRepo = mock<MoviesRepoT>()
 when(
     mockedMoviesRepo.findMany(anything(), deepEqual({ page: 0, limit: 5 }))
 ).thenReturn(TE.right(Array(5).fill(exampleMovie)))
+when(
+    mockedMoviesRepo.findMany(anything(), deepEqual({ page: 0, limit: 20 }))
+).thenReturn(TE.right(Array(20).fill(exampleMovie)))
 when(mockedMoviesRepo.findOne(anything())).thenReturn(TE.right(exampleMovie))
 when(mockedMoviesRepo.getGenres()).thenReturn(O.some(tmdbGenres))
 const mockedMoviesRepoInstance = instance(mockedMoviesRepo)
@@ -29,14 +32,22 @@ const mockedMoviesRepoInstance = instance(mockedMoviesRepo)
 const mockedTorrentRepo = mock<TorrentRepo>()
 when(mockedTorrentRepo.getTorrentsByImdbId(anyString())).thenReturn(
     TE.right(
-        Array(5).fill({
+        [...Array(5).fill({
             title: "",
             magnetURI: "",
             fileIdx: 0,
             size: 1024,
             seeders: 112,
-            resolution: "4k",
-        })
+            resolution: "4K",
+        }),
+        ...Array(5).fill({
+            title: "",
+            magnetURI: "",
+            fileIdx: 0,
+            size: 1024,
+            seeders: 112,
+            resolution: "8K",
+        })]
     )
 )
 const mockedTorrentRepoInstance = instance(mockedTorrentRepo)

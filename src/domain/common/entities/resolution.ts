@@ -23,7 +23,7 @@ export const fuzzyMatchResolution = (s: string) => matcher.search(s)[0]
 //Compare resolutions
 export const indexOfResolution = (resolution: string) =>
     pipe(
-        Object.entries(videoResolutions).findIndex((entries) =>
+        Object.keys(videoResolutions).findIndex((entries) =>
             entries.includes(resolution)
         ),
         (index) => (index == -1 ? 6 : index)

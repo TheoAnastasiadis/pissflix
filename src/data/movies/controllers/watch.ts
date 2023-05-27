@@ -158,7 +158,7 @@ export const watchView: Controller<
         (decoder: typeof watchParams) =>
         (params: any) =>
             pipe(
-                TE.of(params),
+                params,
                 decoder.decode,
                 E.mapLeft(
                     () => `You have to provide imdbId, player and title params`

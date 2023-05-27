@@ -18,12 +18,7 @@ describe("discover view", () => {
 
         console.log(JSON.stringify(content, undefined, 2))
         expect(content.pages).toHaveLength(2)
-        type DiscoverPages = [MsxContentPage, MsxContentPage]
-        expect((content.pages as DiscoverPages)[0].action).toEqual(
-            `panel:${mockedContext.absolutePaths.panel}`
-        )
-        expect((content.pages as DiscoverPages)[1].action).toEqual(
-            `panel:${mockedContext.absolutePaths.panel}`
-        )
+        expect(content?.pages?.at(0)?.items?.at(-1)?.action).toMatch(/trending=day$/)
+        expect(content?.pages?.at(1)?.items?.at(-1)?.action).toMatch(/trending=week$/)
     })
 })

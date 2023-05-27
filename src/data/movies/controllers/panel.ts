@@ -1,4 +1,4 @@
-import { pipe, flow } from "fp-ts/lib/function"
+import { pipe, flow, identity } from "fp-ts/lib/function"
 import { Controller } from "../../../core/sharedObjects/view"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { MoviePaths, panelParams } from "../../../domain/movies/controllers"
@@ -39,16 +39,16 @@ export const panelView: Controller<
             decoder.decode,
             E.mapLeft(
                 () =>
-                    `Search params must contain 'page', 'limit' and at least one of: 'decade', 'genre', 'region' or 'trending'`
+                    (errorPage(`Search params must contain 'page', 'limit' and at least one of: 'decade', 'genre', 'region' or 'trending'`)) as TE.TaskEither<MsxContentRoot, MsxContentRoot>
             ),
-            E.chainW((searchParams) =>
+            E.map((searchParams) =>
                 pipe(
                     O.fromNullable(searchParams.decade), //decade
-                    O.map(
+                    O.map(d =>
                         getMoviesByDecade(context.moviesRepo)({
                             page: searchParams.page,
                             limit: searchParams.limit,
-                        })
+                        })(d),
                     ),
                     O.alt(() =>
                         pipe(
@@ -94,15 +94,7 @@ export const panelView: Controller<
                             )
                         )
                     ),
-                    E.fromOption(
-                        () =>
-                            `Search params must contain at least one of: decade, genre, region, trending`
-                    )
-                )
-            ),
-            E.map(
-                flow(
-                    TE.map((movies) =>
+                    O.map(TE.map((movies) =>
                         pipe(
                             movies,
                             A.reduce(
@@ -127,12 +119,13 @@ export const panelView: Controller<
                                         }),
                                         addItemToContent(content)
                                     )
-                            )
-                        )
+                            ),
+                        ))
                     ),
-                    TE.mapLeft((error) => errorPage(error))
+                    O.map(TE.mapLeft(errorPage)),
+                    O.getOrElse(() => TE.left(errorPage(`Search params must contain at least one of: 'decade', 'genre', 'region' or 'trending'`)))
                 )
             ),
-            E.getOrElse((errorMessage) => TE.left(errorPage(errorMessage))) //TE.TaskEither<MsxContentRoot, MsxContentRoot>
-        ),
+            E.getOrElseW(identity)
+    ),
 }

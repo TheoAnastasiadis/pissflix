@@ -10,3 +10,5 @@ export const Country = t.brand(
     (s): s is t.Branded<string, Country> => countries.isValid(s),
     "Country"
 )
+
+export type CountryT = t.TypeOf<typeof Country>

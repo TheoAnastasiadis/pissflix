@@ -56,15 +56,17 @@ export const unrestrictLinkResponse = t.type({
 
 /**
  * This cannot be represented by an io-ts runtime type due to variable key names.
-*/
+ */
 export type availablityT = {
-    [key: string]: { //hash
+    [key: string]: {
+        //hash
         [key: string]: //host
-            {
-                [key: string]: { //fileIdx
-                    filename: string,
-                    filesize: number
-                }
-            }[]
+        {
+            [key: string]: {
+                //fileIdx
+                filename: string
+                filesize: number
+            }
+        }[]
     }
 }

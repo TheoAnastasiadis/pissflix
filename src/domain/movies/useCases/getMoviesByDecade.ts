@@ -8,12 +8,12 @@ export const getMoviesByDecade =
     (pagination: paginationParamsT) =>
     (firstYearOfDecade: number) =>
         pipe(
-            Math.round(moment(firstYearOfDecade).year() / 10) * 10, //1963 -> 196.3 -> 196 -> 1960
+            Math.floor(moment(String(firstYearOfDecade)).year() / 10) * 10, //1963 -> 196.3 -> 196 -> 1960,
             (year) =>
                 repo.findMany(
                     {
-                        startDate: moment(year).unix(),
-                        endDate: moment(year + 10).unix(),
+                        startDate: moment(String(year)).unix(),
+                        endDate: moment(String(year + 10)).unix(),
                     },
                     pagination
                 )

@@ -6,7 +6,7 @@ import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
 import * as A from "fp-ts/Array"
 import * as TO from "fp-ts/TaskOption"
-import {filesize} from 'filesize'
+import { filesize } from "filesize"
 import any from "promise.any"
 import {
     MsxContentItem,
@@ -34,7 +34,9 @@ const getOneofResolution: (
         TO.tryCatch(() =>
             any(
                 entries.map((torrent) =>
-                    checkIfFileAvailable(repo)(torrent.fileIdx)(torrent.magnetURI)
+                    checkIfFileAvailable(repo)(torrent.fileIdx)(
+                        torrent.magnetURI
+                    )
                 )
             )
         ),

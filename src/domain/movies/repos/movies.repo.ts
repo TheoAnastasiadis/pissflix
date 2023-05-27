@@ -16,11 +16,11 @@ type MovieParamsT = {
 }
 
 type MoviesRepoT = {
-    findOne(id: number): TE.TaskEither<string, MovieT>
-    findMany(
+    findOne: (id: number) => TE.TaskEither<string, MovieT>
+    findMany: (
         params: MovieParamsT,
         pagination: paginationParamsT
-    ): TE.TaskEither<string, Array<MovieT>>
+    ) => TE.TaskEither<string, Array<MovieT>>
     getGenres(): O.Option<Array<GenreT>>
 }
 

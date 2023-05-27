@@ -10,13 +10,13 @@ export const getMoviesByGenre =
     (pagination: paginationParamsT) =>
     (genre: GenreT | Array<GenreT>) =>
         pipe(
-            E.of(genre),
-            E.fromPredicate(Array.isArray, identity),
+            genre,
+            E.fromPredicate((genre) => Array.isArray(genre), identity),
             E.match(
                 (genre) => repo.findMany({ genre }, pagination),
                 (genres) =>
                     pipe(
-                        genres,
+                        genres as GenreT[],
                         A.map(Genre.decode),
                         A.filter(E.isRight),
                         A.map((genre) => genre.right),

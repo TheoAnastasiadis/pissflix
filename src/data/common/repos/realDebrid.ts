@@ -12,13 +12,13 @@ import {
 } from "./helpers/realDebridSchemas"
 import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
 import { MagnetURI } from "../../../domain/common/entities/magnetURI"
-import parseTorrent from 'parse-torrent'
+import parseTorrent from "parse-torrent"
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
 const api = axios.create({
     headers: {
         Authorization: `Bearer ${API_KEY}`,
-        "Content-Type":'multipart/form-data'
+        "Content-Type": "multipart/form-data",
     },
 })
 
@@ -28,7 +28,12 @@ const addMagnet = (magnet: MagnetURI) =>
     pipe(
         TE.tryCatch(
             () => api.post(`${BASE_URL}/torrents/addMagnet`, { magnet }),
-            (reason) => `[ADD MAGNET] Connection with Real Debrid could not be established.\n${JSON.stringify(reason, undefined, 2)}`
+            (reason) =>
+                `[ADD MAGNET] Connection with Real Debrid could not be established.\n${JSON.stringify(
+                    reason,
+                    undefined,
+                    2
+                )}`
         ),
         TE.map((reponse) => reponse.data),
         TE.chain((data) =>
@@ -50,9 +55,10 @@ const selectFile = (fileIdx: number) => (torrentId: string) =>
         TE.tryCatch(
             () =>
                 api.post(`${BASE_URL}/torrents/selectFiles/${torrentId}`, {
-                    files: String(fileIdx + 1),//realdebrid uses 1-indexing
+                    files: String(fileIdx + 1), //realdebrid uses 1-indexing
                 }),
-            () => `[SELECT FILE] Connection with Real Debrid could not be established`
+            () =>
+                `[SELECT FILE] Connection with Real Debrid could not be established`
         )
     )
 
@@ -60,7 +66,8 @@ const getLink = (torrentId: string) =>
     pipe(
         TE.tryCatch(
             () => api.get(`${BASE_URL}/torrents/info/${torrentId}`),
-            () => `[GET LINK] Connection with Real Debrid could not be established`
+            () =>
+                `[GET LINK] Connection with Real Debrid could not be established`
         ),
         TE.map((reponse) => reponse.data),
         TE.chain((data) =>
@@ -81,7 +88,8 @@ const unrestrictLink = (link: string) =>
     pipe(
         TE.tryCatch(
             () => api.post(`${BASE_URL}/unrestrict/link/`, { link }),
-            () => `[UNRESTRICT LINK] Connection with Real Debrid could not be established`
+            () =>
+                `[UNRESTRICT LINK] Connection with Real Debrid could not be established`
         ),
         TE.map((reponse) => reponse.data),
         TE.chain((data) =>
@@ -121,7 +129,12 @@ export const RealDebridRepo: DebridProviderRepo = {
             TE.map((response) => response.data),
             TE.chain(
                 TE.fromPredicate(
-                    (data) => Object.keys((data as availablityT)[parseTorrent(magnet).infoHash as string]).length > 0, //Don't ask me, ask Real Debrid???
+                    (data) =>
+                        Object.keys(
+                            (data as availablityT)[
+                                parseTorrent(magnet).infoHash as string
+                            ]
+                        ).length > 0, //Don't ask me, ask Real Debrid???
                     () => `Torrent not available`
                 )
             ),

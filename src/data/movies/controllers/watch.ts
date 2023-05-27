@@ -1,6 +1,6 @@
 import { identity, pipe } from "fp-ts/lib/function"
-import { View } from "../../../core/sharedObjects/view"
-import { watchParams } from "../../../domain/movies/views"
+import { Controller } from "../../../core/sharedObjects/view"
+import { MoviePaths, watchParams } from "../../../domain/movies/controllers"
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
@@ -143,42 +143,50 @@ const toLocalContent: (
         TE.mapLeft(errorPage)
     )
 
-export const watchView: View<
+export const watchView: Controller<
+    MoviePaths["watch"],
     { torrentRepo: TorrentRepo; debridRepo: DebridProviderRepo },
     typeof watchParams
-> =
-    (context: { torrentRepo: TorrentRepo; debridRepo: DebridProviderRepo }) =>
-    (decoder: typeof watchParams) =>
-    (params: any) =>
-        pipe(
-            TE.of(params),
-            decoder.decode,
-            E.mapLeft(
-                () => `You have to provide imdbId, player and title params`
-            ),
-            E.map((query) =>
-                pipe(
-                    query,
-                    E.fromPredicate(
-                        (query) => query.player == "remote",
-                        identity
-                    ),
-                    E.map((query) =>
-                        toRemoteContent(
-                            query.imdbId,
-                            query.title,
-                            context.torrentRepo,
-                            context.debridRepo
-                        )
-                    ),
-                    E.getOrElse((query) =>
-                        toLocalContent(
-                            query.imdbId,
-                            query.title,
-                            context.torrentRepo
+> = {
+    _tag: "view",
+    _path: `/movies/watch`,
+    render:
+        (context: {
+            torrentRepo: TorrentRepo
+            debridRepo: DebridProviderRepo
+        }) =>
+        (decoder: typeof watchParams) =>
+        (params: any) =>
+            pipe(
+                TE.of(params),
+                decoder.decode,
+                E.mapLeft(
+                    () => `You have to provide imdbId, player and title params`
+                ),
+                E.map((query) =>
+                    pipe(
+                        query,
+                        E.fromPredicate(
+                            (query) => query.player == "remote",
+                            identity
+                        ),
+                        E.map((query) =>
+                            toRemoteContent(
+                                query.imdbId,
+                                query.title,
+                                context.torrentRepo,
+                                context.debridRepo
+                            )
+                        ),
+                        E.getOrElse((query) =>
+                            toLocalContent(
+                                query.imdbId,
+                                query.title,
+                                context.torrentRepo
+                            )
                         )
                     )
-                )
+                ),
+                E.getOrElseW((error) => TE.left(errorPage(error)))
             ),
-            E.getOrElseW((error) => TE.left(errorPage(error)))
-        )
+}

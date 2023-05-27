@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/function"
-import { View } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/view"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
-import { MoviePaths, searchParams } from "../../../domain/movies/views"
+import { MoviePaths, searchParams } from "../../../domain/movies/controllers"
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
 import * as A from "fp-ts/Array"
@@ -14,6 +14,8 @@ import {
     addPageToContent,
 } from "../../../core/msxUI/contentObjects"
 import moment from "moment"
+import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
+import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 
 const FLAG = "_search"
 
@@ -31,8 +33,8 @@ const createSearchBarPage: (query: string) => MsxContentPage = (query) => ({
 
 const addKeyboardToPage: (
     query: string,
-    context: { paths: MoviePaths }
-) => (page: MsxContentPage) => MsxContentPage = (query, context) => (page) =>
+    paths: MoviePaths
+) => (page: MsxContentPage) => MsxContentPage = (query, paths) => (page) =>
     pipe(
         page,
         (page) =>
@@ -45,7 +47,7 @@ const addKeyboardToPage: (
                     alignment: "center",
                     color: "msx-gray",
                     action: `replace:content:${FLAG}:${
-                        context.paths.search +
+                        paths.search +
                         "?" +
                         new URLSearchParams({
                             query: query + char,
@@ -61,7 +63,7 @@ const addKeyboardToPage: (
                 alignment: "center",
                 color: "msx-gray",
                 action: `replace:content:${FLAG}:${
-                    context.paths.search
+                    paths.search
                 }?${new URLSearchParams({ query: query + " " }).toString()}`,
             }), //space bar
         (page) =>
@@ -72,7 +74,7 @@ const addKeyboardToPage: (
                     alignment: "center",
                     color: "msx-gray",
                     action: `replace:content:${FLAG}:${
-                        context.paths.search
+                        paths.search
                     }?${new URLSearchParams({
                         query: query + char,
                     }).toString()}`,
@@ -86,7 +88,7 @@ const addKeyboardToPage: (
                 alignment: "center",
                 color: "msx-gray",
                 action: `replace:content:${FLAG}:${
-                    context.paths.search
+                    paths.search
                 }?${new URLSearchParams({
                     query: query.substring(0, query.length - 1),
                 }).toString()}`,
@@ -99,18 +101,25 @@ const addKeyboardToPage: (
                 alignment: "center",
                 color: "msx-gray",
                 action: `replace:content:${FLAG}:${
-                    context.paths.search
+                    paths.search
                 }?${new URLSearchParams({ query: "" }).toString()}`,
             }) //clear
     )
 
-export const searchView: View<
-    { repo: MoviesRepoT; paths: MoviePaths },
+export const searchView: Controller<
+    MoviePaths["search"],
+    {
+        moviesRepo: MoviesRepoT
+        torrentRepo: TorrentRepo
+        debridRepo: DebridProviderRepo
+        relativePaths: MoviePaths
+        absolutePaths: MoviePaths
+    },
     typeof searchParams
-> =
-    (context: { repo: MoviesRepoT; paths: MoviePaths }) =>
-    (decoder: typeof searchParams) =>
-    (params: any) =>
+> = {
+    _tag: "view",
+    _path: `/movies/search`,
+    render: (context) => (decoder: typeof searchParams) => (params: any) =>
         pipe(
             TE.Do,
             TE.bind("query", () =>
@@ -126,13 +135,13 @@ export const searchView: View<
             TE.bind("movies", ({ query }) =>
                 pipe(
                     query,
-                    searchForMovie(context.repo)({ page: 0, limit: 20 })
+                    searchForMovie(context.moviesRepo)({ page: 0, limit: 20 })
                 )
             ),
             TE.map(({ query, movies }) =>
                 pipe(
                     createSearchBarPage(query),
-                    addKeyboardToPage(query, context),
+                    addKeyboardToPage(query, context.absolutePaths),
                     addPageToContent({
                         flag: FLAG, //this is important to be able to replace the page content
                         type: "list",
@@ -166,7 +175,7 @@ export const searchView: View<
             TE.mapLeft(() =>
                 pipe(
                     createSearchBarPage(""), //empty search bar
-                    addKeyboardToPage("", context),
+                    addKeyboardToPage("", context.absolutePaths),
                     addPageToContent({
                         flag: FLAG,
                         type: "list",
@@ -175,4 +184,5 @@ export const searchView: View<
                     })
                 )
             )
-        )
+        ),
+}

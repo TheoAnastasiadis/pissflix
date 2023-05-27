@@ -1,7 +1,7 @@
 import { pipe, flow } from "fp-ts/lib/function"
-import { View } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/view"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
-import { panelParams } from "../../../domain/movies/views"
+import { MoviePaths, panelParams } from "../../../domain/movies/controllers"
 import * as E from "fp-ts/Either"
 import * as O from "fp-ts/Option"
 import * as TE from "fp-ts/TaskEither"
@@ -17,11 +17,23 @@ import {
 } from "../../../core/msxUI/contentObjects"
 import moment from "moment"
 import { errorPage } from "./helpers/errorPage"
+import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
+import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 
-export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
-    (context: { repo: MoviesRepoT }) =>
-    (decoder: typeof panelParams) =>
-    (params: any) =>
+export const panelView: Controller<
+    MoviePaths["panel"],
+    {
+        moviesRepo: MoviesRepoT
+        torrentRepo: TorrentRepo
+        debridRepo: DebridProviderRepo
+        relativePaths: MoviePaths
+        absolutePaths: MoviePaths
+    },
+    typeof panelParams
+> = {
+    _tag: "view",
+    _path: `/movies/panel`,
+    render: (context) => (decoder: typeof panelParams) => (params: any) =>
         pipe(
             params,
             decoder.decode,
@@ -33,7 +45,7 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                 pipe(
                     O.fromNullable(searchParams.decade), //decade
                     O.map(
-                        getMoviesByDecade(context.repo)({
+                        getMoviesByDecade(context.moviesRepo)({
                             page: searchParams.page,
                             limit: searchParams.limit,
                         })
@@ -46,7 +58,7 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                                 name: "",
                             })),
                             O.map(
-                                getMoviesByGenre(context.repo)({
+                                getMoviesByGenre(context.moviesRepo)({
                                     page: searchParams.page,
                                     limit: searchParams.limit,
                                 })
@@ -64,7 +76,7 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                                 )
                             ),
                             O.map(
-                                getMoviesByRegion(context.repo)({
+                                getMoviesByRegion(context.moviesRepo)({
                                     page: searchParams.page,
                                     limit: searchParams.limit,
                                 })
@@ -75,7 +87,7 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                         pipe(
                             O.fromNullable(searchParams.trending), //trending
                             O.map(
-                                getTrendingMovies(context.repo)({
+                                getTrendingMovies(context.moviesRepo)({
                                     page: searchParams.page,
                                     limit: searchParams.limit,
                                 })
@@ -122,4 +134,5 @@ export const panelView: View<{ repo: MoviesRepoT }, typeof panelParams> =
                 )
             ),
             E.getOrElse((errorMessage) => TE.left(errorPage(errorMessage))) //TE.TaskEither<MsxContentRoot, MsxContentRoot>
-        )
+        ),
+}

@@ -1,7 +1,7 @@
-import { View } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/view"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { pipe } from "fp-ts/lib/function"
-import { MoviePaths, infoParams } from "../../../domain/movies/views"
+import { MoviePaths, infoParams } from "../../../domain/movies/controllers"
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
 import { getMovieById } from "../../../domain/movies/useCases/getMovieById"
@@ -11,6 +11,7 @@ import moment from "moment"
 import { MovieT } from "../../../domain/movies/entities/movie"
 
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
+import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
 
 const toContent = (watchPath: string) => (movie: MovieT) =>
     ({
@@ -89,17 +90,20 @@ const toContent = (watchPath: string) => (movie: MovieT) =>
         ],
     } as MsxContentRoot)
 
-export const infoView: View<
-    { moviesRepo: MoviesRepoT; torrentsRepo: TorrentRepo; paths: MoviePaths },
-    typeof infoParams
-> =
-    (context: {
+export const infoView: Controller<
+    MoviePaths["info"],
+    {
         moviesRepo: MoviesRepoT
-        torrentsRepo: TorrentRepo
-        paths: MoviePaths
-    }) =>
-    (decoder: typeof infoParams) =>
-    (params: any) =>
+        torrentRepo: TorrentRepo
+        debridRepo: DebridProviderRepo
+        relativePaths: MoviePaths
+        absolutePaths: MoviePaths
+    },
+    typeof infoParams
+> = {
+    _tag: "view",
+    _path: `/movie`,
+    render: (context) => (decoder: typeof infoParams) => (params: any) =>
         pipe(
             params,
             decoder.decode,
@@ -108,9 +112,10 @@ export const infoView: View<
                 pipe(
                     TE.of(searchParams.id),
                     TE.chain(getMovieById(context.moviesRepo)),
-                    TE.map(toContent(context.paths.watch)),
+                    TE.map(toContent(context.absolutePaths.watch)),
                     TE.mapLeft(errorPage)
                 )
             ),
             E.getOrElse((errorMessage) => TE.left(errorPage(errorMessage)))
-        )
+        ),
+}

@@ -40,7 +40,7 @@ export const resultsPage = (
         (p) =>
             addItemToPage(p)({
                 //show more button
-                layout: `10,1,12,2`,
+                layout: `10,1,2,4`,
                 type: "separate",
                 icon: "more-horiz",
                 action: `panel:${panelUrl}`,

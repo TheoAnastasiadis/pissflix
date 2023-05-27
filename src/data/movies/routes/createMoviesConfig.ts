@@ -1,4 +1,4 @@
-import { MovieConfigOptions } from "../../../domain/movies/routes"
+import { MovieConfigOptions } from "../../../domain/movies/adaptors"
 import { TorrentIoRepo } from "../../common/repos/torrentioIO"
 import { TMDBRepo } from "../repos/tmdb"
 import { movieViews } from "../views"

@@ -1,7 +1,4 @@
-import { View } from "../../../core/sharedObjects/view"
-import { TorrentRepo } from "../../common/repos/torrent.repo"
-import { Language } from "../entities/language"
-import { MoviesRepoT } from "../repos/movies.repo"
+import { Controller } from "../../../core/sharedObjects/view"
 import * as t from "io-ts"
 
 export type MoviePaths = {
@@ -43,21 +40,18 @@ export const watchParams = t.type({
     title: t.string,
 })
 
-export type MovieViews = {
-    menu: View<{ paths: MoviePaths }>
-    panel: View<{ repo: MoviesRepoT }, typeof panelParams>
-    genres: View<{ repo: MoviesRepoT; paths: MoviePaths }>
-    eras: View<{ repo: MoviesRepoT; paths: MoviePaths }>
-    regions: View<{ repo: MoviesRepoT; paths: MoviePaths }>
-    search: View<{ repo: MoviesRepoT; paths: MoviePaths }, typeof searchParams>
-    info: View<
-        {
-            moviesRepo: MoviesRepoT
-            torrentsRepo: TorrentRepo
-            paths: MoviePaths
-        },
-        typeof infoParams
+export type createMovieControllers<C> = (context: C) => {
+    menu: Controller<MoviePaths["menu"], typeof context>
+    panel: Controller<MoviePaths["panel"], typeof context, typeof panelParams>
+    genres: Controller<MoviePaths["genres"], typeof context>
+    eras: Controller<MoviePaths["eras"], typeof context>
+    regions: Controller<MoviePaths["regions"], typeof context>
+    search: Controller<
+        MoviePaths["search"],
+        typeof context,
+        typeof searchParams
     >
-    discover: View<{ repo: MoviesRepoT; paths: MoviePaths }>
-    watch: View<{ repo: TorrentRepo }, typeof watchParams>
-} & Record<keyof MoviePaths, View<any, any>>
+    info: Controller<MoviePaths["info"], typeof context, typeof infoParams>
+    discover: Controller<MoviePaths["discover"], typeof context>
+    watch: Controller<MoviePaths["watch"], typeof context, typeof watchParams>
+}

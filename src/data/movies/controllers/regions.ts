@@ -1,6 +1,6 @@
-import { View } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/view"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
-import { MoviePaths } from "../../../domain/movies/views"
+import { MoviePaths } from "../../../domain/movies/controllers"
 import * as t from "io-ts"
 import * as TE from "fp-ts/TaskEither"
 import * as A from "fp-ts/Array"
@@ -13,11 +13,22 @@ import {
     addPageToContent,
 } from "../../../core/msxUI/contentObjects"
 import { errorPage } from "./helpers/errorPage"
+import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
+import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 
-export const regionsView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
-    (context: { paths: MoviePaths; repo: MoviesRepoT }) =>
-    (decoder: t.Type<{}>) =>
-    (params: {}) =>
+export const regionsView: Controller<
+    MoviePaths["regions"],
+    {
+        moviesRepo: MoviesRepoT
+        torrentRepo: TorrentRepo
+        debridRepo: DebridProviderRepo
+        relativePaths: MoviePaths
+        absolutePaths: MoviePaths
+    }
+> = {
+    _tag: "view",
+    _path: `/movies/regions`,
+    render: (context) => (decoder: t.Type<{}>) => (params: {}) =>
         pipe(
             TE.Do,
             TE.bind("regions", () => TE.right(regions)),
@@ -25,7 +36,10 @@ export const regionsView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
                 pipe(
                     regions,
                     A.traverse(TE.ApplicativePar)(
-                        getMoviesByRegion(context.repo)({ limit: 5, page: 0 })
+                        getMoviesByRegion(context.moviesRepo)({
+                            limit: 5,
+                            page: 0,
+                        })
                     )
                 )
             ),
@@ -37,7 +51,9 @@ export const regionsView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
                             `Movies from ${region.name}`,
                             `Selected just for you`,
                             movies[i],
-                            `${context.paths.panel}?${new URLSearchParams({
+                            `${
+                                context.absolutePaths.panel
+                            }?${new URLSearchParams({
                                 region: region.name,
                             }).toString()}`
                         )
@@ -52,4 +68,5 @@ export const regionsView: View<{ repo: MoviesRepoT; paths: MoviePaths }> =
                 )
             ),
             TE.mapLeft(errorPage)
-        )
+        ),
+}

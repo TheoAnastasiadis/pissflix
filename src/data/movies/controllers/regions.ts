@@ -1,4 +1,4 @@
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { MoviePaths } from "../../../domain/movies/controllers"
 import * as t from "io-ts"
@@ -28,6 +28,7 @@ export const regionsView: Controller<
 > = {
     _tag: "view",
     _path: `/movies/regions`,
+    _decoder: t.type({}),
     render: (context) => (decoder: t.Type<{}>) => (params: {}) =>
         pipe(
             TE.Do,

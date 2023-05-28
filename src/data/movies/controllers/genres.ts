@@ -1,5 +1,5 @@
 import { pipe } from "fp-ts/lib/function"
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { MoviePaths } from "../../../domain/movies/controllers"
 import { errorPage } from "./helpers/errorPage"
@@ -28,6 +28,7 @@ export const genresView: Controller<
 > = {
     _tag: "view",
     _path: "/movies/genres",
+    _decoder: t.type({}),
     render: (context) => (decoder: t.Type<{}>) => (params: {}) =>
         pipe(
             TE.Do,

@@ -14,6 +14,7 @@ export type Controller<
 > = {
     _tag: "view"
     _path: P
+    _decoder: D
     render: (
         context: C
     ) => (decoder: D) => (params: any) => TE.TaskEither<MsxContent, MsxContent>

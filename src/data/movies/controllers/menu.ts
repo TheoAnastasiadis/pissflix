@@ -1,5 +1,5 @@
 import { MsxMenu } from "../../../core/msxUI/menuObject"
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviePaths } from "../../../domain/movies/controllers"
 import * as t from "io-ts"
 import * as TE from "fp-ts/TaskEither"
@@ -19,6 +19,7 @@ const menuView: Controller<
 > = {
     _tag: "view",
     _path: `/movies/menu`,
+    _decoder: t.type({}),
     render:
         (context) =>
         (

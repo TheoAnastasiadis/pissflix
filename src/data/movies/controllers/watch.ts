@@ -1,5 +1,5 @@
 import { identity, pipe } from "fp-ts/lib/function"
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviePaths, watchParams } from "../../../domain/movies/controllers"
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 import * as E from "fp-ts/Either"
@@ -150,6 +150,7 @@ export const watchView: Controller<
 > = {
     _tag: "view",
     _path: `/movies/watch`,
+    _decoder: watchParams,
     render:
         (context: {
             torrentRepo: TorrentRepo

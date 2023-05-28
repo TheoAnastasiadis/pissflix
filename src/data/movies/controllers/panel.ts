@@ -1,5 +1,5 @@
 import { pipe, flow, identity } from "fp-ts/lib/function"
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { MoviePaths, panelParams } from "../../../domain/movies/controllers"
 import * as E from "fp-ts/Either"
@@ -33,6 +33,7 @@ export const panelView: Controller<
 > = {
     _tag: "view",
     _path: `/movies/panel`,
+    _decoder: panelParams,
     render: (context) => (decoder: typeof panelParams) => (params: any) =>
         pipe(
             params,

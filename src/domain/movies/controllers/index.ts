@@ -1,5 +1,8 @@
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import * as t from "io-ts"
+import { DebridProviderRepo } from "../../common/repos/debridProvider.repo"
+import { TorrentRepo } from "../../common/repos/torrent.repo"
+import { MoviesRepoT } from "../repos/movies.repo"
 
 export type MoviePaths = {
     menu: `${string}/movies/menu`
@@ -40,7 +43,15 @@ export const watchParams = t.type({
     title: t.string,
 })
 
-export type createMovieControllers<C> = (context: C) => {
+export type MovieContext = {
+    moviesRepo: MoviesRepoT
+    torrentRepo: TorrentRepo
+    debridRepo: DebridProviderRepo
+    relativePaths: MoviePaths
+    absolutePaths: MoviePaths
+}
+
+export type createMovieControllers = (context: MovieContext) => {
     menu: Controller<MoviePaths["menu"], typeof context>
     panel: Controller<MoviePaths["panel"], typeof context, typeof panelParams>
     genres: Controller<MoviePaths["genres"], typeof context>

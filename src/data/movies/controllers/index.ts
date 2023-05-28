@@ -15,13 +15,7 @@ import { regionsView } from "./regions"
 import { searchView } from "./search"
 import { watchView } from "./watch"
 
-export const createMoviesControllers: createMovieControllers<{
-    moviesRepo: MoviesRepoT
-    torrentRepo: TorrentRepo
-    debridRepo: DebridProviderRepo
-    relativePaths: MoviePaths
-    absolutePaths: MoviePaths
-}> = (context) => ({
+export const createMoviesControllers: createMovieControllers = (context) => ({
     menu: menuView,
     panel: panelView,
     genres: genresView,

@@ -1,5 +1,5 @@
 import { pipe } from "fp-ts/lib/function"
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { MoviePaths, searchParams } from "../../../domain/movies/controllers"
 import * as E from "fp-ts/Either"
@@ -117,6 +117,7 @@ export const searchView: Controller<
 > = {
     _tag: "view",
     _path: `/movies/search`,
+    _decoder: searchParams,
     render: (context) => (decoder: typeof searchParams) => (params: any) =>
         pipe(
             TE.Do,

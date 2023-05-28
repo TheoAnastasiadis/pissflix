@@ -1,4 +1,4 @@
-import { Controller } from "../../../core/sharedObjects/view"
+import { Controller } from "../../../core/sharedObjects/controller"
 import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
 import { pipe } from "fp-ts/lib/function"
 import { MoviePaths, infoParams } from "../../../domain/movies/controllers"
@@ -103,6 +103,7 @@ export const infoView: Controller<
 > = {
     _tag: "view",
     _path: `/movie`,
+    _decoder: infoParams,
     render: (context) => (decoder: typeof infoParams) => (params: any) =>
         pipe(
             params,

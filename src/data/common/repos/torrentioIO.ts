@@ -5,7 +5,6 @@ import * as t from "io-ts"
 import axios from "axios"
 import { succesfullTorrentIOResponse } from "./helpers/torrentioSchemas"
 import torrentTitleParser from "parse-torrent-title"
-
 import ParseTorrent from "parse-torrent"
 import {
     fuzzyMatchResolution,

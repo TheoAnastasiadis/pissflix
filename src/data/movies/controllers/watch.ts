@@ -19,7 +19,7 @@ import { TorrentT } from "../../../domain/common/entities/torrent"
 import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
 import _ from "lodash/fp"
 import { checkIfFileAvailable } from "../../../domain/common/useCases/checkIfFileAvailable"
-import { getTorrentsById } from "../../../domain/common/useCases/getTorrentById"
+import { getTorrentsById } from "../../../domain/common/useCases/getTorrentsById"
 
 const resolutionIcons: Icon[] = ["sd", "hd", "hd", "2k", "4k", "8k"]
 

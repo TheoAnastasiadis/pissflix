@@ -11,7 +11,7 @@ import {
     unrestrictLinkResponse,
 } from "./helpers/realDebridSchemas"
 import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
-import { MagnetURI } from "../../../domain/common/entities/magnetURI"
+import { MagnetURIT } from "../../../domain/common/entities/magnetURI"
 import parseTorrent from "parse-torrent"
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
@@ -24,7 +24,7 @@ const api = axios.create({
 
 const BASE_URL = "https://api.real-debrid.com/rest/1.0"
 
-const addMagnet = (magnet: MagnetURI) =>
+const addMagnet = (magnet: MagnetURIT) =>
     pipe(
         TE.tryCatch(
             () => api.post(`${BASE_URL}/torrents/addMagnet`, { magnet }),
@@ -115,7 +115,7 @@ export const RealDebridRepo: DebridProviderRepo = {
             TE.chain(getLink),
             TE.chain(unrestrictLink)
         ),
-    checkIfAvailable: (magnet: MagnetURI) =>
+    checkIfAvailable: (magnet: MagnetURIT) =>
         pipe(
             TE.tryCatch(
                 () =>

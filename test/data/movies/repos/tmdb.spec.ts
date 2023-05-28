@@ -117,3 +117,14 @@ describe("get trending movies", () => {
         expect(E.isRight(movies)).toBeTruthy()
     })
 })
+
+describe("search for movie", () => {
+    test("returns movies match the query string", async () => {
+        const movies = await TMDBRepo.findMany(
+            { query: "titanic" },
+            pagination
+        )()
+        console.warn(movies)
+        expect(E.isRight(movies)).toBeTruthy()
+    })
+})

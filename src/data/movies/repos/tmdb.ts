@@ -4,6 +4,7 @@ import * as TE from "fp-ts/TaskEither"
 import * as IO from "fp-ts/IO"
 import * as E from "fp-ts/Either"
 import * as O from "fp-ts/Option"
+import * as t from "io-ts"
 import {
     SuccesfullTMDBAggregateResponse,
     UnsuccesfullTMDBResponse,
@@ -26,12 +27,6 @@ import {
     MoviesRepoT,
 } from "../../../domain/movies/repos/movies.repo"
 
-const log =
-    <A>(message: string) =>
-    (r: A) =>
-    () =>
-        console.log(`${message}: ${JSON.stringify(r, undefined, 2)}`)
-
 const api = axios.create({
     headers: {
         Authorization: `Bearer ${tmdbConfig.tmdbApiKey}`,
@@ -49,18 +44,22 @@ const fromTrending =
                         type +
                         `?page=${resultsPage(pagination)}`
                 ),
-            (error: unknown) => (error as AxiosError).response?.data
+            (error: unknown) => (error as AxiosError).response
         )
 
 const fromQuery = (pagination: paginationParamsT) => (query: string) =>
     TE.tryCatch(
         () =>
             api.get(
-                "search/movie/" +
+                baseURL +
+                    "search/movie" +
                     `?query=${query}` +
                     `&page=${resultsPage(pagination)}`
             ),
-        (error: unknown) => (error as AxiosError).response?.data
+        (error) => {
+            console.error((error as AxiosError).request)
+            return (error as AxiosError).response
+        }
     )
 
 const fromParams =
@@ -116,7 +115,7 @@ const fromParams =
                         toQuery(params) +
                         `page=${resultsPage(pagination)}`
                 ),
-            (error: unknown) => (error as AxiosError).response?.data
+            (error: unknown) => (error as AxiosError).response
         )
     }
 
@@ -158,26 +157,24 @@ const TMDBRepo: MoviesRepoT = {
     findMany: (params: MovieParamsT, pagination: paginationParamsT) =>
         pipe(
             params,
-            O.fromPredicate((params) => !!params.trendingType),
+            O.fromPredicate((params) => "trendingType" in params),
             O.map(() =>
                 fromTrending(pagination)(params.trendingType as "day" | "week")
             ),
             O.alt(() =>
                 pipe(
                     params,
-                    O.fromPredicate((params) => !!params.query),
+                    O.fromPredicate((params) => "query" in params),
                     O.map(() => fromQuery(pagination)(params.query as string))
                 )
             ),
             O.getOrElse(() => fromParams(pagination)(params)),
             TE.map((response) => response.data),
-            TE.chain((response) =>
+            TE.mapLeft((error) => error?.data),
+            TE.chainW((response) =>
                 pipe(
                     SuccesfullTMDBAggregateResponse.decode(response),
-                    E.match(
-                        () => TE.left(response),
-                        () => TE.right(response)
-                    )
+                    TE.fromEither
                 )
             ),
             TE.mapLeft((response) =>
@@ -201,7 +198,7 @@ const TMDBRepo: MoviesRepoT = {
                 a.slice(resultsStart(pagination), resultsEnd(pagination))
             )
         ),
-    getGenres: () => pipe(O.of(tmdbGenres)),
+    getGenres: () => O.of(tmdbGenres),
 }
 
 export { TMDBRepo }

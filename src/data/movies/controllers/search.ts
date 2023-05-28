@@ -40,9 +40,7 @@ const addKeyboardToPage: (
         (page) =>
             A.reduceWithIndex(page, (i, p, char: string) =>
                 addItemToPage(p)({
-                    layout: `${i % 12},${
-                        Math.floor(i / 12) + 1
-                    },${1},${1}"` as `${number},${number},${number},${number}`,
+                    layout: `${i % 12},${Math.floor(i / 12) + 1},${1},${1}`,
                     label: char,
                     alignment: "center",
                     color: "msx-gray",
@@ -69,7 +67,7 @@ const addKeyboardToPage: (
         (page) =>
             A.reduceWithIndex(page, (i, p, char: string) =>
                 addItemToPage(p)({
-                    layout: `${i},${2},${1},${1}"` as `${number},${number},${number},${number}`,
+                    layout: `${5 + i},${3},${1},${1}`,
                     label: char,
                     alignment: "center",
                     color: "msx-gray",

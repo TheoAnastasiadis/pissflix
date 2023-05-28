@@ -31,8 +31,8 @@ const mockedMoviesRepoInstance = instance(mockedMoviesRepo)
 //torrent repo
 const mockedTorrentRepo = mock<TorrentRepo>()
 when(mockedTorrentRepo.getTorrentsByImdbId(anyString())).thenReturn(
-    TE.right(
-        [...Array(5).fill({
+    TE.right([
+        ...Array(5).fill({
             title: "",
             magnetURI: "",
             fileIdx: 0,
@@ -47,8 +47,8 @@ when(mockedTorrentRepo.getTorrentsByImdbId(anyString())).thenReturn(
             size: 1024,
             seeders: 112,
             resolution: "8K",
-        })]
-    )
+        }),
+    ])
 )
 const mockedTorrentRepoInstance = instance(mockedTorrentRepo)
 

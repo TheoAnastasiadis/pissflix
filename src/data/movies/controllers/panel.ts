@@ -39,16 +39,18 @@ export const panelView: Controller<
             decoder.decode,
             E.mapLeft(
                 () =>
-                    (errorPage(`Search params must contain 'page', 'limit' and at least one of: 'decade', 'genre', 'region' or 'trending'`)) as TE.TaskEither<MsxContentRoot, MsxContentRoot>
+                    errorPage(
+                        `Search params must contain 'page', 'limit' and at least one of: 'decade', 'genre', 'region' or 'trending'`
+                    ) as TE.TaskEither<MsxContentRoot, MsxContentRoot>
             ),
             E.map((searchParams) =>
                 pipe(
                     O.fromNullable(searchParams.decade), //decade
-                    O.map(d =>
+                    O.map((d) =>
                         getMoviesByDecade(context.moviesRepo)({
                             page: searchParams.page,
                             limit: searchParams.limit,
-                        })(d),
+                        })(d)
                     ),
                     O.alt(() =>
                         pipe(
@@ -94,38 +96,46 @@ export const panelView: Controller<
                             )
                         )
                     ),
-                    O.map(TE.map((movies) =>
-                        pipe(
-                            movies,
-                            A.reduce(
-                                {
-                                    headline: "Relevant Results",
-                                    type: "list",
-                                    template: {
-                                        titleHeader: "headline",
-                                        titleFooter: "subtitle",
-                                        layout: "0,0,2,4",
-                                        type: "separate",
-                                    },
-                                } as MsxContentRoot,
-                                (content, movie) =>
-                                    pipe(
-                                        movie,
-                                        (movie) => ({
-                                            titleHeader: movie.title,
-                                            titleFooter: moment
-                                                .unix(movie.release)
-                                                .format("YYYY"),
-                                        }),
-                                        addItemToContent(content)
-                                    )
-                            ),
-                        ))
+                    O.map(
+                        TE.map((movies) =>
+                            pipe(
+                                movies,
+                                A.reduce(
+                                    {
+                                        headline: "Relevant Results",
+                                        type: "list",
+                                        template: {
+                                            titleHeader: "headline",
+                                            titleFooter: "subtitle",
+                                            layout: "0,0,2,4",
+                                            type: "separate",
+                                        },
+                                    } as MsxContentRoot,
+                                    (content, movie) =>
+                                        pipe(
+                                            movie,
+                                            (movie) => ({
+                                                titleHeader: movie.title,
+                                                titleFooter: moment
+                                                    .unix(movie.release)
+                                                    .format("YYYY"),
+                                            }),
+                                            addItemToContent(content)
+                                        )
+                                )
+                            )
+                        )
                     ),
                     O.map(TE.mapLeft(errorPage)),
-                    O.getOrElse(() => TE.left(errorPage(`Search params must contain at least one of: 'decade', 'genre', 'region' or 'trending'`)))
+                    O.getOrElse(() =>
+                        TE.left(
+                            errorPage(
+                                `Search params must contain at least one of: 'decade', 'genre', 'region' or 'trending'`
+                            )
+                        )
+                    )
                 )
             ),
             E.getOrElseW(identity)
-    ),
+        ),
 }

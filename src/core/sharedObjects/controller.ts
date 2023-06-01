@@ -7,15 +7,10 @@ type MsxContent = MsxContentRoot | MsxMenu
 
 //this type represents redirecting routes
 //These routes should be invoced by GET requests.
-export type Controller<
-    P extends string,
-    C,
-    D extends t.Decoder<object, object> = t.Type<{}>
-> = {
+export type Controller<C, P = {}> = {
     _tag: "view"
-    _path: P
-    _decoder: D
     render: (
-        context: C
-    ) => (decoder: D) => (params: any) => TE.TaskEither<MsxContent, MsxContent>
+        context: C,
+        ...args: any[]
+    ) => (params: P) => TE.TaskEither<string, MsxContent>
 }

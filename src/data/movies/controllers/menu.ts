@@ -1,71 +1,60 @@
 import { MsxMenu } from "../../../core/msxUI/menuObject"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { MoviePaths } from "../../../domain/movies/controllers"
-import * as t from "io-ts"
+import { MovieContext } from "../../../domain/movies/controllers/context"
 import * as TE from "fp-ts/TaskEither"
-import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
-import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
-import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
+import * as R from "fp-ts-routing"
 
-const menuView: Controller<
-    MoviePaths["menu"],
-    {
-        moviesRepo: MoviesRepoT
-        torrentRepo: TorrentRepo
-        debridRepo: DebridProviderRepo
-        relativePaths: MoviePaths
-        absolutePaths: MoviePaths
-    }
-> = {
+export const menuView: Controller<MovieContext> = {
     _tag: "view",
-    _path: `/movies/menu`,
-    _decoder: t.type({}),
-    render:
-        (context) =>
-        (
-            decoder: t.Type<{}, {}, unknown> //no decoding
-        ) =>
-        (
-            params: object //params are irrelevant
-        ) =>
-            TE.right({
-                headline: "Movies",
-                menu: [
-                    {
-                        id: "0",
-                        type: "default",
-                        extensionIcon: "auto-awesome",
-                        label: "Your Content",
-                        data: context.absolutePaths.discover,
-                    },
-                    {
-                        id: "1",
-                        type: "separator",
-                        label: "Discover by",
-                    },
-                    {
-                        id: "2",
-                        type: "default",
-                        extensionIcon: "auto-awesome",
-                        label: "Genre",
-                        data: context.absolutePaths.genres,
-                    },
-                    {
-                        id: "3",
-                        type: "default",
-                        extensionIcon: "auto-awesome",
-                        label: "Era",
-                        data: context.absolutePaths.eras,
-                    },
-                    {
-                        id: "4",
-                        type: "default",
-                        extensionIcon: "auto-awesome",
-                        label: "Region",
-                        data: context.absolutePaths.regions,
-                    },
-                ],
-            } satisfies MsxMenu),
+    render: (context, topLevelRoute: R.Route) => (params) =>
+        TE.right({
+            headline: "Movies",
+            menu: [
+                {
+                    id: "0",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Your Content",
+                    data: context.matchers.discover.formatter.run(
+                        R.Route.empty,
+                        {}
+                    ),
+                },
+                {
+                    id: "1",
+                    type: "separator",
+                    label: "Discover by",
+                },
+                {
+                    id: "2",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Genre",
+                    data: context.matchers.genres.formatter.run(
+                        R.Route.empty,
+                        {}
+                    ),
+                },
+                {
+                    id: "3",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Era",
+                    data: context.matchers.eras.formatter.run(
+                        R.Route.empty,
+                        {}
+                    ),
+                },
+                {
+                    id: "4",
+                    type: "default",
+                    extensionIcon: "auto-awesome",
+                    label: "Region",
+                    data: context.matchers.regions.formatter.run(
+                        R.Route.empty,
+                        {}
+                    ),
+                },
+            ],
+        } satisfies MsxMenu),
 }
-
-export { menuView }

@@ -1,10 +1,4 @@
-import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
-import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
-import {
-    MoviePaths,
-    createMovieControllers,
-} from "../../../domain/movies/controllers"
-import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
+import { MovieControllers } from "../../../domain/movies/controllers/controllers"
 import { discoverView } from "./discover"
 import { erasView } from "./eras"
 import { genresView } from "./genres"
@@ -15,7 +9,7 @@ import { regionsView } from "./regions"
 import { searchView } from "./search"
 import { watchView } from "./watch"
 
-export const createMoviesControllers: createMovieControllers = (context) => ({
+export const MovieControllersImpl: MovieControllers = {
     menu: menuView,
     panel: panelView,
     genres: genresView,
@@ -25,4 +19,4 @@ export const createMoviesControllers: createMovieControllers = (context) => ({
     info: infoView,
     discover: discoverView,
     watch: watchView,
-})
+}

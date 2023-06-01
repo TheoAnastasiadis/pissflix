@@ -4,7 +4,7 @@ import { Genre } from "./genre"
 import { Language } from "./language"
 import { Image } from "./image"
 
-const Movie = t.readonly(
+export const Movie = t.readonly(
     t.type({
         background: Image,
         genres: t.array(Genre),
@@ -21,6 +21,4 @@ const Movie = t.readonly(
     })
 )
 
-type MovieT = t.TypeOf<typeof Movie>
-
-export { Movie, MovieT }
+export type MovieT = t.TypeOf<typeof Movie>

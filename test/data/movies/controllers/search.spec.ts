@@ -1,13 +1,13 @@
 import { MsxContentRoot } from "../../../../src/core/msxUI/contentObjects"
 import { searchView } from "../../../../src/data/movies/controllers/search"
-import { searchParams } from "../../../../src/domain/movies/controllers"
+
 import { mockedContext } from "./testObjects"
 import * as E from "fp-ts/Either"
 
 describe("search view", () => {
     test("returns the search view", async () => {
         const content = (
-            (await searchView.render(mockedContext)(searchParams)({
+            (await searchView.render(mockedContext)({
                 query: "abcd?",
             })()) as E.Right<MsxContentRoot>
         ).right

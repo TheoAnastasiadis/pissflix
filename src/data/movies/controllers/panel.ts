@@ -1,11 +1,11 @@
-import { pipe, flow, identity } from "fp-ts/lib/function"
+import { pipe } from "fp-ts/lib/function"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
-import { MoviePaths, panelParams } from "../../../domain/movies/controllers"
-import * as E from "fp-ts/Either"
+import { MovieContext } from "../../../domain/movies/controllers/context"
 import * as O from "fp-ts/Option"
 import * as TE from "fp-ts/TaskEither"
 import * as A from "fp-ts/Array"
+import * as t from "io-ts"
+import * as R from "fp-ts-routing"
 import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
 import { getMoviesByGenre } from "../../../domain/movies/useCases/getMoviesByGenre"
 import { regions } from "../../../core/sharedObjects/regions"
@@ -16,127 +16,127 @@ import {
     addItemToContent,
 } from "../../../core/msxUI/contentObjects"
 import moment from "moment"
-import { errorPage } from "./helpers/errorPage"
-import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
-import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
+import { panelParams } from "../../../domain/movies/controllers/params"
 
 export const panelView: Controller<
-    MoviePaths["panel"],
-    {
-        moviesRepo: MoviesRepoT
-        torrentRepo: TorrentRepo
-        debridRepo: DebridProviderRepo
-        relativePaths: MoviePaths
-        absolutePaths: MoviePaths
-    },
-    typeof panelParams
+    MovieContext,
+    t.TypeOf<typeof panelParams>
 > = {
     _tag: "view",
-    _path: `/movies/panel`,
-    _decoder: panelParams,
-    render: (context) => (decoder: typeof panelParams) => (params: any) =>
+    render: (context, topLevelRoute) => (params) =>
         pipe(
-            params,
-            decoder.decode,
-            E.mapLeft(
-                () =>
-                    errorPage(
-                        `Search params must contain 'page', 'limit' and at least one of: 'decade', 'genre', 'region' or 'trending'`
-                    ) as TE.TaskEither<MsxContentRoot, MsxContentRoot>
+            O.fromNullable(
+                (params as { page: string; limit: string; decade: string })
+                    .decade
+            ), //decade
+            O.map((decade) => Number(decade)),
+            O.map(
+                getMoviesByDecade(context.moviesRepo)({
+                    page: Number(params.page),
+                    limit: Number(params.limit),
+                })
             ),
-            E.map((searchParams) =>
+            O.alt(() =>
                 pipe(
-                    O.fromNullable(searchParams.decade), //decade
-                    O.map((d) =>
-                        getMoviesByDecade(context.moviesRepo)({
-                            page: searchParams.page,
-                            limit: searchParams.limit,
-                        })(d)
-                    ),
-                    O.alt(() =>
-                        pipe(
-                            O.fromNullable(searchParams.genre), //genre
-                            O.map((genreId) => ({
-                                uniqueId: genreId,
-                                name: "",
-                            })),
-                            O.map(
-                                getMoviesByGenre(context.moviesRepo)({
-                                    page: searchParams.page,
-                                    limit: searchParams.limit,
-                                })
-                            )
-                        )
-                    ),
-                    O.alt(() =>
-                        pipe(
-                            O.fromNullable(searchParams.region), //region
-                            O.chain((regionName) =>
-                                O.fromNullable(
-                                    regions.find(
-                                        (region) => region.name == regionName
-                                    )
-                                )
-                            ),
-                            O.map(
-                                getMoviesByRegion(context.moviesRepo)({
-                                    page: searchParams.page,
-                                    limit: searchParams.limit,
-                                })
-                            )
-                        )
-                    ),
-                    O.alt(() =>
-                        pipe(
-                            O.fromNullable(searchParams.trending), //trending
-                            O.map(
-                                getTrendingMovies(context.moviesRepo)({
-                                    page: searchParams.page,
-                                    limit: searchParams.limit,
-                                })
-                            )
+                    O.fromNullable(
+                        (
+                            params as {
+                                page: string
+                                limit: string
+                                genre: string
+                            }
+                        ).genre
+                    ), //genre
+                    O.map((genreId) => ({
+                        uniqueId: Number(genreId),
+                        name: "",
+                    })),
+                    O.map(
+                        getMoviesByGenre(context.moviesRepo)({
+                            page: Number(params.page),
+                            limit: Number(params.limit),
+                        })
+                    )
+                )
+            ),
+            O.alt(() =>
+                pipe(
+                    O.fromNullable(
+                        (
+                            params as {
+                                page: string
+                                limit: string
+                                region: string
+                            }
+                        ).region
+                    ), //region
+                    O.chain((regionName) =>
+                        O.fromNullable(
+                            regions.find((region) => region.name == regionName)
                         )
                     ),
                     O.map(
-                        TE.map((movies) =>
-                            pipe(
-                                movies,
-                                A.reduce(
-                                    {
-                                        headline: "Relevant Results",
-                                        type: "list",
-                                        template: {
-                                            titleHeader: "headline",
-                                            titleFooter: "subtitle",
-                                            layout: "0,0,2,4",
-                                            type: "separate",
-                                        },
-                                    } as MsxContentRoot,
-                                    (content, movie) =>
-                                        pipe(
-                                            movie,
-                                            (movie) => ({
-                                                titleHeader: movie.title,
-                                                titleFooter: moment
-                                                    .unix(movie.release)
-                                                    .format("YYYY"),
-                                            }),
-                                            addItemToContent(content)
-                                        )
+                        getMoviesByRegion(context.moviesRepo)({
+                            page: Number(params.page),
+                            limit: Number(params.limit),
+                        })
+                    )
+                )
+            ),
+            O.alt(() =>
+                pipe(
+                    O.fromNullable(
+                        (
+                            params as {
+                                page: string
+                                limit: string
+                                trending: "day" | "week"
+                            }
+                        ).trending
+                    ), //trending
+                    O.map(
+                        getTrendingMovies(context.moviesRepo)({
+                            page: Number(params.page),
+                            limit: Number(params.limit),
+                        })
+                    )
+                )
+            ),
+            O.map(
+                TE.map((movies) =>
+                    pipe(
+                        movies,
+                        A.reduce(
+                            {
+                                headline: "Relevant Results",
+                                type: "list",
+                                template: {
+                                    titleHeader: "headline",
+                                    titleFooter: "subtitle",
+                                    layout: "0,0,2,4",
+                                    type: "separate",
+                                },
+                            } as MsxContentRoot,
+                            (content, movie) =>
+                                pipe(
+                                    movie,
+                                    (movie) => ({
+                                        titleHeader: movie.title,
+                                        titleFooter: moment
+                                            .unix(movie.release)
+                                            .format("YYYY"),
+                                        action: `content:${context.matchers.info.formatter
+                                            .run(R.Route.empty, {
+                                                id: String(movie.id),
+                                            })
+                                            .toString()}` as `content:${string}`,
+                                    }),
+                                    addItemToContent(content)
                                 )
-                            )
-                        )
-                    ),
-                    O.map(TE.mapLeft(errorPage)),
-                    O.getOrElse(() =>
-                        TE.left(
-                            errorPage(
-                                `Search params must contain at least one of: 'decade', 'genre', 'region' or 'trending'`
-                            )
                         )
                     )
                 )
             ),
-            E.getOrElseW(identity)
+            O.getOrElse(() => TE.left("Please provide valid query params."))
         ),
 }

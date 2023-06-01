@@ -6,7 +6,7 @@ import { MovieT } from "../entities/movie"
 import { GenreT } from "../entities/genre"
 import { LanguageT } from "../entities/language"
 
-type MovieParamsT = {
+export type MovieParamsT = {
     genre?: GenreT | Array<GenreT>
     startDate?: number
     endDate?: number
@@ -15,7 +15,7 @@ type MovieParamsT = {
     query?: string
 }
 
-type MoviesRepoT = {
+export type MoviesRepoT = {
     findOne: (id: number) => TE.TaskEither<string, MovieT>
     findMany: (
         params: MovieParamsT,
@@ -23,5 +23,3 @@ type MoviesRepoT = {
     ) => TE.TaskEither<string, Array<MovieT>>
     getGenres(): O.Option<Array<GenreT>>
 }
-
-export { MoviesRepoT, MovieParamsT }

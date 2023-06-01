@@ -1,18 +1,18 @@
 import { identity, pipe } from "fp-ts/lib/function"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { MoviePaths, watchParams } from "../../../domain/movies/controllers"
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
 import * as A from "fp-ts/Array"
 import * as TO from "fp-ts/TaskOption"
+import * as t from "io-ts"
+import * as R from "fp-ts-routing"
 import { filesize } from "filesize"
 import any from "promise.any"
 import {
     MsxContentItem,
     MsxContentRoot,
 } from "../../../core/msxUI/contentObjects"
-import { errorPage } from "./helpers/errorPage"
 import { Icon } from "../../../core/msxUI/icon"
 import { indexOfResolution } from "../../../domain/common/entities/resolution"
 import { TorrentT } from "../../../domain/common/entities/torrent"
@@ -20,6 +20,8 @@ import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.
 import _ from "lodash/fp"
 import { checkIfFileAvailable } from "../../../domain/common/useCases/checkIfFileAvailable"
 import { getTorrentsById } from "../../../domain/common/useCases/getTorrentsById"
+import { MovieContext } from "../../../domain/movies/controllers/context"
+import { watchParams } from "../../../domain/movies/controllers/params"
 
 const resolutionIcons: Icon[] = ["sd", "hd", "hd", "2k", "4k", "8k"]
 
@@ -68,7 +70,7 @@ const toRemoteContent: (
     title: string,
     torrentRepo: TorrentRepo,
     debridRepo: DebridProviderRepo
-) => TE.TaskEither<MsxContentRoot, MsxContentRoot> = (
+) => TE.TaskEither<string, MsxContentRoot> = (
     imdbId,
     title,
     torrentRepo,
@@ -102,15 +104,14 @@ const toRemoteContent: (
                             } as MsxContentItem)
                     ),
                 } as MsxContentRoot)
-        ),
-        TE.mapLeft(errorPage)
+        )
     )
 
 const toLocalContent: (
     imdbId: string,
     title: string,
     repo: TorrentRepo
-) => TE.TaskEither<MsxContentRoot, MsxContentRoot> = (imdbId, title, repo) =>
+) => TE.TaskEither<string, MsxContentRoot> = (imdbId, title, repo) =>
     pipe(
         imdbId,
         getTorrentsById(repo),
@@ -139,55 +140,31 @@ const toLocalContent: (
                             } as MsxContentItem)
                     ),
                 } as MsxContentRoot)
-        ),
-        TE.mapLeft(errorPage)
+        )
     )
 
 export const watchView: Controller<
-    MoviePaths["watch"],
-    { torrentRepo: TorrentRepo; debridRepo: DebridProviderRepo },
-    typeof watchParams
+    MovieContext,
+    t.TypeOf<typeof watchParams>
 > = {
     _tag: "view",
-    _path: `/movies/watch`,
-    _decoder: watchParams,
-    render:
-        (context: {
-            torrentRepo: TorrentRepo
-            debridRepo: DebridProviderRepo
-        }) =>
-        (decoder: typeof watchParams) =>
-        (params: any) =>
-            pipe(
-                params,
-                decoder.decode,
-                E.mapLeft(
-                    () => `You have to provide imdbId, player and title params`
-                ),
-                E.map((query) =>
-                    pipe(
-                        query,
-                        E.fromPredicate(
-                            (query) => query.player == "remote",
-                            identity
-                        ),
-                        E.map((query) =>
-                            toRemoteContent(
-                                query.imdbId,
-                                query.title,
-                                context.torrentRepo,
-                                context.debridRepo
-                            )
-                        ),
-                        E.getOrElse((query) =>
-                            toLocalContent(
-                                query.imdbId,
-                                query.title,
-                                context.torrentRepo
-                            )
-                        )
-                    )
-                ),
-                E.getOrElseW((error) => TE.left(errorPage(error)))
+    render: (context) => (params) =>
+        pipe(
+            params.player,
+            E.fromPredicate(
+                (player) => player == "remote", //player : "remote" | "local"
+                identity
             ),
+            E.map(() =>
+                toRemoteContent(
+                    params.imdbId,
+                    params.title,
+                    context.torrentRepo,
+                    context.debridRepo
+                )
+            ),
+            E.getOrElse(() =>
+                toLocalContent(params.imdbId, params.title, context.torrentRepo)
+            )
+        ),
 }

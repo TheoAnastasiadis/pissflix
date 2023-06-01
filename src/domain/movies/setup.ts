@@ -1,48 +1,33 @@
-import {
-    ResponseAdaptor,
-    SetUpFunction,
-} from "../../core/sharedObjects/addaptors"
+import * as R from "fp-ts-routing"
+import * as A from "fp-ts/Array"
+import { pipe } from "fp-ts/lib/function"
+import { MovieControllers } from "./controllers/controllers"
+import { MovieMatchersT } from "./controllers/matchers"
+import { MovieContext } from "./controllers/context"
+import { createMovieControllerRegistry } from "./controllers"
 import { Controller } from "../../core/sharedObjects/controller"
-import { setupRouter } from "../../core/sharedObjects/routerSetup"
-import { DebridProviderRepo } from "../common/repos/debridProvider.repo"
-import { TorrentRepo } from "../common/repos/torrent.repo"
-import { MovieContext, MoviePaths } from "./controllers"
-import { MoviesRepoT } from "./repos/movies.repo"
+import { params } from "@testdeck/mocha"
 
-export const createMovieContext: (
-    moviesRepo: MoviesRepoT,
-    torrentRepo: TorrentRepo,
-    debridRepo: DebridProviderRepo,
-    relativePaths: MoviePaths,
-    absolutePaths: MoviePaths
-) => MovieContext = (
-    moviesRepo,
-    torrentRepo,
-    debridRepo,
-    relativePaths,
-    absolutePaths
-) => ({
-    moviesRepo,
-    torrentRepo,
-    debridRepo,
-    relativePaths,
-    absolutePaths,
-})
+const MOVIES_ROUTE = "movies"
 
-export type setUpFunctionsRecord = Record<
-    Controller<any, any>["_tag"],
-    SetUpFunction
->
-export type responseAdaptorsRecord = Record<
-    Controller<any, any>["_tag"],
-    ResponseAdaptor<any, any>
->
-
-export const createMoviesRouter: (
-    movieControllers: Controller<string, MovieContext, any>[],
-    setUpFunction: setUpFunctionsRecord,
-    addaptors: responseAdaptorsRecord,
-    context: MovieContext
-) => void = (movieControllers, setUpFunctions, addaptors, context) => {
-    setupRouter(movieControllers, setUpFunctions, addaptors, context)
-}
+export const MovieRouter =
+    (
+        controllers: MovieControllers,
+        matchers: MovieMatchersT,
+        context: MovieContext
+    ) =>
+    (applicationRouter: R.Parser<any>) =>
+        pipe(
+            createMovieControllerRegistry(controllers)(matchers),
+            A.map(({ controller, matcher }) => ({
+                controller,
+                matcher: R.lit(MOVIES_ROUTE).then(matcher as R.Match<any>),
+            })), //prepend matchers with "/movies",
+            A.map(({ controller, matcher }) =>
+                matcher.parser.map((params) => ({
+                    result: controller.render(context)(params),
+                    _tag: controller._tag,
+                }))
+            ), //map matchers to controllers
+            A.reduce(applicationRouter, (router, parser) => router.alt(parser)) //register alternative paths to router
+        )

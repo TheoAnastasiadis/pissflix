@@ -1,0 +1,10 @@
+export type MoviePaths =
+    | "menu"
+    | "panel"
+    | "genres"
+    | "eras"
+    | "regions"
+    | "search"
+    | "info"
+    | "discover"
+    | "watch"

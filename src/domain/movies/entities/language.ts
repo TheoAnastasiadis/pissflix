@@ -5,12 +5,10 @@ interface Language {
     readonly Language: unique symbol
 }
 
-const Language = t.brand(
+export const Language = t.brand(
     t.string,
     (s): s is t.Branded<string, Language> => isValidLanguage(s) as boolean,
     "Language"
 )
 
-type LanguageT = t.TypeOf<typeof Language>
-
-export { Language, LanguageT }
+export type LanguageT = t.TypeOf<typeof Language>

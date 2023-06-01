@@ -1,34 +1,19 @@
 import { pipe } from "fp-ts/lib/function"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { MoviesRepoT } from "../../../domain/movies/repos/movies.repo"
-import { MoviePaths } from "../../../domain/movies/controllers"
-import * as t from "io-ts"
 import * as A from "fp-ts/Array"
 import * as TE from "fp-ts/TaskEither"
+import * as R from "fp-ts-routing"
 import { getMoviesByDecade } from "../../../domain/movies/useCases/getMoviesByDecade"
 import {
     MsxContentRoot,
     addPageToContent,
 } from "../../../core/msxUI/contentObjects"
-import { errorPage } from "./helpers/errorPage"
 import { resultsPage } from "./helpers/resultsPage"
-import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
-import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
+import { MovieContext } from "../../../domain/movies/controllers/context"
 
-export const erasView: Controller<
-    MoviePaths["eras"],
-    {
-        moviesRepo: MoviesRepoT
-        torrentRepo: TorrentRepo
-        debridRepo: DebridProviderRepo
-        relativePaths: MoviePaths
-        absolutePaths: MoviePaths
-    }
-> = {
+export const erasView: Controller<MovieContext> = {
     _tag: "view",
-    _path: `/movies/eras`,
-    _decoder: t.type({}),
-    render: (context) => (decoder: t.Type<{}>) => (params: {}) =>
+    render: (context, topeLevelRoute) => (params: {}) =>
         pipe(
             TE.Do,
             TE.bind("decades", () =>
@@ -59,11 +44,13 @@ export const erasView: Controller<
                             `Movies from the ${decade}s`,
                             `Selected just for you`,
                             movies[i],
-                            `${
-                                context.absolutePaths.panel
-                            }?${new URLSearchParams({
-                                decade: String(decade),
-                            }).toString()}`
+                            context.matchers.panel.formatter
+                                .run(R.Route.empty, {
+                                    decade: String(decade),
+                                    page: "0",
+                                    limit: "20",
+                                })
+                                .toString()
                         )
                     ),
                     A.reduce(
@@ -74,7 +61,6 @@ export const erasView: Controller<
                         (content, page) => addPageToContent(content)(page)
                     )
                 )
-            ),
-            TE.mapLeft(errorPage)
+            )
         ),
 }

@@ -45,17 +45,17 @@ const toContent =
                             title: "{txt:msx-white-soft:Info}",
                             titleFooter: `{ico:timelapse}{txt:msx-white:${
                                 movie.runtime
-                            }'}{tb}{ico:style}{txt:msx-white:${movie.genres
+                            }'}{tb}{ico:style}{txt:msx-white:${movie.genres.length > 0 ? movie.genres
                                 .map((genre) => genre.name)
                                 .reduce(
                                     (p, c) => p + ", " + c
-                                )}}{tb}{ico:volume-down-alt}{txt:msx-white:${movie.languages
-                                .map((language) => language.toString())
+                                ) : ''}}{tb}{ico:volume-down-alt}{txt:msx-white:${movie.languages.length > 0 ? movie.languages
+                                .map((language) => String(language))
                                 .reduce(
                                     (p, c) => p + ", " + c
-                                )}}{tb}{ico:language}{txt:msx-white:${movie.countries
-                                .map((country) => country.toString())
-                                .reduce((p, c) => p + ", " + c)}}`,
+                                ): ''}}{tb}{ico:language}{txt:msx-white:${movie.countries.length > 0 ? movie.countries
+                                .map((country) => String(country))
+                                .reduce((p, c) => p + ", " + c) : ''}}`,
                             type: "space",
                         },
                         {

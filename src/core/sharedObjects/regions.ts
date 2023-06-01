@@ -4,9 +4,10 @@ export type Region = {
     name: string
     isoType: IsoType
     languages: string[]
+    countries: string[]
 }
 
-export const regions: Region[] = [
+export const regions : Region[] = [
     {
         name: "Scandinavia",
         languages: [
@@ -25,6 +26,7 @@ export const regions: Region[] = [
             "fo",
             "lv",
         ],
+        countries: ["DK", "EE", "FI", "NO", "SJ", "SE"],
         isoType: "639-1",
     },
     {
@@ -48,16 +50,19 @@ export const regions: Region[] = [
             "va",
             "ie",
         ],
+        countries: ["AD", "AT", "BE", "FO", "AX", "FR", "DE", "GI", "VA", "IS", "IE", "IT", "LI", "LU", "MT", "MC", "NL", "PT", "SM", "ES", "CH", "GG", "JE", "IM"],
         isoType: "639-1",
     },
     {
         name: "Balkans",
         languages: ["al", "hr", "mt", "ba", "me", "rs", "si", "mk"],
+        countries: ["AL", "BA", "BG", "HR", "ME", "RO", "RS", "SI", "MK"],
         isoType: "639-1",
     },
     {
         name: "Greece",
-        languages: ["gr", "cy"],
+        languages: ["el"],
+        countries: ["GR", "CY"],
         isoType: "639-1",
     },
     {
@@ -82,6 +87,7 @@ export const regions: Region[] = [
             "kg",
             "kz",
         ],
+        countries: ["BY", "CZ", "GE", "HU", "KZ", "LV", "LT", "MD", "PL", "SK", "UA"],
         isoType: "639-1",
     },
     {
@@ -111,6 +117,7 @@ export const regions: Region[] = [
             "af",
             "ir",
         ],
+        countries: ["DZ", "LY", "MA", "EH", "SD", "TN", "EG","PS", "IR", "IQ", "IL", "JO", "KW", "LB", "QA", "SA", "SY", "AE", "TR", "YE", "XE"],
         isoType: "639-1",
     },
     {
@@ -170,11 +177,13 @@ export const regions: Region[] = [
             "ls",
             "bw",
         ],
+        countries: ["AQ", "AO", "BW", "BV", "BI", "CM", "CV", "CF", "TD", "KM", "YT", "CG", "CD", "BJ", "GQ", "ET", "ER", "GS", "TF", "DJ", "GA", "GM", "GH", "GN", "HM", "CI", "KE", "LS", "LR", "MG", "MW", "ML", "MR", "MU", "MZ", "NA", "NE", "NG", "GW", "RE", "RW", "SH", "ST", "SN", "SC", "SL", "SO", "ZA", "ZW", "SS", "SZ", "TG", "UG", "TZ", "BF", "ZM"],
         isoType: "639-1",
     },
     {
         name: "Indian Subcontinent",
         languages: ["lk", "pk", "np", "mv", "in", "bt", "bd"],
+        countries: ["IN", "PK", "BG"],
         isoType: "639-1",
     },
     {
@@ -200,6 +209,7 @@ export const regions: Region[] = [
             "kh",
             "bn",
         ],
+        countries: ["AF", "AZ", "BH", "BD", "AM", "BT", "IO", "BN", "MM", "KH", "LK", "CN", "TW", "CX", "CC", "GE", "HK", "ID", "IQ", "JP", "KZ", "KP", "KR", "KG", "LA", "MO", "MY", "MV", "MN", "NP", "PH", "TL", "SG", "VN", "TJ", "TH", "XD", "XS"],
         isoType: "639-1",
     },
     {
@@ -258,6 +268,7 @@ export const regions: Region[] = [
             "ag",
             "ai",
         ],
+        countries: ["AR", "BO", "BR", "CL", "CO", "EC", "FK", "GF", "GY", "PY", "PE", "SR", "UY", "VE"],
         isoType: "639-1",
     },
     {
@@ -293,6 +304,7 @@ export const regions: Region[] = [
             "au",
             "as",
         ],
+        countries: ["AS", "AU", "SB", "CK", "FJ", "PF", "KI", "GU", "NR", "NC", "VU", "NZ", "NU", "NF", "MP", "UM", "FM", "MH", "PW", "PG", "PN", "TK", "TO", "TV", "WF", "WS"],
         isoType: "639-1",
     },
 ]

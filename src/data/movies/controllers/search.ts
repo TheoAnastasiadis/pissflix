@@ -109,7 +109,7 @@ export const searchView: Controller<
             TE.Do,
             TE.bind("query", () => TE.right(params.query)),
             TE.bind("movies", ({ query }) =>
-                query.length == 0
+                query.length > 0
                     ? searchForMovie(context.moviesRepo)({
                           page: 0,
                           limit: 20,

@@ -10,6 +10,7 @@ import {
 } from "../../../core/msxUI/contentObjects"
 import { resultsPage } from "./helpers/resultsPage"
 import { MovieContext } from "../../../domain/movies/controllers/context"
+import erasContent from "./content/eras.content"
 
 export const erasView: Controller<MovieContext> = {
     _tag: "view",
@@ -42,7 +43,8 @@ export const erasView: Controller<MovieContext> = {
                     A.mapWithIndex((i, decade) =>
                         resultsPage(
                             `Movies from the ${decade}s`,
-                            `Selected just for you`,
+                            erasContent['en'][String(decade) as keyof typeof erasContent["en"]].title,
+                            erasContent['en'][String(decade) as keyof typeof erasContent["en"]].subtitle,
                             movies[i],
                             context.matchers.panel.formatter
                                 .run(R.Route.empty, {
@@ -50,12 +52,13 @@ export const erasView: Controller<MovieContext> = {
                                     page: "0",
                                     limit: "20",
                                 })
-                                .toString()
+                                .toString(),
+                            context.matchers
                         )
                     ),
                     A.reduce(
                         {
-                            headline: "Discover Movies By Era",
+                            headline: "Eras of cinema",
                             type: "list",
                         } as MsxContentRoot,
                         (content, page) => addPageToContent(content)(page)

@@ -76,6 +76,7 @@ export const exampleRegion: Region = {
     name: "Example",
     isoType: "639-1",
     languages: [exampleLanguage],
+    countries: ['EX']
 }
 when(
     mockedRepo.findMany(

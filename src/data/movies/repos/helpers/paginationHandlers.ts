@@ -6,14 +6,14 @@ import * as O from "fp-ts/Option"
 const TMDB_RESULTS_LIMIT = 20 //this is hardcoded into the API
 const TMDB_MAX_PAGES = 1000 // this is hardcoded into the API
 
-const validatePage = (page: number) =>
+const validPage = (page: number) =>
     pipe(
         page,
         O.fromPredicate((page: number) => page < TMDB_MAX_PAGES),
         O.getOrElse(() => TMDB_MAX_PAGES - 1)
     )
 
-const validateLimit = (limit: number) =>
+const validLimit = (limit: number) =>
     pipe(
         limit,
         O.fromPredicate((l) => l <= TMDB_RESULTS_LIMIT),
@@ -23,20 +23,20 @@ const validateLimit = (limit: number) =>
 const resultsPage = (pagination: paginationParamsT) =>
     pipe(
         O.Do,
-        O.bind("page", () => O.of(validatePage(pagination.page))),
-        O.bind("limit", () => O.of(validateLimit(pagination.limit))),
-        O.map(({ page, limit }) => (page - 1) * limit), //first result we're looking for
+        O.bind("page", () => O.of(validPage(pagination.page))),
+        O.bind("limit", () => O.of(validLimit(pagination.limit))),
+        O.map(({ page, limit }) => page * limit), //first result we're looking for
         O.map((prod) => Math.floor(prod / TMDB_RESULTS_LIMIT) + 1),
-        O.map(validatePage),
+        O.map(validPage),
         O.getOrElse(() => 0)
     )
 
 const resultsStart = (pagination: paginationParamsT) =>
     pipe(
         O.Do,
-        O.bind("page", () => O.of(validatePage(pagination.page))),
-        O.bind("limit", () => O.of(validateLimit(pagination.limit))),
-        O.map(({ page, limit }) => (page - 1) * limit), //first result in the page we're looking for
+        O.bind("page", () => O.of(validPage(pagination.page))),
+        O.bind("limit", () => O.of(validLimit(pagination.limit))),
+        O.map(({ page, limit }) => page * limit), //first result in the page we're looking for
         O.map((prod) => prod % TMDB_RESULTS_LIMIT),
         O.getOrElse(() => 0)
     )

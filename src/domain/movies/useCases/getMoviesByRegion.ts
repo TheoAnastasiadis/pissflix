@@ -13,9 +13,6 @@ export const getMoviesByRegion =
     (region: Region) =>
         pipe(
             region,
-            (r) => r.languages,
-            A.map(Language.decode),
-            A.filter(E.isRight),
-            A.map((langValidation) => langValidation.right),
-            (languages) => repo.findMany({ language: languages }, pagination)
+            (r) => r.countries,
+            (countries) => repo.findMany({ country: countries }, pagination)
         )

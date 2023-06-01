@@ -13,6 +13,7 @@ export type MovieParamsT = {
     language?: LanguageT | Array<LanguageT>
     trendingType?: "day" | "week"
     query?: string
+    country?: string | string[]
 }
 
 export type MoviesRepoT = {

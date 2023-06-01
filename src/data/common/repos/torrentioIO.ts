@@ -26,8 +26,8 @@ const toTorrent: (
             announce: torrent.sources,
         }),
         fileIdx: torrent.fileIdx || 0,
-        size: 7,
-        seeders: 7,
+        size: Number(torrent.title?.match(/\s([1-9.]*)\sGB/)?.at(1) || 0) * 1e9,
+        seeders: Number(torrent.title?.match(/\n\W*(\d*)\s/)?.at(1) || 0),
         resolution: pipe(
             torrent,
             (torrent) => (torrent.title ? torrent.title : ""),

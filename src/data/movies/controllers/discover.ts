@@ -5,6 +5,7 @@ import * as R from "fp-ts-routing"
 import { resultsPage } from "./helpers/resultsPage"
 import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
 import { MovieContext } from "../../../domain/movies/controllers/context"
+import discoverContent from "./content/discover.content"
 
 export const discoverView: Controller<MovieContext> = {
     _tag: "view",
@@ -26,8 +27,9 @@ export const discoverView: Controller<MovieContext> = {
                 type: "list",
                 pages: [
                     resultsPage(
-                        "Movies Trending Today",
-                        "Most views in the last 24 hours",
+                        discoverContent["en"]["day"].title,
+                        discoverContent["en"]["day"].title,
+                        discoverContent["en"]["day"].subtitle,
                         moviesOfTheDay,
                         context.matchers.panel.formatter
                             .run(R.Route.empty, {
@@ -35,11 +37,13 @@ export const discoverView: Controller<MovieContext> = {
                                 page: "0",
                                 limit: "20",
                             })
-                            .toString()
+                            .toString(),
+                        context.matchers
                     ),
                     resultsPage(
-                        "Movies Trending This Week",
-                        "Popular movies of the last few days",
+                        discoverContent["en"]["week"].title,
+                        discoverContent["en"]["week"].title,
+                        discoverContent["en"]["week"].subtitle,
                         moviesOfTheWeek,
                         context.matchers.panel.formatter
                             .run(R.Route.empty, {
@@ -47,7 +51,8 @@ export const discoverView: Controller<MovieContext> = {
                                 page: "0",
                                 limit: "20",
                             })
-                            .toString()
+                            .toString(),
+                        context.matchers
                     ),
                 ],
             }))

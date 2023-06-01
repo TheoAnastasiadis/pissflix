@@ -5,13 +5,13 @@ import {
     resultsEnd,
 } from "../../../../../src/data/movies/repos/helpers/paginationHandlers"
 
-const page = 5
+const page = 0
 const limit = 5
 const pagination: paginationParamsT = { page, limit }
 
 describe("pagination handlers", () => {
     test("correct page number", () => {
-        expect(resultsPage(pagination)).toBe(2)
+        expect(resultsPage(pagination)).toBe(1)
     })
 
     test("correct results length", () => {

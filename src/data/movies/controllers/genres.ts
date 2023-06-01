@@ -11,6 +11,7 @@ import {
 import { getGenres } from "../../../domain/movies/useCases/getGenres"
 import { getMoviesByGenre } from "../../../domain/movies/useCases/getMoviesByGenre"
 import { MovieContext } from "../../../domain/movies/controllers/context"
+import genresContent from "./content/genres.content"
 export const genresView: Controller<MovieContext> = {
     _tag: "view",
     render: (context, topeLevelRoute) => (params: {}) =>
@@ -39,8 +40,9 @@ export const genresView: Controller<MovieContext> = {
                     genres,
                     A.mapWithIndex((i, genre) =>
                         resultsPage(
-                            `Movies with ${genre.name}`,
-                            `Selected just for you`,
+                            genre.name,
+                            genresContent["en"][genre.name as keyof typeof genresContent["en"]].title,
+                            genresContent["en"][genre.name as keyof typeof genresContent["en"]].subtitle,
                             movies[i],
                             context.matchers.panel.formatter
                                 .run(R.Route.empty, {
@@ -48,7 +50,8 @@ export const genresView: Controller<MovieContext> = {
                                     page: "0",
                                     limit: "20",
                                 })
-                                .toString()
+                                .toString(),
+                            context.matchers
                         )
                     ),
                     A.reduce(

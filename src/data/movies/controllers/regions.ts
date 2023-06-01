@@ -11,6 +11,7 @@ import {
     addPageToContent,
 } from "../../../core/msxUI/contentObjects"
 import { MovieContext } from "../../../domain/movies/controllers/context"
+import regionsContent from "./content/regions.content"
 
 export const regionsView: Controller<MovieContext> = {
     _tag: "view",
@@ -35,7 +36,8 @@ export const regionsView: Controller<MovieContext> = {
                     A.mapWithIndex((i, region) =>
                         resultsPage(
                             `Movies from ${region.name}`,
-                            `Selected just for you`,
+                            regionsContent["en"][region.name as keyof typeof regionsContent["en"]].title,
+                            regionsContent["en"][region.name as keyof typeof regionsContent["en"]].subtitle,
                             movies[i],
                             context.matchers.panel.formatter
                                 .run(R.Route.empty, {
@@ -43,7 +45,8 @@ export const regionsView: Controller<MovieContext> = {
                                     page: "0",
                                     limit: "20",
                                 })
-                                .toString()
+                                .toString(),
+                            context.matchers
                         )
                     ),
                     A.reduce(

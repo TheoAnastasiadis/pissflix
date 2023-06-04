@@ -130,16 +130,15 @@ const toLocalContent: (
                         title: "Seeders",
                         titleFooter: "File Size",
                     },
-                    items: torrents.map(
-                        (torrent) =>
-                            ({
-                                icon: resolutionIcons[
-                                    indexOfResolution(torrent.resolution)
-                                ],
-                                title: `${torrent.seeders}{sp}{ico:group}`,
-                                titleFooter: filesize(torrent.size),
-                            } as MsxContentItem)
-                    ),
+                    items: torrents.map((torrent) => {
+                        return {
+                            icon: resolutionIcons[
+                                indexOfResolution(torrent.resolution)
+                            ],
+                            title: `${torrent.seeders}{sp}{ico:group}`,
+                            titleFooter: filesize(torrent.size),
+                        } as MsxContentItem
+                    }),
                 } as MsxContentRoot)
         )
     )

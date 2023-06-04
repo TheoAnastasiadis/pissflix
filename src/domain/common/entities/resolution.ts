@@ -2,10 +2,6 @@ import * as t from "io-ts"
 import { Searcher } from "fast-fuzzy"
 import { pipe } from "fp-ts/lib/function"
 
-export interface VideoResolution {
-    readonly VideoResolution: unique symbol
-}
-
 const videoResolutions = {
     SD: ["SD", "480p"],
     HD: ["HD", "720p"],
@@ -17,22 +13,20 @@ const videoResolutions = {
 }
 
 //Match texts to resolution categories
-const matcher = new Searcher(Object.entries(videoResolutions).flat())
-export const fuzzyMatchResolution = (s: string) => matcher.search(s)[0]
+const matcher = new Searcher(Object.values(videoResolutions).flat())
+export const fuzzyMatchResolution : (s: string) => keyof typeof videoResolutions = (s) => //converts resolution string to one of the resolution keys above
+    Object.keys(videoResolutions).find((key) => 
+        videoResolutions[key as keyof typeof videoResolutions].includes(
+            matcher.search(s)[0]
+        )
+    )  as keyof typeof videoResolutions
 
 //Compare resolutions
-export const indexOfResolution = (resolution: string) =>
+export const indexOfResolution = (resolution: keyof typeof videoResolutions) => //gets the key index
     pipe(
-        Object.keys(videoResolutions).findIndex((entries) =>
-            entries.includes(resolution)
-        ),
+        Object.keys(videoResolutions).findIndex(key => resolution == key),
         (index) => (index == -1 ? 6 : index)
     ) //all -1 values will be mapped to 'Unknown'
 
 //Branded type
-export const Resolution = t.brand(
-    t.string,
-    (input): input is t.Branded<string, VideoResolution> =>
-        Object.entries(videoResolutions).flat().includes(input),
-    "VideoResolution"
-)
+export const Resolution = t.keyof(videoResolutions)

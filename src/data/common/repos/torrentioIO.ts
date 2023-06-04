@@ -9,7 +9,6 @@ import ParseTorrent from "parse-torrent"
 import {
     fuzzyMatchResolution,
     Resolution,
-    VideoResolution,
 } from "../../../domain/common/entities/resolution"
 import { TorrentT } from "../../../domain/common/entities/torrent"
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
@@ -32,10 +31,10 @@ const toTorrent: (
             torrent,
             (torrent) => (torrent.title ? torrent.title : ""),
             torrentTitleParser.parse,
-            (result) => result.resolution || "Unknown",
+            (result) => result.resolution || torrent.name || "Unknown",
             fuzzyMatchResolution,
             Resolution.decode,
-            E.getOrElse(() => `Unknown` as t.Branded<string, VideoResolution>)
+            E.getOrElse(() => "Unknown" as t.TypeOf<typeof Resolution>)
         ),
     }))
 

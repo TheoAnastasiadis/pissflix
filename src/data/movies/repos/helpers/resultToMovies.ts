@@ -44,9 +44,12 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
     id: data.id || 0,
     languages: pipe(
         O.fromNullable(data.spoken_languages),
-        O.map(A.map((obj) => obj.name)),
-        O.map(A.filter(Language.is)),
-        O.getOrElse(() => [] as any[])
+        A.fromOption,
+        A.flatten,
+        A.map((obj) => obj.iso_639_1), 
+        A.map(Language.decode),
+        A.filter(E.isRight),
+        A.map(l => l.right)
     ),
     title: data.original_title || data.title || "Unknown Title",
     overview: data.overview || "",
@@ -63,7 +66,7 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
         O.fromNullable,
         A.fromOption,
         A.flatten,
-        A.map((obj) => obj.name),
+        A.map((obj) => obj.iso_3166_1),
         A.map(Country.decode),
         A.filter(E.isRight),
         A.map((c) => c.right)

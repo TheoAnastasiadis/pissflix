@@ -7,7 +7,7 @@ export const moviePage: (
     localWatchPath: string
 ) => (movie: MovieT) => MsxContentRoot =
     (remoteWatchPath, localWatchPath) => (movie) => ({
-        type: "pages",
+        type: "list",
         pages: [
             {
                 background: movie.background.bestQuality,
@@ -49,13 +49,13 @@ export const moviePage: (
                         }}{tb}{ico:volume-down-alt}{txt:msx-white:${
                             movie.languages.length > 0
                                 ? movie.languages
-                                      .map((language) => String(language))
+                                      .map(String)
                                       .reduce((p, c) => p + ", " + c)
                                 : ""
                         }}{tb}{ico:language}{txt:msx-white:${
                             movie.countries.length > 0
                                 ? movie.countries
-                                      .map((country) => String(country))
+                                      .map(String)
                                       .reduce((p, c) => p + ", " + c)
                                 : ""
                         }}`,

@@ -8,6 +8,7 @@ import {
 } from "ts-mockito"
 import { MoviesRepoT } from "../../../../src/domain/movies/repos/movies.repo"
 import * as TE from "fp-ts/TaskEither"
+import * as TO from 'fp-ts/TaskOption'
 import * as O from "fp-ts/Option"
 import { exampleMovie } from "../../../domain/movies/useCases/testObjects"
 import { TorrentRepo } from "../../../../src/domain/common/repos/torrent.repo"
@@ -60,7 +61,7 @@ const mockedDebridRepo = mock<DebridProviderRepo>()
 when(mockedDebridRepo.getStreamingLink(anything())).thenReturn(() =>
     TE.right("https://www.example.com/streamingLink.mp4")
 )
-when(mockedDebridRepo.checkIfAvailable(anyString())).thenResolve("")
+when(mockedDebridRepo.checkIfAvailable(anyString())).thenReturn(TO.some(true))
 const mockedDebridRepoInstance = instance(mockedDebridRepo)
 
 export const mockedContext: MovieContext = {

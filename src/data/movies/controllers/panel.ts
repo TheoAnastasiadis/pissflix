@@ -15,7 +15,6 @@ import {
     MsxContentRoot,
     addItemToContent,
 } from "../../../core/msxUI/contentObjects"
-import moment from "moment"
 import { panelParams } from "../../../domain/movies/controllers/params"
 import { moviePoster } from "./helpers/moviePoster"
 

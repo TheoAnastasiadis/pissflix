@@ -8,14 +8,11 @@ import {
     when,
     instance,
     deepEqual,
-    anyNumber,
     anything,
 } from "ts-mockito"
-import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { GenreT } from "../../../../src/domain/movies/entities/genre"
 import * as TE from "fp-ts/TaskEither"
 import * as O from "fp-ts/Option"
-import { regions } from "../../../../src/core/sharedObjects/regions"
 
 let mockedRepo = mock<MoviesRepoT>() //mock(TMDBRepo) does not work. Not sure why.
 

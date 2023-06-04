@@ -1,5 +1,6 @@
 import { anything, mock, when, instance, anyString } from "ts-mockito"
 import * as TE from "fp-ts/TaskEither"
+import * as TO from "fp-ts/TaskOption"
 import { TorrentRepo } from "../../../../src/domain/common/repos/torrent.repo"
 import { DebridProviderRepo } from "../../../../src/domain/common/repos/debridProvider.repo"
 import * as dotenv from "dotenv"
@@ -36,6 +37,6 @@ when(mockedDebridRepo.getStreamingLink("abc")).thenReturn(() =>
     TE.right("https://www.example.com/streamingLink.mp4")
 )
 when(mockedDebridRepo.getStreamingLink("def")).thenReturn(() => TE.left(""))
-when(mockedDebridRepo.checkIfAvailable("abc")).thenResolve("")
-when(mockedDebridRepo.checkIfAvailable("def")).thenReject()
+when(mockedDebridRepo.checkIfAvailable("abc")).thenReturn(TO.some(true))
+when(mockedDebridRepo.checkIfAvailable("def")).thenReturn(TO.some(false))
 export const mockedDebridRepoInstance = instance(mockedDebridRepo)

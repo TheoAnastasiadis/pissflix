@@ -14,17 +14,23 @@ const videoResolutions = {
 
 //Match texts to resolution categories
 const matcher = new Searcher(Object.values(videoResolutions).flat())
-export const fuzzyMatchResolution : (s: string) => keyof typeof videoResolutions = (s) => //converts resolution string to one of the resolution keys above
-    Object.keys(videoResolutions).find((key) => 
+export const fuzzyMatchResolution: (
+    s: string
+) => keyof typeof videoResolutions = (
+    s //converts resolution string to one of the resolution keys above
+) =>
+    Object.keys(videoResolutions).find((key) =>
         videoResolutions[key as keyof typeof videoResolutions].includes(
             matcher.search(s)[0]
         )
-    )  as keyof typeof videoResolutions
+    ) as keyof typeof videoResolutions
 
 //Compare resolutions
-export const indexOfResolution = (resolution: keyof typeof videoResolutions) => //gets the key index
+export const indexOfResolution = (
+    resolution: keyof typeof videoResolutions //gets the key index
+) =>
     pipe(
-        Object.keys(videoResolutions).findIndex(key => resolution == key),
+        Object.keys(videoResolutions).findIndex((key) => resolution == key),
         (index) => (index == -1 ? 6 : index)
     ) //all -1 values will be mapped to 'Unknown'
 

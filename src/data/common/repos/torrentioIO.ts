@@ -4,17 +4,16 @@ import * as E from "fp-ts/Either"
 import * as t from "io-ts"
 import axios from "axios"
 import { succesfullTorrentIOResponse } from "./helpers/torrentioSchemas"
-import torrentTitleParser from "parse-torrent-title"
 import ParseTorrent from "parse-torrent"
-import {
-    fuzzyMatchResolution,
-    Resolution,
-} from "../../../domain/common/entities/resolution"
 import { TorrentT } from "../../../domain/common/entities/torrent"
 import { TorrentRepo } from "../../../domain/common/repos/torrent.repo"
+import { parseFileSize } from "./helpers/parseFileSize"
+import { parseSeeders } from "./helpers/parseSeeders"
+import { parseResolution } from "./helpers/parseResolution"
 
 const api = axios.create()
 
+//helpers
 const toTorrent: (
     data: t.TypeOf<typeof succesfullTorrentIOResponse>
 ) => TorrentT[] = (data) =>
@@ -25,17 +24,9 @@ const toTorrent: (
             announce: torrent.sources,
         }),
         fileIdx: torrent.fileIdx || 0,
-        size: Number(torrent.title?.match(/\s([1-9.]*)\sGB/)?.at(1) || 0) * 1e9,
-        seeders: Number(torrent.title?.match(/\n\W*(\d*)\s/)?.at(1) || 0),
-        resolution: pipe(
-            torrent,
-            (torrent) => (torrent.title ? torrent.title : ""),
-            torrentTitleParser.parse,
-            (result) => result.resolution || torrent.name || "Unknown",
-            fuzzyMatchResolution,
-            Resolution.decode,
-            E.getOrElse(() => "Unknown" as t.TypeOf<typeof Resolution>)
-        ),
+        size: parseFileSize(torrent.title || ""),
+        seeders: parseSeeders(torrent.title || ""),
+        resolution: parseResolution(torrent)
     }))
 
 export const TorrentIoRepo: TorrentRepo = {
@@ -46,7 +37,7 @@ export const TorrentIoRepo: TorrentRepo = {
                     api.get(
                         `https://torrentio.strem.fun/stream/movie/${imdbId}.json`
                     ),
-                () => `Torrent server did not response succesfully.`
+                () => `Torrent server did not response succesfully.` //if code != 202
             ),
             TE.map((response) => response.data),
             TE.chain((data) =>
@@ -55,7 +46,7 @@ export const TorrentIoRepo: TorrentRepo = {
                     succesfullTorrentIOResponse.decode,
                     E.mapLeft(
                         () =>
-                            `Torrent server response was not in the expected format`
+                            `Torrent server response was not in the expected format` //if response cannot be parsed
                     ),
                     TE.fromEither
                 )

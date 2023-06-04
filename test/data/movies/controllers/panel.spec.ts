@@ -32,7 +32,7 @@ describe("panel view", () => {
     test("with region param", async () => {
         const content = (
             (await panelView.render(mockedContext)({
-                region: regions[0].name,
+                region: "Europe",
                 page: "0",
                 limit: "20",
             })()) as E.Right<MsxContentRoot>

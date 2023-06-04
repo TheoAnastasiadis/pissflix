@@ -24,8 +24,8 @@ describe("find one movie by id", () => {
     })
 })
 
-const startDate = moment("1980-1-1").unix()
-const endDate = moment("1980-1-6").unix()
+const startDate = moment([1980, 1, 1]).unix()
+const endDate = moment([1980, 1, 6]).unix()
 
 describe("find movies by release date", () => {
     test("given valid start and end dates TMDB returns an array of movies", async () => {
@@ -124,7 +124,6 @@ describe("search for movie", () => {
             { query: "titanic" },
             pagination
         )()
-        console.warn(movies)
         expect(E.isRight(movies)).toBeTruthy()
     })
 })

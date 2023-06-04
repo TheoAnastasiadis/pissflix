@@ -13,8 +13,6 @@ describe("discover view", () => {
                 {}
             )()) as E.Right<MsxContentRoot>
         ).right
-
-        console.log(JSON.stringify(content, undefined, 2))
         expect(content.pages).toHaveLength(2)
     })
 })

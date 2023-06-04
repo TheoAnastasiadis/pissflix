@@ -1,9 +1,19 @@
 import * as t from "io-ts"
+import { regions } from "../../../core/sharedObjects/regions"
+import { decades } from "../../../core/sharedObjects/decades"
 
 export const panelParams = t.intersection([
     t.union([
-        t.type({ decade: t.string }),
-        t.type({ region: t.string }),
+        t.type({
+            decade: t.union(
+                decades.map((dec) => t.literal(String(dec))) as [
+                    t.LiteralC<string>,
+                    t.LiteralC<string>,
+                    ...t.LiteralC<string>[]
+                ]
+            ),
+        }), //[t.literal("1920"), t.literal("1930"), etc...]
+        t.type({ region: t.keyof(regions) }),
         t.type({ genre: t.string }),
         t.type({ trending: t.union([t.literal("day"), t.literal("week")]) }),
     ]),

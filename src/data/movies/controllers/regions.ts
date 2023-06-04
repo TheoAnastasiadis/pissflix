@@ -11,17 +11,24 @@ import {
     addPageToContent,
 } from "../../../core/msxUI/contentObjects"
 import { MovieContext } from "../../../domain/movies/controllers/context"
-import regionsContent from "./content/regions.content"
+import regionsContent from "./content/regions"
+
+//helpers
+const regionNames = Object.keys(regions) as (keyof typeof regions)[]
+const contentRoot: MsxContentRoot = {
+    headline: "Discover Movies By Genre",
+    type: "list",
+}
 
 export const regionsView: Controller<MovieContext> = {
     _tag: "view",
-    render: (context, topLevelRoute: R.Route) => (params) =>
+    render: (context) => (params) =>
         pipe(
             TE.Do,
-            TE.bind("regions", () => TE.right(regions)),
-            TE.bind("movies", ({ regions }) =>
+            TE.bind("regionNames", () => TE.right(regionNames)),
+            TE.bind("movies", ({ regionNames }) =>
                 pipe(
-                    regions,
+                    regionNames,
                     A.traverse(TE.ApplicativePar)(
                         getMoviesByRegion(context.moviesRepo)({
                             limit: 5,
@@ -30,18 +37,18 @@ export const regionsView: Controller<MovieContext> = {
                     )
                 )
             ),
-            TE.map(({ regions, movies }) =>
+            TE.map(({ regionNames, movies }) =>
                 pipe(
-                    regions,
-                    A.mapWithIndex((i, region) =>
+                    regionNames,
+                    A.mapWithIndex((i, name) =>
                         resultsPage(
-                            `Movies from ${region.name}`,
-                            regionsContent["en"][region.name as keyof typeof regionsContent["en"]].title,
-                            regionsContent["en"][region.name as keyof typeof regionsContent["en"]].subtitle,
+                            `Movies from ${name}`,
+                            regionsContent["en"][name].title,
+                            regionsContent["en"][name].subtitle,
                             movies[i],
                             context.matchers.panel.formatter
                                 .run(R.Route.empty, {
-                                    region: region.name,
+                                    region: name,
                                     page: "0",
                                     limit: "20",
                                 })
@@ -49,12 +56,8 @@ export const regionsView: Controller<MovieContext> = {
                             context.matchers
                         )
                     ),
-                    A.reduce(
-                        {
-                            headline: "Discover Movies By Genre",
-                            type: "list",
-                        } as MsxContentRoot,
-                        (content, page) => addPageToContent(content)(page)
+                    A.reduce(contentRoot, (content, page) =>
+                        addPageToContent(content)(page)
                     )
                 )
             )

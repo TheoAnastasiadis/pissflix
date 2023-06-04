@@ -6,7 +6,7 @@ import * as R from "fp-ts-routing"
 
 export const menuView: Controller<MovieContext> = {
     _tag: "view",
-    render: (context, topLevelRoute: R.Route) => (params) =>
+    render: (context) => (params) =>
         TE.right({
             headline: "Movies",
             menu: [

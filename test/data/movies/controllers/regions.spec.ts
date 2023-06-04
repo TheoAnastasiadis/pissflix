@@ -15,6 +15,6 @@ describe("regions view", () => {
             )()) as E.Right<MsxContentRoot>
         ).right
 
-        expect(content.pages).toHaveLength(regions.length)
+        expect(content.pages).toHaveLength(Object.keys(regions).length)
     })
 })

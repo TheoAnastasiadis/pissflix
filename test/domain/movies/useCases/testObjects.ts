@@ -15,7 +15,7 @@ import { TMDBRepo } from "../../../../src/data/movies/repos/tmdb"
 import { GenreT } from "../../../../src/domain/movies/entities/genre"
 import * as TE from "fp-ts/TaskEither"
 import * as O from "fp-ts/Option"
-import { Region } from "../../../../src/core/sharedObjects/regions"
+import { regions } from "../../../../src/core/sharedObjects/regions"
 
 let mockedRepo = mock<MoviesRepoT>() //mock(TMDBRepo) does not work. Not sure why.
 
@@ -72,12 +72,7 @@ when(
 
 //getMoviesByRegion()
 const exampleLanguage: LanguageT = "fr" as LanguageT
-export const exampleRegion: Region = {
-    name: "Example",
-    isoType: "639-1",
-    languages: [exampleLanguage],
-    countries: ['EX']
-}
+export const exampleRegion = "Europe"
 when(
     mockedRepo.findMany(
         deepEqual({ language: [exampleLanguage] }),

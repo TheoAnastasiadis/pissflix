@@ -23,6 +23,7 @@ import { getTorrentsById } from "../../../domain/common/useCases/getTorrentsById
 import { MovieContext } from "../../../domain/movies/controllers/context"
 import { watchParams } from "../../../domain/movies/controllers/params"
 
+//helpers
 const resolutionIcons: Icon[] = ["sd", "hd", "hd", "2k", "4k", "8k"]
 
 const getOneofResolution: (

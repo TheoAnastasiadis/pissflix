@@ -12,7 +12,6 @@ describe("search view", () => {
             })()) as E.Right<MsxContentRoot>
         ).right
 
-        console.warn(JSON.stringify(content, undefined, 2))
         expect(content.pages?.at(0)?.items).toHaveLength(33)
         expect(content.pages?.at(1)?.items).toHaveLength(11)
     })

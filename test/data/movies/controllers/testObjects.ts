@@ -20,10 +20,13 @@ import { MovieMatchers } from "../../../../src/domain/movies/controllers/matcher
 const mockedMoviesRepo = mock<MoviesRepoT>()
 when(
     mockedMoviesRepo.findMany(anything(), deepEqual({ page: 0, limit: 5 }))
-).thenReturn(TE.right(Array(5).fill(exampleMovie)))
+).thenReturn(TE.right(Array(5).fill(exampleMovie))) //for simple page results
 when(
     mockedMoviesRepo.findMany(anything(), deepEqual({ page: 0, limit: 20 }))
-).thenReturn(TE.right(Array(20).fill(exampleMovie)))
+).thenReturn(TE.right(Array(20).fill(exampleMovie))) //for panel results
+when(
+    mockedMoviesRepo.findMany(anything(), deepEqual({ page: 0, limit: 11 }))
+).thenReturn(TE.right(Array(11).fill(exampleMovie))) //for search page results
 when(mockedMoviesRepo.findOne(anything())).thenReturn(TE.right(exampleMovie))
 when(mockedMoviesRepo.getGenres()).thenReturn(O.some(tmdbGenres))
 const mockedMoviesRepoInstance = instance(mockedMoviesRepo)

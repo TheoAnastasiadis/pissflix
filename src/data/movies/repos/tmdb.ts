@@ -76,7 +76,8 @@ const fromParams =
             const languageToQueryValue = (lang: LanguageT | Array<LanguageT>) =>
                 Array.isArray(lang) ? lang.join("|") : lang
 
-            const countryToQueryValue = (country: string | string[]) => Array.isArray(country) ? country.join("|") : country
+            const countryToQueryValue = (country: string | string[]) =>
+                Array.isArray(country) ? country.join("|") : country
 
             return (
                 `?` +

@@ -17,17 +17,35 @@ import {
 } from "../../../core/msxUI/contentObjects"
 import moment from "moment"
 import { panelParams } from "../../../domain/movies/controllers/params"
+import { moviePoster } from "./helpers/moviePoster"
+
+//helpers
+type pagination = { page: string; limit: string }
+const contentRoot: MsxContentRoot = {
+    headline: "Relevant Results",
+    type: "list",
+    template: {
+        titleHeader: "headline",
+        titleFooter: "subtitle",
+        layout: "0,0,2,4",
+        type: "separate",
+    },
+}
 
 export const panelView: Controller<
     MovieContext,
     t.TypeOf<typeof panelParams>
 > = {
     _tag: "view",
-    render: (context, topLevelRoute) => (params) =>
+    render: (context) => (params) =>
         pipe(
             O.fromNullable(
-                (params as { page: string; limit: string; decade: string })
-                    .decade
+                (
+                    params as Extract<
+                        { decade: string } & pagination,
+                        typeof params
+                    >
+                ).decade
             ), //decade
             O.map((decade) => Number(decade)),
             O.map(
@@ -40,11 +58,10 @@ export const panelView: Controller<
                 pipe(
                     O.fromNullable(
                         (
-                            params as {
-                                page: string
-                                limit: string
-                                genre: string
-                            }
+                            params as Extract<
+                                { genre: string } & pagination,
+                                typeof params
+                            >
                         ).genre
                     ), //genre
                     O.map((genreId) => ({
@@ -63,18 +80,12 @@ export const panelView: Controller<
                 pipe(
                     O.fromNullable(
                         (
-                            params as {
-                                page: string
-                                limit: string
-                                region: string
-                            }
+                            params as Extract<
+                                { region: keyof typeof regions } & pagination,
+                                typeof params
+                            >
                         ).region
                     ), //region
-                    O.chain((regionName) =>
-                        O.fromNullable(
-                            regions.find((region) => region.name == regionName)
-                        )
-                    ),
                     O.map(
                         getMoviesByRegion(context.moviesRepo)({
                             page: Number(params.page),
@@ -87,11 +98,10 @@ export const panelView: Controller<
                 pipe(
                     O.fromNullable(
                         (
-                            params as {
-                                page: string
-                                limit: string
-                                trending: "day" | "week"
-                            }
+                            params as Extract<
+                                { trending: "day" | "week" } & pagination,
+                                typeof params
+                            >
                         ).trending
                     ), //trending
                     O.map(
@@ -106,33 +116,18 @@ export const panelView: Controller<
                 TE.map((movies) =>
                     pipe(
                         movies,
-                        A.reduce(
-                            {
-                                headline: "Relevant Results",
-                                type: "list",
-                                template: {
-                                    titleHeader: "headline",
-                                    titleFooter: "subtitle",
-                                    layout: "0,0,2,4",
-                                    type: "separate",
-                                },
-                            } as MsxContentRoot,
-                            (content, movie) =>
-                                pipe(
+                        A.reduce(contentRoot, (content, movie) =>
+                            pipe(
+                                moviePoster(
                                     movie,
-                                    (movie) => ({
-                                        titleHeader: movie.title,
-                                        titleFooter: moment
-                                            .unix(movie.release)
-                                            .format("YYYY"),
-                                        action: `content:${context.matchers.info.formatter
-                                            .run(R.Route.empty, {
-                                                id: String(movie.id),
-                                            })
-                                            .toString()}` as `content:${string}`,
-                                    }),
-                                    addItemToContent(content)
-                                )
+                                    context.matchers.info.formatter
+                                        .run(R.Route.empty, {
+                                            id: String(movie.id),
+                                        })
+                                        .toString()
+                                ),
+                                addItemToContent(content)
+                            )
                         )
                     )
                 )

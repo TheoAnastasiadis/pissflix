@@ -5,7 +5,7 @@ import * as R from "fp-ts-routing"
 import { resultsPage } from "./helpers/resultsPage"
 import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
 import { MovieContext } from "../../../domain/movies/controllers/context"
-import discoverContent from "./content/discover.content"
+import discoverContent from "./content/discover"
 
 export const discoverView: Controller<MovieContext> = {
     _tag: "view",

@@ -10,21 +10,20 @@ import {
 } from "../../../core/msxUI/contentObjects"
 import { resultsPage } from "./helpers/resultsPage"
 import { MovieContext } from "../../../domain/movies/controllers/context"
-import erasContent from "./content/eras.content"
+import erasContent from "./content/eras"
+import { decades } from "../../../core/sharedObjects/decades"
+
+const rootContent: MsxContentRoot = {
+    headline: "Eras of cinema",
+    type: "list",
+}
 
 export const erasView: Controller<MovieContext> = {
     _tag: "view",
-    render: (context, topeLevelRoute) => (params: {}) =>
+    render: (context) => (params: {}) =>
         pipe(
             TE.Do,
-            TE.bind("decades", () =>
-                pipe(
-                    Array(10)
-                        .fill(1920)
-                        .map((v, i) => Number(v) + i * 10),
-                    (decades) => TE.right(decades)
-                )
-            ),
+            TE.bind("decades", () => TE.right(decades)),
             TE.bind("movies", ({ decades }) =>
                 pipe(
                     decades,
@@ -34,7 +33,7 @@ export const erasView: Controller<MovieContext> = {
                             limit: 5,
                         })
                     ),
-                    A.sequence(TE.ApplicativePar)
+                    A.sequence(TE.ApplicativePar) //parallel execution of Tasks
                 )
             ),
             TE.map(({ decades, movies }) =>
@@ -43,8 +42,8 @@ export const erasView: Controller<MovieContext> = {
                     A.mapWithIndex((i, decade) =>
                         resultsPage(
                             `Movies from the ${decade}s`,
-                            erasContent['en'][String(decade) as keyof typeof erasContent["en"]].title,
-                            erasContent['en'][String(decade) as keyof typeof erasContent["en"]].subtitle,
+                            erasContent["en"][decade].title,
+                            erasContent["en"][decade].subtitle,
                             movies[i],
                             context.matchers.panel.formatter
                                 .run(R.Route.empty, {
@@ -56,12 +55,8 @@ export const erasView: Controller<MovieContext> = {
                             context.matchers
                         )
                     ),
-                    A.reduce(
-                        {
-                            headline: "Eras of cinema",
-                            type: "list",
-                        } as MsxContentRoot,
-                        (content, page) => addPageToContent(content)(page)
+                    A.reduce(rootContent, (content, page) =>
+                        addPageToContent(content)(page)
                     )
                 )
             )

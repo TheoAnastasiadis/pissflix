@@ -46,7 +46,7 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
         O.fromNullable(data.spoken_languages),
         O.map(A.map((obj) => obj.name)),
         O.map(A.filter(Language.is)),
-        O.getOrElse(() => ([] as any[]))
+        O.getOrElse(() => [] as any[])
     ),
     title: data.original_title || data.title || "Unknown Title",
     overview: data.overview || "",

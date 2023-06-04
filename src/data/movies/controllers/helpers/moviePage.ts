@@ -29,12 +29,14 @@ export const moviePage: (
                     },
                     {
                         layout: "4,1,8,1",
+                        offset: "0.5,0,-0.5,0",
                         title: "{txt:msx-white-soft:Description}",
                         titleFooter: `{txt:msx-white:${movie.overview}}`,
                         type: "space",
                     },
                     {
                         layout: "4,2,8,1",
+                        offset: "0.5,0,-0.5,0",
                         title: "{txt:msx-white-soft:Info}",
                         titleFooter: `{ico:timelapse}{txt:msx-white:${
                             movie.runtime
@@ -61,18 +63,21 @@ export const moviePage: (
                     },
                     {
                         layout: "4,3,3,1",
+                        offset: "0.5,0,0,0",
                         type: "default",
                         label: "Watch Trailer{tb}{ico:smart-display}",
                         enable: false,
                     },
                     {
                         layout: "4,4,3,1",
+                        offset: "0.5,0,0,0",
                         type: "default",
                         label: "Play Locally{tb}{ico:local-play}",
                         action: `content:${localWatchPath}`,
                     },
                     {
                         layout: "7,4,3,1",
+                        offset: "0.5,0,0,0",
                         type: "default",
                         label: "Play Remotely{tb}{ico:play-circle}",
                         action: `content:${remoteWatchPath}`,

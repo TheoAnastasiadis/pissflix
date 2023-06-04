@@ -3,7 +3,13 @@ import * as t from "io-ts"
 const successfullTMDBResponse = t.type({
     adult: t.union([t.boolean, t.null]),
     backdrop_path: t.union([t.string, t.null]),
-    belongs_to_collection: t.union([t.string, t.null]),
+    belongs_to_collection: t.union([
+        t.type({
+            id:t.number,
+            name:t.string,
+            poster_path:t.string,
+            backdrop_path:t.string
+        }), t.null]),
     budget: t.union([t.number, t.null]),
     genres: t.union([
         t.array(

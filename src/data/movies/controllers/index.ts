@@ -1,4 +1,5 @@
 import { MovieControllers } from "../../../domain/movies/controllers/controllers"
+import { streamRedirection } from "./stream"
 import { discoverView } from "./discover"
 import { erasView } from "./eras"
 import { genresView } from "./genres"
@@ -19,4 +20,5 @@ export const MovieControllersImpl: MovieControllers = {
     info: infoView,
     discover: discoverView,
     watch: watchView,
+    stream: streamRedirection,
 }

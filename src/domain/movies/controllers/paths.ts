@@ -8,3 +8,4 @@ export type MoviePaths =
     | "info"
     | "discover"
     | "watch"
+    | "stream"

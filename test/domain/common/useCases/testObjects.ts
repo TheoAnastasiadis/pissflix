@@ -1,9 +1,10 @@
-import { anything, mock, when, instance, anyString } from "ts-mockito"
+import { mock, when, instance } from "ts-mockito"
 import * as TE from "fp-ts/TaskEither"
 import * as TO from "fp-ts/TaskOption"
 import { TorrentRepo } from "../../../../src/domain/common/repos/torrent.repo"
 import { DebridProviderRepo } from "../../../../src/domain/common/repos/debridProvider.repo"
 import * as dotenv from "dotenv"
+import { TorrentT } from "../../../../src/domain/common/entities/torrent"
 dotenv.config()
 
 //torrent repo
@@ -32,11 +33,35 @@ when(mockedTorrentRepo.getTorrentsByImdbId("tt5678")).thenReturn(TE.right([]))
 export const mockedTorrentRepoInstance = instance(mockedTorrentRepo)
 
 //debrid repo
+export const goodTorrent: TorrentT = {
+    title: "good",
+    magnetURI: "magnet:?good",
+    fileIdx: 0,
+    size: 0,
+    seeders: 0,
+    resolution: "SD",
+    imdbId: "",
+}
+export const badTorrent: TorrentT = {
+    title: "bad",
+    magnetURI: "magnet:?bad",
+    fileIdx: 1,
+    size: 0,
+    seeders: 0,
+    resolution: "SD",
+    imdbId: "",
+}
 const mockedDebridRepo = mock<DebridProviderRepo>()
-when(mockedDebridRepo.getStreamingLink("abc")).thenReturn(() =>
-    TE.right("https://www.example.com/streamingLink.mp4")
+when(mockedDebridRepo.getStreamingLink(goodTorrent.magnetURI)).thenReturn(
+    () =>
+        TE.right("https://www.example.com/streamingLink.mp4") as TE.TaskEither<
+            string,
+            string
+        >
 )
-when(mockedDebridRepo.getStreamingLink("def")).thenReturn(() => TE.left(""))
+when(mockedDebridRepo.getStreamingLink(badTorrent.magnetURI)).thenReturn(() =>
+    TE.left("")
+)
 when(mockedDebridRepo.checkIfAvailable("abc")).thenReturn(TO.some(true))
 when(mockedDebridRepo.checkIfAvailable("def")).thenReturn(TO.some(false))
 export const mockedDebridRepoInstance = instance(mockedDebridRepo)

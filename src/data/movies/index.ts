@@ -4,12 +4,14 @@ import { TMDBRepo } from "./repos/tmdb"
 import { MovieContext } from "../../domain/movies/controllers/context"
 import { MovieMatchers } from "../../domain/movies/controllers/matchers"
 import { MovieControllersImpl } from "./controllers"
+import { OSRepo } from "../common/repos/opensubtitles"
 
 const MovieContextImpl: MovieContext = {
     moviesRepo: TMDBRepo,
     torrentRepo: TorrentIoRepo,
     debridRepo: RealDebridRepo,
     matchers: MovieMatchers,
+    subtitlesRepo: OSRepo,
 }
 
 export { MovieContextImpl, MovieControllersImpl }

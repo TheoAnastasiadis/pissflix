@@ -9,6 +9,7 @@ export const torrent = t.type({
     size: t.number, //in GB
     seeders: t.number,
     resolution: Resolution,
+    imdbId: t.string,
 })
 
 export type TorrentT = t.TypeOf<typeof torrent>

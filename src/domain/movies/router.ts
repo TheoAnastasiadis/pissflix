@@ -2,13 +2,13 @@ import * as R from "fp-ts-routing"
 import * as A from "fp-ts/Array"
 import { pipe } from "fp-ts/lib/function"
 import { MovieControllers } from "./controllers/controllers"
-import { MovieMatchersT } from "./controllers/matchers"
+import { MovieMatchersT, prependMovieMatchers } from "./controllers/matchers"
 import { MovieContext } from "./controllers/context"
 import { createMovieControllerRegistry } from "./controllers"
 
 const MOVIES_ROUTE = "movies"
 
-export const MovieRouter =
+export const registerMovieRouter =
     (
         controllers: MovieControllers,
         matchers: MovieMatchersT,
@@ -16,14 +16,12 @@ export const MovieRouter =
     ) =>
     (applicationRouter: R.Parser<any>) =>
         pipe(
-            createMovieControllerRegistry(controllers)(matchers),
-            A.map(({ controller, matcher }) => ({
-                controller,
-                matcher: R.lit(MOVIES_ROUTE).then(matcher as R.Match<any>),
-            })), //prepend matchers with "/movies",
+            matchers,
+            prependMovieMatchers(MOVIES_ROUTE),
+            createMovieControllerRegistry(controllers),
             A.map(({ controller, matcher }) =>
                 matcher.parser.map((params) => ({
-                    result: controller.render(context)(params),
+                    result: controller.render(context)(params as any),
                     _tag: controller._tag,
                 }))
             ), //map matchers to controllers

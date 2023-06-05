@@ -36,3 +36,8 @@ export const watchParams = t.type({
     player: t.union([t.literal("remote"), t.literal("local")]),
     title: t.string,
 })
+
+export const streamParams = t.type({
+    magnet: t.string,
+    fileIdx: t.string,
+})

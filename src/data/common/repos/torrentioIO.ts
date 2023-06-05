@@ -15,19 +15,21 @@ const api = axios.create()
 
 //helpers
 const toTorrent: (
-    data: t.TypeOf<typeof succesfullTorrentIOResponse>
-) => TorrentT[] = (data) =>
-    data.streams.map((torrent) => ({
-        title: torrent.title || "Unknown title",
-        magnetURI: ParseTorrent.toMagnetURI({
-            infoHash: torrent.infoHash,
-            announce: torrent.sources,
-        }),
-        fileIdx: torrent.fileIdx || 0,
-        size: parseFileSize(torrent.title || ""),
-        seeders: parseSeeders(torrent.title || ""),
-        resolution: parseResolution(torrent),
-    }))
+    imdbId: string
+) => (data: t.TypeOf<typeof succesfullTorrentIOResponse>) => TorrentT[] =
+    (imdbId) => (data) =>
+        data.streams.map((torrent) => ({
+            title: torrent.title || "Unknown title",
+            magnetURI: ParseTorrent.toMagnetURI({
+                infoHash: torrent.infoHash,
+                announce: torrent.sources,
+            }),
+            fileIdx: torrent.fileIdx || 0,
+            size: parseFileSize(torrent.title || ""),
+            seeders: parseSeeders(torrent.title || ""),
+            resolution: parseResolution(torrent),
+            imdbId,
+        }))
 
 export const TorrentIoRepo: TorrentRepo = {
     getTorrentsByImdbId: (imdbId: string) =>
@@ -51,6 +53,6 @@ export const TorrentIoRepo: TorrentRepo = {
                     TE.fromEither
                 )
             ),
-            TE.map(toTorrent)
+            TE.map(toTorrent(imdbId))
         ),
 }

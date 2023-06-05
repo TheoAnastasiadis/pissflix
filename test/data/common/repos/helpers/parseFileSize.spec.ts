@@ -20,8 +20,7 @@ describe("Parse File Size", () => {
         expect(size).toEqual(890 * 1e3)
     })
     test("returns 0 otherwise", () => {
-        const title =
-            "Movie.video.file.mkv\n👤 8 💾 12 B ⚙️ Torrent Catalogue"
+        const title = "Movie.video.file.mkv\n👤 8 💾 12 B ⚙️ Torrent Catalogue"
         const size = parseFileSize(title)
         expect(size).toEqual(0)
     })

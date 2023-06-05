@@ -5,8 +5,6 @@ import { MovieControllers } from "./controllers/controllers"
 import { MovieMatchersT } from "./controllers/matchers"
 import { MovieContext } from "./controllers/context"
 import { createMovieControllerRegistry } from "./controllers"
-import { Controller } from "../../core/sharedObjects/controller"
-import { params } from "@testdeck/mocha"
 
 const MOVIES_ROUTE = "movies"
 

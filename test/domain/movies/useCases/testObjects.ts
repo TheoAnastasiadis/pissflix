@@ -3,13 +3,7 @@ import { MovieT } from "../../../../src/domain/movies/entities/movie"
 import { LanguageT } from "../../../../src/domain/movies/entities/language"
 import { CountryT } from "../../../../src/domain/movies/entities/country"
 import { MoviesRepoT } from "../../../../src/domain/movies/repos/movies.repo"
-import {
-    mock,
-    when,
-    instance,
-    deepEqual,
-    anything,
-} from "ts-mockito"
+import { mock, when, instance, deepEqual, anything } from "ts-mockito"
 import { GenreT } from "../../../../src/domain/movies/entities/genre"
 import * as TE from "fp-ts/TaskEither"
 import * as O from "fp-ts/Option"

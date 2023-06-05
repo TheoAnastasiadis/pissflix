@@ -1,7 +1,12 @@
 import axios from "axios"
 import { pipe } from "fp-ts/function"
 import { MagnetURIT } from "../../../../domain/common/entities/magnetURI"
-import { addTorrentResponse, availablityT, getTorrentInfoResponse, unrestrictLinkResponse } from "./realDebridSchemas"
+import {
+    addTorrentResponse,
+    availablityT,
+    getTorrentInfoResponse,
+    unrestrictLinkResponse,
+} from "./realDebridSchemas"
 import * as TE from "fp-ts/TaskEither"
 import * as TO from "fp-ts/TaskOption"
 import * as E from "fp-ts/Either"
@@ -126,17 +131,16 @@ export const unrestrictLink = (link: string) =>
  * @param {MagnetURIT} magnet
  */
 export const instantAvailability = (magnet: MagnetURIT) =>
-pipe(
-    TO.tryCatch(
-        () =>
+    pipe(
+        TO.tryCatch(() =>
             api.get(
                 `${BASE_URL}/torrents/instantAvailability/${
                     parseTorrent(magnet).infoHash
                 }`
             )
-    ),
-    TO.map((response) => response.data),
-    TO.map(
-        (data) => Object.keys(data[Object.keys(data)[0]]).length > 0 //real debrid :/
+        ),
+        TO.map((response) => response.data),
+        TO.map(
+            (data) => Object.keys(data[Object.keys(data)[0]]).length > 0 //real debrid :/
+        )
     )
-)

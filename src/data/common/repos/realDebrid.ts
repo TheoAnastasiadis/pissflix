@@ -3,7 +3,13 @@ import * as TE from "fp-ts/TaskEither"
 import realDebridApiKey from "../../../core/config/debrid.config"
 import { DebridProviderRepo } from "../../../domain/common/repos/debridProvider.repo"
 
-import { addMagnet, getLink, instantAvailability, selectFile, unrestrictLink } from "./helpers/realDebridWrappers"
+import {
+    addMagnet,
+    getLink,
+    instantAvailability,
+    selectFile,
+    unrestrictLink,
+} from "./helpers/realDebridWrappers"
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
 export const RealDebridRepo: DebridProviderRepo = {
@@ -15,5 +21,5 @@ export const RealDebridRepo: DebridProviderRepo = {
             TE.chain(getLink),
             TE.chain(unrestrictLink)
         ),
-    checkIfAvailable: instantAvailability
+    checkIfAvailable: instantAvailability,
 }

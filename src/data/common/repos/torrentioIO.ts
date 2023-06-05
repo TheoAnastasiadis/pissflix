@@ -26,7 +26,7 @@ const toTorrent: (
         fileIdx: torrent.fileIdx || 0,
         size: parseFileSize(torrent.title || ""),
         seeders: parseSeeders(torrent.title || ""),
-        resolution: parseResolution(torrent)
+        resolution: parseResolution(torrent),
     }))
 
 export const TorrentIoRepo: TorrentRepo = {

@@ -1,1 +1,1 @@
-export type CommonPaths = "subtitle"
+export type CommonPaths = "subtitle" | "start"

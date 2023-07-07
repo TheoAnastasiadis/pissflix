@@ -1,6 +1,7 @@
 import express from "express"
 import morgan from "morgan"
 import bodyParser from "body-parser"
+import cors from "cors"
 import { pipe } from "fp-ts/lib/function"
 import { parseRoute, router } from "./router"
 import { handleError } from "./error.handler"
@@ -10,18 +11,25 @@ import path from "path"
 
 const app = express()
 
-app.use(morgan("tiny"))
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+//Middleware
+const corsOptions = {
+    origin: /https?:\/\/msx\.benzac\.de/,
+    optionsSuccessStatus: 200,
+}
+const middleware = [
+    morgan("tiny"),
+    bodyParser.urlencoded({ extended: false }),
+    bodyParser.json(),
+    cors(corsOptions),
+]
+app.use(middleware)
 
-console.log(
-    `Static files served from ${path.resolve(__dirname, "../../../assets")}`
-)
 app.use(
     `/${applicationConfig.staticPath}`,
     express.static(path.resolve(__dirname, "../../../assets"))
 )
 
+//Handlers
 app.get(
     "*",
     async (req, res) =>

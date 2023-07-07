@@ -6,6 +6,7 @@ import * as t from "io-ts"
 
 export type commonControllers = {
     subtitle: Redirection<CommonContext, t.TypeOf<typeof subtitleParams>>
+    start: Controller<CommonContext>
 } & Record<
     CommonPaths,
     Controller<CommonContext, any> | Redirection<CommonContext, any>

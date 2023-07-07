@@ -7,7 +7,6 @@ import {
     streamParams,
 } from "./params"
 import * as t from "io-ts"
-import * as R from "fp-ts-routing"
 import { MovieContext } from "./context"
 import { MoviePaths } from "./paths"
 

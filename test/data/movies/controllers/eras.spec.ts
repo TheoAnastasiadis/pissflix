@@ -5,6 +5,7 @@ import {
     MsxContentItem,
     MsxContentRoot,
 } from "../../../../src/core/msxUI/contentObjects"
+
 describe("test view", () => {
     test("returns test view", async () => {
         const content = (

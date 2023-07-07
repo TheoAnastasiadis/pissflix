@@ -16,6 +16,10 @@ import { tmdbGenres } from "../../../../src/data/movies/repos/helpers/tmdbGenres
 import { DebridProviderRepo } from "../../../../src/domain/common/repos/debridProvider.repo"
 import { MovieContext } from "../../../../src/domain/movies/controllers/context"
 import { MovieMatchers } from "../../../../src/domain/movies/controllers/matchers"
+import { SubtitleRepo } from "../../../../src/domain/common/repos/subtitle.repo"
+import { SubtitleT } from "../../../../src/domain/common/entities/subtitle"
+import { Branded } from "io-ts"
+import { LanguageT } from "../../../../src/domain/movies/entities/language"
 
 //movies repo
 const mockedMoviesRepo = mock<MoviesRepoT>()
@@ -64,9 +68,19 @@ when(mockedDebridRepo.getStreamingLink(anything())).thenReturn(() =>
 when(mockedDebridRepo.checkIfAvailable(anyString())).thenReturn(TO.some(true))
 const mockedDebridRepoInstance = instance(mockedDebridRepo)
 
+//subtitles repo
+const mockedSubtitleRepo = mock<SubtitleRepo>()
+when(mockedSubtitleRepo.findByImdbId(anything())).thenReturn(() =>
+    TE.right([
+        { id: 0, language: "fr" as LanguageT, fps: 0 } satisfies SubtitleT,
+    ])
+)
+const mockedSubtitleRepoInstance = instance(mockedSubtitleRepo)
+
 export const mockedContext: MovieContext = {
     moviesRepo: mockedMoviesRepoInstance,
     torrentRepo: mockedTorrentRepoInstance,
     debridRepo: mockedDebridRepoInstance,
+    subtitlesRepo: mockedSubtitleRepoInstance,
     matchers: MovieMatchers,
 }

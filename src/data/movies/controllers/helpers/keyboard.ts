@@ -6,6 +6,9 @@ import {
 } from "../../../../core/msxUI/contentObjects"
 import { MovieContext } from "../../../../domain/movies/controllers/context"
 import * as R from "fp-ts-routing"
+import appConfig from "../../../../core/config/app.config"
+
+const baseUrl = appConfig.externalURL
 
 export const addKeyboardPage: (
     query: string,
@@ -22,9 +25,12 @@ export const addKeyboardPage: (
                         label: char,
                         alignment: "center",
                         color: "msx-gray",
-                        action: `replace:content:${FLAG}:${matchers.search.formatter
-                            .run(R.Route.empty, { query: query + char })
-                            .toString()}`,
+                        action: `replace:content:${FLAG}:${
+                            baseUrl +
+                            matchers.search.formatter
+                                .run(R.Route.empty, { query: query + char })
+                                .toString()
+                        }`,
                     })
                 )("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")), //alpha characters
             (page) =>
@@ -34,9 +40,12 @@ export const addKeyboardPage: (
                     type: "default",
                     alignment: "center",
                     color: "msx-gray",
-                    action: `replace:content:${FLAG}:${matchers.search.formatter
-                        .run(R.Route.empty, { query: query + " " })
-                        .toString()}`,
+                    action: `replace:content:${FLAG}:${
+                        baseUrl +
+                        matchers.search.formatter
+                            .run(R.Route.empty, { query: query + " " })
+                            .toString()
+                    }`,
                 }), //space bar
             (page) =>
                 A.reduceWithIndex(page, (i, p, char: string) =>
@@ -45,9 +54,12 @@ export const addKeyboardPage: (
                         label: char,
                         alignment: "center",
                         color: "msx-gray",
-                        action: `replace:content:${FLAG}:${matchers.search.formatter
-                            .run(R.Route.empty, { query: query + char })
-                            .toString()}`,
+                        action: `replace:content:${FLAG}:${
+                            baseUrl +
+                            matchers.search.formatter
+                                .run(R.Route.empty, { query: query + char })
+                                .toString()
+                        }`,
                     })
                 )(".!?".split("")), //symbols
             (page) =>
@@ -57,11 +69,14 @@ export const addKeyboardPage: (
                     type: "default",
                     alignment: "center",
                     color: "msx-gray",
-                    action: `replace:content:${FLAG}:${matchers.search.formatter
-                        .run(R.Route.empty, {
-                            query: query.substring(0, query.length - 1),
-                        })
-                        .toString()}`,
+                    action: `replace:content:${FLAG}:${
+                        baseUrl +
+                        matchers.search.formatter
+                            .run(R.Route.empty, {
+                                query: query.substring(0, query.length - 1),
+                            })
+                            .toString()
+                    }`,
                 }), //backspace
             (page) =>
                 addItemToPage(page)({
@@ -70,8 +85,11 @@ export const addKeyboardPage: (
                     type: "default",
                     alignment: "center",
                     color: "msx-gray",
-                    action: `replace:content:${FLAG}:${matchers.search.formatter
-                        .run(R.Route.empty, { query: "" })
-                        .toString()}`,
+                    action: `replace:content:${FLAG}:${
+                        baseUrl +
+                        matchers.search.formatter
+                            .run(R.Route.empty, { query: "" })
+                            .toString()
+                    }`,
                 }) //clear
         )

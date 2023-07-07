@@ -9,44 +9,18 @@ export const succesfullSearchResponse = t.type({
         t.type({
             id: t.string,
             type: t.string,
-            attributes: t.type({
-                subtitle_id: t.string,
-                language: t.string,
-                download_count: t.number,
-                new_download_count: t.number,
-                hearing_impaired: t.boolean,
-                hd: t.boolean,
-                fps: t.number,
-                votes: t.number,
-                ratings: t.number,
-                from_trusted: t.boolean,
-                foreign_parts_only: t.boolean,
-                upload_date: t.string,
-                ai_translated: t.boolean,
-                machine_translated: t.boolean,
-                release: t.string,
-                comments: t.string,
-                legacy_subtitle_id: t.number,
-                uploader: t.any,
-                feature_details: t.type({
-                    feature_id: t.number,
-                    feature_type: t.string,
-                    year: t.number,
-                    title: t.string,
-                    movie_name: t.string,
-                    imdb_id: t.number,
-                    tmdb_id: t.number,
+            attributes: t.union([
+                t.any,
+                t.type({
+                    files: t.array(
+                        t.partial({
+                            file_id: t.number,
+                            cd_number: t.number,
+                            file_name: t.string,
+                        })
+                    ),
                 }),
-                url: t.string,
-                related_links: t.any,
-                files: t.array(
-                    t.type({
-                        file_id: t.number,
-                        cd_number: t.number,
-                        file_name: t.string,
-                    })
-                ),
-            }),
+            ]),
         })
     ),
 })

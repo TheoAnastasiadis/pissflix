@@ -116,6 +116,7 @@ export const watchView: Controller<
                                                 }
                                             ),
                                         ...parseSubtitles(subtitles),
+                                        playerLabel: params.title,
                                         "button:content:icon": "settings",
                                         "button:content:action":
                                             "panel:request:player:options",

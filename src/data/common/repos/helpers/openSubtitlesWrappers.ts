@@ -77,7 +77,7 @@ export const searchForSubtitle = (imdbId: string, languages: LanguageT[]) =>
                 A.map(
                     (data) =>
                         ({
-                            id: Number(data.attributes.files.at(0)?.file_id),
+                            id: Number(data.attributes?.files?.at(0)?.file_id),
                             fps: data.attributes.fps || 0,
                             language: pipe(
                                 data.attributes.language,

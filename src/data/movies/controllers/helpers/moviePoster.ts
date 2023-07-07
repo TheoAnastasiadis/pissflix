@@ -8,5 +8,6 @@ export const moviePoster: (
 ) => MsxContentItem = (movie, infoPage) => ({
     titleHeader: movie.title,
     titleFooter: moment.unix(movie.release).format("YYYY"),
+    image: movie.poster.bestQuality,
     action: `content:${infoPage}`,
 })

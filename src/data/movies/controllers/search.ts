@@ -15,19 +15,25 @@ import { searchParams } from "../../../domain/movies/controllers/params"
 import { searchBar } from "./helpers/searchBar"
 import { addKeyboardPage } from "./helpers/keyboard"
 import { MovieT } from "../../../domain/movies/entities/movie"
-
+import appConfig from "../../../core/config/app.config"
+import * as R from "fp-ts-routing"
 //helpers
-const resultPoster: (movie: MovieT, i: number) => MsxContentItem = (
-    movie,
-    i
-) => ({
-    layout: `${(i % 6) * 2},${
-        Math.floor(i / 6) * 3
-    },2,3` as `${number},${number},${number},${number}`,
-    image: movie.poster.economicQuality,
-    type: "teaser",
-    titleFooter: moment.unix(movie.release).format("YYYY"),
-})
+const resultPoster: (
+    context: MovieContext
+) => (movie: MovieT, i: number) => MsxContentItem =
+    (context) => (movie, i) => ({
+        layout: `${(i % 6) * 2},${
+            Math.floor(i / 6) * 3
+        },2,3` as `${number},${number},${number},${number}`,
+        image: movie.poster.economicQuality,
+        type: "teaser",
+        titleFooter: moment.unix(movie.release).format("YYYY"),
+        action: `content:${
+            appConfig.externalURL
+        }${context.matchers.info.formatter.run(R.Route.empty, {
+            id: String(movie.id),
+        })}`,
+    })
 
 const rootContent: (backgroundUrl: string, flag: string) => MsxContentRoot = (
     backgroundUrl,
@@ -76,7 +82,7 @@ export const searchView: Controller<
                     ),
                     (content) =>
                         addPageToContent(content)({
-                            items: movies.map(resultPoster),
+                            items: movies.map(resultPoster(context)),
                         })
                 )
             )

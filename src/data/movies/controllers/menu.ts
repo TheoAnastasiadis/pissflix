@@ -16,7 +16,7 @@ export const menuView: Controller<MovieContext> = {
                 {
                     id: "0",
                     type: "default",
-                    extensionIcon: "auto-awesome",
+                    extensionIcon: "person-pin",
                     label: "Your Content",
                     data: `${baseUrl}${context.matchers.discover.formatter.run(
                         R.Route.empty,
@@ -31,7 +31,7 @@ export const menuView: Controller<MovieContext> = {
                 {
                     id: "2",
                     type: "default",
-                    extensionIcon: "auto-awesome",
+                    extensionIcon: "style",
                     label: "Genre",
                     data: `${baseUrl}${context.matchers.genres.formatter.run(
                         R.Route.empty,
@@ -41,7 +41,7 @@ export const menuView: Controller<MovieContext> = {
                 {
                     id: "3",
                     type: "default",
-                    extensionIcon: "auto-awesome",
+                    extensionIcon: "timelapse",
                     label: "Era",
                     data: `${baseUrl}${context.matchers.eras.formatter.run(
                         R.Route.empty,
@@ -51,11 +51,21 @@ export const menuView: Controller<MovieContext> = {
                 {
                     id: "4",
                     type: "default",
-                    extensionIcon: "auto-awesome",
+                    extensionIcon: "map",
                     label: "Region",
                     data: `${baseUrl}${context.matchers.regions.formatter.run(
                         R.Route.empty,
                         {}
+                    )}`,
+                },
+                {
+                    id: "5",
+                    type: "default",
+                    extensionIcon: "search",
+                    label: "Search",
+                    data: `${baseUrl}${context.matchers.search.formatter.run(
+                        R.Route.empty,
+                        { query: "" }
                     )}`,
                 },
             ],

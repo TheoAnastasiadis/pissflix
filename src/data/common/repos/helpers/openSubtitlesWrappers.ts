@@ -21,7 +21,8 @@ const convertToErrorString = (error: AxiosError) =>
         error.response?.data,
         unsuccesfullResponse.decode,
         E.match(
-            () => "Response could not be recognized.",
+            () =>
+                "[Unexpected subtitle error] Response could not be recognized.",
             (data) => data.errors.reduce((p, c) => p + "\n" + c)
         )
     )
@@ -31,6 +32,8 @@ const OS_API_KEY = config.osApiKey
 const api = axios.create({
     headers: {
         "Api-Key": OS_API_KEY,
+        "Content-Type": "application/json",
+        Accept: "*/*",
     },
 })
 
@@ -60,10 +63,6 @@ export const searchForSubtitle = (imdbId: string, languages: LanguageT[]) =>
         TE.chain((data) =>
             pipe(
                 data,
-                (d) => {
-                    console.log(JSON.stringify(d, undefined, 2))
-                    return d
-                },
                 succesfullSearchResponse.decode,
                 E.mapLeft(
                     () =>
@@ -78,7 +77,7 @@ export const searchForSubtitle = (imdbId: string, languages: LanguageT[]) =>
                 A.map(
                     (data) =>
                         ({
-                            id: Number(data.id),
+                            id: Number(data.attributes.files.at(0)?.file_id),
                             fps: data.attributes.fps || 0,
                             language: pipe(
                                 data.attributes.language,
@@ -95,13 +94,15 @@ export const downloadSubtitle = (subtitleiId: number) =>
     pipe(
         TE.tryCatch(
             () =>
-                api.post(baseUrl + "donwload", {
-                    data: {
-                        file_id: subtitleiId,
-                    },
+                api.post(baseUrl + "download", {
+                    file_id: subtitleiId,
                 }),
             identity
         ),
+        TE.mapLeft((r) => {
+            console.log(JSON.stringify(r, undefined, 2))
+            return r
+        }),
         TE.mapLeft((error) => convertToErrorString(error as AxiosError)),
         TE.map((response) => response.data),
         TE.chain((data) =>

@@ -11,6 +11,10 @@ import path from "path"
 
 const app = express()
 
+//helpers
+const removeMsxQuery = (path: string) =>
+    path.replace(/v=\d\.\d\.\d{1,}/, "").replace(/t=\d{13}/, "")
+
 //Middleware
 const corsOptions = {
     origin: /https?:\/\/msx\.benzac\.de/,
@@ -24,6 +28,9 @@ const middleware = [
 ]
 app.use(middleware)
 
+console.log(
+    `Static files served from ${path.resolve(__dirname, "../../../assets")}`
+)
 app.use(
     `/${applicationConfig.staticPath}`,
     express.static(path.resolve(__dirname, "../../../assets"))
@@ -34,7 +41,7 @@ app.get(
     "*",
     async (req, res) =>
         await pipe(
-            parseRoute(req.originalUrl, router),
+            parseRoute(removeMsxQuery(req.originalUrl), router),
             handleError(res),
             handleSuccess(res)
         )()

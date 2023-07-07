@@ -9,6 +9,6 @@ export const startObject: Controller<CommonContext> = {
         TE.right({
             name: "Pissflix",
             version: "1.0.0",
-            parameter: `menu:${appConfig.externalURL}/msx/menu.json`,
+            parameter: `content:${appConfig.externalURL}/msx/menu`,
         }),
 }

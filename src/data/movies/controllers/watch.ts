@@ -37,10 +37,12 @@ const sortTorrents = (isRemote: boolean) => (a: TorrentT, b: TorrentT) =>
     isRemote ? b.size - a.size : b.seeders - a.seeders //for remote plays resolution is more impoarnt. for local plays seeders are more important
 
 const parseSubtitles = (subtitles: SubtitleT[]) =>
-    subtitles
-        .map((sub) => [`torrent:subtitle:${sub.language}`, sub.id])
-        .map(([key, value]) => ({ [key as string]: value as string }))
-        .reduce((p, c) => Object.assign(p, c), {})
+    Object.fromEntries(
+        subtitles.map((sub) => [
+            `torrent:subtitle:${sub.language}:${sub.id}`,
+            `${applicationConfig.externalURL}/msx/subtitle?id=${sub.id}`,
+        ])
+    )
 
 export const watchView: Controller<
     MovieContext,
@@ -68,7 +70,7 @@ export const watchView: Controller<
             TE.bind("subtitles", () =>
                 getSubtitles(context.subtitlesRepo)([
                     "en" as LanguageT,
-                    "gr" as LanguageT,
+                    "el" as LanguageT,
                 ])(params.imdbId)
             ),
             TE.map(
@@ -84,7 +86,6 @@ export const watchView: Controller<
                             iconSize: "medium",
                             title: "Seeders",
                             titleFooter: "File Size",
-                            properties: parseSubtitles(subtitles),
                         },
                         items: torrents
                             .sort(sortTorrents(params.player == "remote"))
@@ -101,17 +102,24 @@ export const watchView: Controller<
                                         instantAvailability[i]
                                             ? "{ico:offline-bolt}"
                                             : "",
-                                    action: `video:plugin:${
-                                        applicationConfig.externalURL
-                                    }/${
-                                        applicationConfig.staticPath
-                                    }/plugin?url=${context.matchers.stream.formatter.run(
-                                        R.Route.empty,
-                                        {
-                                            magnet: torrent.magnetURI,
-                                            fileIdx: String(torrent.fileIdx),
-                                        }
-                                    )}`,
+                                    action: `video:plugin:${applicationConfig.externalURL}/${applicationConfig.staticPath}/plugin`,
+                                    properties: {
+                                        "torrent:fallbackUrl":
+                                            `${applicationConfig.externalURL}` +
+                                            context.matchers.stream.formatter.run(
+                                                R.Route.empty,
+                                                {
+                                                    magnet: torrent.magnetURI,
+                                                    fileIdx: String(
+                                                        torrent.fileIdx
+                                                    ),
+                                                }
+                                            ),
+                                        ...parseSubtitles(subtitles),
+                                        "button:content:icon": "settings",
+                                        "button:content:action":
+                                            "panel:request:player:options",
+                                    },
                                 } satisfies MsxContentItem
                             }),
                     } satisfies MsxContentRoot)

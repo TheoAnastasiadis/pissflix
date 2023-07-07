@@ -8,6 +8,9 @@ import * as A from "fp-ts/Array"
 import { pipe } from "fp-ts/lib/function"
 import { MovieMatchersT } from "../../../../domain/movies/controllers/matchers"
 import * as R from "fp-ts-routing"
+import applicationConfig from "../../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 export const resultsPage = (
     headline: string,
@@ -39,9 +42,12 @@ export const resultsPage = (
                 image: m.poster.economicQuality,
                 layout: `${i * 2},1,2,4`,
                 type: "separate",
-                action: `content:${matchers.info.formatter.run(R.Route.empty, {
-                    id: String(m.id),
-                })}`,
+                action: `content:${baseUrl}${matchers.info.formatter.run(
+                    R.Route.empty,
+                    {
+                        id: String(m.id),
+                    }
+                )}`,
             })
         ),
         (p) =>

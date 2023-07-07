@@ -6,6 +6,9 @@ import { resultsPage } from "./helpers/resultsPage"
 import { getTrendingMovies } from "../../../domain/movies/useCases/getTrendingMovies"
 import { MovieContext } from "../../../domain/movies/controllers/context"
 import discoverContent from "./content/discover"
+import applicationConfig from "../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 export const discoverView: Controller<MovieContext> = {
     _tag: "view",
@@ -31,13 +34,14 @@ export const discoverView: Controller<MovieContext> = {
                         discoverContent["en"]["day"].title,
                         discoverContent["en"]["day"].subtitle,
                         moviesOfTheDay,
-                        context.matchers.panel.formatter
-                            .run(R.Route.empty, {
-                                trending: "day",
-                                page: "0",
-                                limit: "20",
-                            })
-                            .toString(),
+                        baseUrl +
+                            context.matchers.panel.formatter
+                                .run(R.Route.empty, {
+                                    trending: "day",
+                                    page: "0",
+                                    limit: "20",
+                                })
+                                .toString(),
                         context.matchers
                     ),
                     resultsPage(
@@ -45,13 +49,14 @@ export const discoverView: Controller<MovieContext> = {
                         discoverContent["en"]["week"].title,
                         discoverContent["en"]["week"].subtitle,
                         moviesOfTheWeek,
-                        context.matchers.panel.formatter
-                            .run(R.Route.empty, {
-                                trending: "week",
-                                page: "0",
-                                limit: "20",
-                            })
-                            .toString(),
+                        baseUrl +
+                            context.matchers.panel.formatter
+                                .run(R.Route.empty, {
+                                    trending: "week",
+                                    page: "0",
+                                    limit: "20",
+                                })
+                                .toString(),
                         context.matchers
                     ),
                 ],

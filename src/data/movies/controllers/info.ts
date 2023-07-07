@@ -7,6 +7,9 @@ import * as t from "io-ts"
 import * as R from "fp-ts-routing"
 import { infoParams } from "../../../domain/movies/controllers/params"
 import { moviePage } from "./helpers/moviePage"
+import applicationConfig from "../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 export const infoView: Controller<MovieContext, t.TypeOf<typeof infoParams>> = {
     _tag: "view",
@@ -18,20 +21,22 @@ export const infoView: Controller<MovieContext, t.TypeOf<typeof infoParams>> = {
                 pipe(
                     movie,
                     moviePage(
-                        context.matchers.watch.formatter
-                            .run(R.Route.empty, {
-                                imdbId: movie.imdbId as string,
-                                player: "remote",
-                                title: movie.title,
-                            })
-                            .toString(),
-                        context.matchers.watch.formatter
-                            .run(R.Route.empty, {
-                                imdbId: movie.imdbId as string,
-                                player: "local",
-                                title: movie.title,
-                            })
-                            .toString()
+                        baseUrl +
+                            context.matchers.watch.formatter
+                                .run(R.Route.empty, {
+                                    imdbId: movie.imdbId as string,
+                                    player: "remote",
+                                    title: movie.title,
+                                })
+                                .toString(),
+                        baseUrl +
+                            context.matchers.watch.formatter
+                                .run(R.Route.empty, {
+                                    imdbId: movie.imdbId as string,
+                                    player: "local",
+                                    title: movie.title,
+                                })
+                                .toString()
                     )
                 )
             )

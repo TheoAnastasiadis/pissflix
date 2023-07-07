@@ -12,6 +12,9 @@ import { resultsPage } from "./helpers/resultsPage"
 import { MovieContext } from "../../../domain/movies/controllers/context"
 import erasContent from "./content/eras"
 import { decades } from "../../../core/sharedObjects/decades"
+import applicationConfig from "../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 const rootContent: MsxContentRoot = {
     headline: "Eras of cinema",
@@ -45,13 +48,14 @@ export const erasView: Controller<MovieContext> = {
                             erasContent["en"][decade].title,
                             erasContent["en"][decade].subtitle,
                             movies[i],
-                            context.matchers.panel.formatter
-                                .run(R.Route.empty, {
-                                    decade: String(decade),
-                                    page: "0",
-                                    limit: "20",
-                                })
-                                .toString(),
+                            baseUrl +
+                                context.matchers.panel.formatter
+                                    .run(R.Route.empty, {
+                                        decade: String(decade),
+                                        page: "0",
+                                        limit: "20",
+                                    })
+                                    .toString(),
                             context.matchers
                         )
                     ),

@@ -12,6 +12,9 @@ import {
 } from "../../../core/msxUI/contentObjects"
 import { MovieContext } from "../../../domain/movies/controllers/context"
 import regionsContent from "./content/regions"
+import applicationConfig from "../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 //helpers
 const regionNames = Object.keys(regions) as (keyof typeof regions)[]
@@ -46,13 +49,14 @@ export const regionsView: Controller<MovieContext> = {
                             regionsContent["en"][name].title,
                             regionsContent["en"][name].subtitle,
                             movies[i],
-                            context.matchers.panel.formatter
-                                .run(R.Route.empty, {
-                                    region: name,
-                                    page: "0",
-                                    limit: "20",
-                                })
-                                .toString(),
+                            baseUrl +
+                                context.matchers.panel.formatter
+                                    .run(R.Route.empty, {
+                                        region: name,
+                                        page: "0",
+                                        limit: "20",
+                                    })
+                                    .toString(),
                             context.matchers
                         )
                     ),

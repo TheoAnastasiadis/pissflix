@@ -3,6 +3,9 @@ import { Controller } from "../../../core/sharedObjects/controller"
 import { MovieContext } from "../../../domain/movies/controllers/context"
 import * as TE from "fp-ts/TaskEither"
 import * as R from "fp-ts-routing"
+import applicationConfig from "../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 export const menuView: Controller<MovieContext> = {
     _tag: "view",
@@ -15,10 +18,10 @@ export const menuView: Controller<MovieContext> = {
                     type: "default",
                     extensionIcon: "auto-awesome",
                     label: "Your Content",
-                    data: context.matchers.discover.formatter.run(
+                    data: `${baseUrl}${context.matchers.discover.formatter.run(
                         R.Route.empty,
                         {}
-                    ),
+                    )}`,
                 },
                 {
                     id: "1",
@@ -30,30 +33,30 @@ export const menuView: Controller<MovieContext> = {
                     type: "default",
                     extensionIcon: "auto-awesome",
                     label: "Genre",
-                    data: context.matchers.genres.formatter.run(
+                    data: `${baseUrl}${context.matchers.genres.formatter.run(
                         R.Route.empty,
                         {}
-                    ),
+                    )}`,
                 },
                 {
                     id: "3",
                     type: "default",
                     extensionIcon: "auto-awesome",
                     label: "Era",
-                    data: context.matchers.eras.formatter.run(
+                    data: `${baseUrl}${context.matchers.eras.formatter.run(
                         R.Route.empty,
                         {}
-                    ),
+                    )}`,
                 },
                 {
                     id: "4",
                     type: "default",
                     extensionIcon: "auto-awesome",
                     label: "Region",
-                    data: context.matchers.regions.formatter.run(
+                    data: `${baseUrl}${context.matchers.regions.formatter.run(
                         R.Route.empty,
                         {}
-                    ),
+                    )}`,
                 },
             ],
         } satisfies MsxMenu),

@@ -17,6 +17,9 @@ import {
 } from "../../../core/msxUI/contentObjects"
 import { panelParams } from "../../../domain/movies/controllers/params"
 import { moviePoster } from "./helpers/moviePoster"
+import applicationConfig from "../../../core/config/app.config"
+
+const baseUrl = applicationConfig.externalURL
 
 //helpers
 type pagination = { page: string; limit: string }
@@ -119,11 +122,12 @@ export const panelView: Controller<
                             pipe(
                                 moviePoster(
                                     movie,
-                                    context.matchers.info.formatter
-                                        .run(R.Route.empty, {
-                                            id: String(movie.id),
-                                        })
-                                        .toString()
+                                    baseUrl +
+                                        context.matchers.info.formatter
+                                            .run(R.Route.empty, {
+                                                id: String(movie.id),
+                                            })
+                                            .toString()
                                 ),
                                 addItemToContent(content)
                             )

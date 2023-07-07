@@ -20,6 +20,7 @@ import { TorrentT } from "../../../domain/common/entities/torrent"
 import { LanguageT } from "../../../domain/movies/entities/language"
 import { getSubtitles } from "../../../domain/common/useCases/getSubtitles"
 import { SubtitleT } from "../../../domain/common/entities/subtitle"
+import applicationConfig from "../../../core/config/app.config"
 
 //helpers
 const resolutionIcons: Icon[] = [
@@ -100,7 +101,11 @@ export const watchView: Controller<
                                         instantAvailability[i]
                                             ? "{ico:offline-bolt}"
                                             : "",
-                                    action: `video:plugin:pluginUrl?url=${context.matchers.stream.formatter.run(
+                                    action: `video:plugin:${
+                                        applicationConfig.externalURL
+                                    }/${
+                                        applicationConfig.staticPath
+                                    }/plugin?url=${context.matchers.stream.formatter.run(
                                         R.Route.empty,
                                         {
                                             magnet: torrent.magnetURI,

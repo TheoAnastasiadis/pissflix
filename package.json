@@ -7,7 +7,7 @@
         "pre-test": "npx prettier --write .",
         "start:dev": "npx nodemon",
         "build": "rimraf ./build && tsc",
-        "start": "npm run build && node build/index.js",
+        "start": "npm run build && node build/express.deploy.js",
         "test": "npx jest",
         "coverage": "npx jest --coverage --collectCoverageFrom=\"./src/**\""
     },

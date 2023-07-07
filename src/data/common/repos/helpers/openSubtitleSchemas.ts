@@ -27,11 +27,7 @@ export const succesfullSearchResponse = t.type({
                 release: t.string,
                 comments: t.string,
                 legacy_subtitle_id: t.number,
-                uploader: t.type({
-                    uploader_id: t.number,
-                    name: t.string,
-                    rank: t.string,
-                }),
+                uploader: t.any,
                 feature_details: t.type({
                     feature_id: t.number,
                     feature_type: t.string,
@@ -42,13 +38,7 @@ export const succesfullSearchResponse = t.type({
                     tmdb_id: t.number,
                 }),
                 url: t.string,
-                related_links: t.array(
-                    t.type({
-                        label: t.string,
-                        url: t.string,
-                        img_url: t.string,
-                    })
-                ),
+                related_links: t.any,
                 files: t.array(
                     t.type({
                         file_id: t.number,

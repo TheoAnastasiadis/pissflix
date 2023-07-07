@@ -60,10 +60,14 @@ export const searchForSubtitle = (imdbId: string, languages: LanguageT[]) =>
         TE.chain((data) =>
             pipe(
                 data,
+                (d) => {
+                    console.log(JSON.stringify(d, undefined, 2))
+                    return d
+                },
                 succesfullSearchResponse.decode,
                 E.mapLeft(
                     () =>
-                        "Response was recieved, but not in the expected format"
+                        "[Search for subtitle] Response was recieved, but not in the expected format"
                 ),
                 TE.fromEither
             )
@@ -75,7 +79,7 @@ export const searchForSubtitle = (imdbId: string, languages: LanguageT[]) =>
                     (data) =>
                         ({
                             id: Number(data.id),
-                            fps: data.attributes.fps,
+                            fps: data.attributes.fps || 0,
                             language: pipe(
                                 data.attributes.language,
                                 Language.decode,
@@ -106,7 +110,7 @@ export const downloadSubtitle = (subtitleiId: number) =>
                 SuccesfullDownloadResponse.decode,
                 E.mapLeft(
                     () =>
-                        "Response was recieved, but not in the expected format"
+                        "[Download subtitle] Response was recieved, but not in the expected format"
                 ),
                 TE.fromEither
             )

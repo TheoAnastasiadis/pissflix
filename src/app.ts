@@ -69,7 +69,7 @@ const handleSuccess: (
     ({ _tag, result }) => {
         switch (_tag) {
             case "view":
-                return pipe(result, TE.map(res.json))
+                return pipe(result, TE.map(res.json.bind(res)))
                 break
             case "redirection":
                 return pipe(
@@ -77,13 +77,13 @@ const handleSuccess: (
                         ReturnType<Response["send"]>,
                         string
                     >,
-                    TE.map(res.redirect)
+                    TE.map(res.redirect.bind(res))
                 )
                 break
         }
     }
 
-app.all(
+app.get(
     "*",
     async (req, res) =>
         await pipe(

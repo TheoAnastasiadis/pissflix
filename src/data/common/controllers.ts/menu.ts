@@ -45,6 +45,7 @@ export const menuController: Controller<CommonContext> = {
                 ({ pics }) =>
                     ({
                         headline: "Welcome Back",
+                        action: `[video:auto:${appConfig.externalURL}/startup.mp4|info:PissFlix: Welcome Back!]`,
                         type: "pages",
                         pages: [
                             {

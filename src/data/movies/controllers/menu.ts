@@ -12,6 +12,8 @@ export const menuView: Controller<MovieContext> = {
     render: (context) => (params) =>
         TE.right({
             headline: "Movies",
+            logo: `${baseUrl}/pissflix_cinema_menu.png`,
+            logoSize: "small",
             menu: [
                 {
                     id: "0",

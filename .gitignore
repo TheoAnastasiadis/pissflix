@@ -8,4 +8,4 @@ build
 *.log
 .firebaserc
 functions
-.static_root/plugin
+static_root/plugin

@@ -10,7 +10,7 @@
         "build": "bash ./bin/build.sh",
         "dev": "bash ./bin/dev.sh",
         "deploy:functions": "bash ./bin/deploy_functions.sh",
-        "deploy:hosting": "bash ./bin/deploy_functions.sh",
+        "deploy:hosting": "bash ./bin/deploy_hosting.sh",
         "test": "npx jest",
         "coverage": "bash ./bin/coverage.sh"
     },

@@ -2,12 +2,15 @@
     "name": "pissflix",
     "version": "1.0.0",
     "description": "Civilized content platform for smart TVs",
-    "main": "index.js",
+    "engines": {
+        "node": "18"
+    },
+    "main": "lib/firebase.deploy.js",
     "scripts": {
-        "pre-test": "npx prettier --write .",
-        "start:dev": "npx nodemon",
-        "build": "rimraf ./build && tsc",
-        "start": "npm run build && node build/src/express.deploy.js",
+        "build": "rimraf ./functions && mkdir functions && tsc",
+        "dev": "npm run build && export ENVIRONMENT=development && node functions/lib/express.deploy.js",
+        "deploy:functions": "rimraf ./functions && mkdir functions && npm run build && cp package.json ./functions/ && cp package-lock.json ./functions/ && cp .env ./functions/ && firebase deploy --only \"functions:firebaseFunction\"",
+        "deploy:hosting": "firebase deploy --only hosting",
         "test": "npx jest",
         "coverage": "npx jest --coverage --collectCoverageFrom=\"./src/**\""
     },
@@ -49,6 +52,8 @@
         "express": "^4.18.2",
         "fast-fuzzy": "^1.12.0",
         "filesize": "^10.0.7",
+        "firebase-admin": "^11.9.0",
+        "firebase-functions": "^4.4.1",
         "fp-ts": "^2.15.0",
         "fp-ts-routing": "^0.5.4",
         "i18n-iso-countries": "^7.6.0",

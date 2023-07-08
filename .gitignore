@@ -3,3 +3,8 @@ node_modules
 .nyc_output
 coverage
 build
+.vscode
+.firebase
+*.log
+.firebaserc
+functions

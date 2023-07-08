@@ -7,12 +7,12 @@
     },
     "main": "lib/firebase.deploy.js",
     "scripts": {
-        "build": "rimraf ./functions && mkdir functions && tsc",
-        "dev": "npm run build && export ENVIRONMENT=development && node functions/lib/express.deploy.js",
-        "deploy:functions": "rimraf ./functions && mkdir functions && npm run build && cp package.json ./functions/ && cp package-lock.json ./functions/ && cp .env ./functions/ && firebase deploy --only \"functions:firebaseFunction\"",
-        "deploy:hosting": "firebase deploy --only hosting",
+        "build": "bash ./bin/build.sh",
+        "dev": "bash ./bin/dev.sh",
+        "deploy:functions": "bash ./bin/deploy_functions.sh",
+        "deploy:hosting": "bash ./bin/deploy_functions.sh",
         "test": "npx jest",
-        "coverage": "npx jest --coverage --collectCoverageFrom=\"./src/**\""
+        "coverage": "bash ./bin/coverage.sh"
     },
     "keywords": [
         "torrents",

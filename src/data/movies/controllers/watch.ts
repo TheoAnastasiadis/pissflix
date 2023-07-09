@@ -103,6 +103,7 @@ export const watchView: Controller<
                                             ? "{ico:offline-bolt}"
                                             : "",
                                     action: `video:plugin:${applicationConfig.externalURL}/plugin`,
+                                    playerLabel: params.title,
                                     properties: {
                                         "torrent:fallbackUrl":
                                             `${applicationConfig.externalURL}` +
@@ -116,7 +117,6 @@ export const watchView: Controller<
                                                 }
                                             ),
                                         ...parseSubtitles(subtitles),
-                                        playerLabel: params.title,
                                         "button:content:icon": "settings",
                                         "button:content:action":
                                             "panel:request:player:options",

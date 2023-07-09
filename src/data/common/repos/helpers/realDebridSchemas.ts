@@ -55,7 +55,7 @@ export const unrestrictLinkResponse = t.type({
 })
 
 /**
- * This cannot be represented by an io-ts runtime type due to variable key names.
+ * These cannot be represented by an io-ts runtime type due to variable key names.
  */
 export type availablityT = {
     [key: string]: {
@@ -69,4 +69,14 @@ export type availablityT = {
             }
         }[]
     }
+}
+
+export type transcodingT = {
+    dash: {
+        full: string
+    }
+}
+
+export function isTranscodingResult(r: any): r is transcodingT {
+    return "dash" in r && "full" in r.dash
 }

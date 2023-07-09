@@ -9,6 +9,7 @@ import {
     instantAvailability,
     selectFile,
     unrestrictLink,
+    transcode,
 } from "./helpers/realDebridWrappers"
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
@@ -19,7 +20,8 @@ export const RealDebridRepo: DebridProviderRepo = {
             TE.chain(addMagnet),
             TE.chainFirst(selectFile(fileIdx)),
             TE.chain(getLink),
-            TE.chain(unrestrictLink)
+            TE.chain(unrestrictLink),
+            TE.chain(transcode)
         ),
     checkIfAvailable: instantAvailability,
 }

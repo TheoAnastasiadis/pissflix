@@ -5,6 +5,7 @@ import {
     addTorrentResponse,
     availablityT,
     getTorrentInfoResponse,
+    isTranscodingResult,
     unrestrictLinkResponse,
 } from "./realDebridSchemas"
 import * as TE from "fp-ts/TaskEither"
@@ -115,7 +116,7 @@ export const unrestrictLink = (link: string) =>
             pipe(
                 data,
                 unrestrictLinkResponse.decode,
-                E.map((response) => response.download),
+                E.map((response) => response.id),
                 E.mapLeft(
                     () =>
                         `[UNRESTRICT LINK] Response was recieved but was not in the expected format`
@@ -123,6 +124,28 @@ export const unrestrictLink = (link: string) =>
                 TE.fromEither
             )
         )
+    )
+
+/**
+ *Wrapper for streaming/transcode/ endpoint
+ *
+ * @param {string} id the resource id
+ */
+export const transcode = (id: string) =>
+    pipe(
+        TE.tryCatch(
+            () => api.get(`${BASE_URL}/streaming/transcode/${id}`),
+            () =>
+                `[TRANSCODE] Connection with Real Debrid could not be established`
+        ),
+        TE.map((reponse) => reponse.data),
+        TE.chain((data) => {
+            if (isTranscodingResult(data)) return TE.right(data.dash.full)
+            else
+                return TE.left(
+                    `[TRANSCODE] Data was recieved but not in the expected format`
+                )
+        })
     )
 
 /**

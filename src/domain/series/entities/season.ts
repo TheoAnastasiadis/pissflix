@@ -8,7 +8,7 @@ export const season = t.type({
     order: t.string,
     background: Image,
     poster: Image,
-    episodes: t.array(episode),
+    episodes: t.array(t.number), //episode ids
 })
 
 export type SeasonT = t.TypeOf<typeof season>

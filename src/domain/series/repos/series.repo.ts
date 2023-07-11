@@ -3,6 +3,8 @@ import * as O from "fp-ts/Option"
 import { SeriesGenresT } from "../entities/seriesGenres"
 import { SeriesT } from "../entities/series"
 import { paginationParamsT } from "../../../core/sharedObjects/pagination"
+import { SeasonT } from "../entities/season"
+import { EpisodeT } from "../entities/episode"
 
 export type SeriesParamsT = {
     genre?: SeriesGenresT | Array<SeriesGenresT>
@@ -10,8 +12,10 @@ export type SeriesParamsT = {
     query?: string
 }
 
-export type SerierRepoT = {
-    findOne: (id: number) => TE.TaskEither<string, SeriesT>
+export type SeriesRepoT = {
+    findSeries: (id: number) => TE.TaskEither<string, SeriesT>
+    findSeason: (id: number) => TE.TaskEither<string, SeasonT>
+    findEpisode: (id: number) => TE.TaskEither<string, EpisodeT>
     findMany: (
         params: SeriesParamsT,
         pagination: paginationParamsT

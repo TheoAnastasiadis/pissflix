@@ -12,7 +12,7 @@ export const series = t.readonly(
         genres: t.array(seriesGenres),
         overview: t.string,
         series_imdbId: t.union([t.string, t.null]),
-        seasons: t.array(season),
+        seasons: t.array(t.number), //season ids
     })
 )
 

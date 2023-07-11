@@ -1,4 +1,4 @@
 node_modules
-build
+functions
 coverage
 .nyc_output

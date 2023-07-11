@@ -7,7 +7,7 @@ import { MovieMatchers } from "../domain/movies/controllers/matchers"
 import { registerMovieRouter } from "../domain/movies/router"
 import * as TE from "fp-ts/TaskEither"
 import * as R from "fp-ts-routing"
-import { errorPage } from "./error.handler"
+import { errorPage } from "./handlers/error.handler"
 import { Result } from "../core/sharedObjects/controller"
 
 export const router = pipe(

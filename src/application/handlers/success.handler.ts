@@ -1,6 +1,6 @@
 import { Response } from "express"
 import { pipe } from "fp-ts/lib/function"
-import { Result } from "../core/sharedObjects/controller"
+import { Result } from "../../core/sharedObjects/controller"
 import * as TE from "fp-ts/TaskEither"
 
 export const handleSuccess: (

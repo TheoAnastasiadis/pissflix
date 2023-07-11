@@ -1,5 +1,5 @@
 import { Response } from "express"
-import { Result } from "../core/sharedObjects/controller"
+import { Result } from "../../core/sharedObjects/controller"
 import * as TE from "fp-ts/TaskEither"
 
 export const errorPage = {

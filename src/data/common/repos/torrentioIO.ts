@@ -39,7 +39,8 @@ export const TorrentIoRepo: TorrentRepo = {
                     api.get(
                         `https://torrentio.strem.fun/stream/movie/${imdbId}.json`
                     ),
-                () => `Torrent server did not response succesfully.` //if code != 202
+                () =>
+                    `[Search torrents by IMDB id] Torrent server did not response succesfully.` //if code != 202
             ),
             TE.map((response) => response.data),
             TE.chain((data) =>
@@ -48,7 +49,7 @@ export const TorrentIoRepo: TorrentRepo = {
                     succesfullTorrentIOResponse.decode,
                     E.mapLeft(
                         () =>
-                            `Torrent server response was not in the expected format` //if response cannot be parsed
+                            `[Search torrents by IMDB id] Torrent server response was not in the expected format` //if response cannot be parsed
                     ),
                     TE.fromEither
                 )

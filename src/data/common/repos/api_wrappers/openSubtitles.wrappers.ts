@@ -12,7 +12,7 @@ import {
     SuccesfullDownloadResponse,
     succesfullSearchResponse,
     unsuccesfullResponse,
-} from "../helpers/openSubtitleSchemas"
+} from "../decoders/openSubtitles.schemas"
 import { SubtitleT } from "../../../../domain/common/entities/subtitle"
 
 //helpers

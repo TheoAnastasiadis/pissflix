@@ -1,4 +1,4 @@
-import { getTorrentInfoResponse } from "../../../../src/data/common/repos/helpers/realDebridSchemas"
+import { getTorrentInfoResponse } from "../../../../src/data/common/repos/decoders/realDebrid.schemas"
 import * as E from "fp-ts/Either"
 
 const validInfoResponse = {

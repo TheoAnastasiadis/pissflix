@@ -9,7 +9,7 @@ import {
     SuccesfullTMDBAggregateResponse,
     UnsuccesfullTMDBResponse,
     successfullTMDBResponse,
-} from "./helpers/tmdbSchemas"
+} from "./decoders/tmdb.schemas"
 import { tmdbGenres } from "./helpers/tmdbGenres"
 import { toMovies, toMovie } from "./helpers/resultToMovies"
 import {

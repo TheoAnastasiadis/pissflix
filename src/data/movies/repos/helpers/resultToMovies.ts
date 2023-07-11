@@ -7,7 +7,7 @@ import * as E from "fp-ts/Either"
 import {
     SuccesfullTMDBAggregateResponse,
     successfullTMDBResponse,
-} from "./tmdbSchemas"
+} from "../decoders/tmdb.schemas"
 import { Language } from "../../../../domain/movies/entities/language"
 import { Country } from "../../../../domain/movies/entities/country"
 import { MovieT } from "../../../../domain/movies/entities/movie"

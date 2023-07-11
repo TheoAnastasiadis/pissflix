@@ -7,7 +7,7 @@ import {
     getTorrentInfoResponse,
     isTranscodingResult,
     unrestrictLinkResponse,
-} from "./realDebridSchemas"
+} from "../helpers/realDebridSchemas"
 import * as TE from "fp-ts/TaskEither"
 import * as TO from "fp-ts/TaskOption"
 import * as E from "fp-ts/Either"

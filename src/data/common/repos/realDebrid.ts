@@ -10,7 +10,7 @@ import {
     selectFile,
     unrestrictLink,
     transcode,
-} from "./helpers/realDebridWrappers"
+} from "./api_wrappers/realDebridWrappers"
 const API_KEY = realDebridApiKey.realDebridApiKEY
 
 export const RealDebridRepo: DebridProviderRepo = {

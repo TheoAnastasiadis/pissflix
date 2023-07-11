@@ -16,7 +16,7 @@ describe("panel view", () => {
             })()) as E.Right<MsxContentRoot>
         ).right
 
-        expect(content.items).toHaveLength(20)
+        expect(content.items).toHaveLength(21)
     })
     test("with genre param", async () => {
         const content = (
@@ -27,7 +27,7 @@ describe("panel view", () => {
             })()) as E.Right<MsxContentRoot>
         ).right
 
-        expect(content.items).toHaveLength(20)
+        expect(content.items).toHaveLength(21)
     })
     test("with region param", async () => {
         const content = (
@@ -38,7 +38,7 @@ describe("panel view", () => {
             })()) as E.Right<MsxContentRoot>
         ).right
 
-        expect(content.items).toHaveLength(20)
+        expect(content.items).toHaveLength(21)
     })
     test("with trending param", async () => {
         const content = (
@@ -49,6 +49,6 @@ describe("panel view", () => {
             })()) as E.Right<MsxContentRoot>
         ).right
 
-        expect(content.items).toHaveLength(20)
+        expect(content.items).toHaveLength(21)
     })
 })

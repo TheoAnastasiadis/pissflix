@@ -9,6 +9,6 @@ describe("menu view", () => {
             (await menuView.render(mockedContext)({})()) as E.Right<MsxMenu>
         ).right
 
-        expect(content.menu).toHaveLength(5)
+        expect(content.menu).toHaveLength(6)
     })
 })

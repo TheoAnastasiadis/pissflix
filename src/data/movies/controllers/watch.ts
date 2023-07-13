@@ -102,7 +102,9 @@ export const watchView: Controller<
                                         instantAvailability[i]
                                             ? "{ico:offline-bolt}"
                                             : "",
-                                    action: `video:plugin:${applicationConfig.externalURL}/plugin`,
+                                    action: `video:plugin:${
+                                        applicationConfig.externalURL
+                                    }/plugin/?t=${Date.now()}`,
                                     playerLabel: params.title,
                                     properties: {
                                         "torrent:fallbackUrl":

@@ -11,7 +11,6 @@ import {
     unrestrictLink,
     transcode,
 } from "./api_wrappers/realDebrid.wrappers"
-const API_KEY = realDebridApiKey.realDebridApiKEY
 
 export const RealDebridRepo: DebridProviderRepo = {
     getStreamingLink: (magnet) => (fileIdx) =>

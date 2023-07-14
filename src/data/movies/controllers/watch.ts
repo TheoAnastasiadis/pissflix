@@ -17,9 +17,6 @@ import { getTorrentsById } from "../../../domain/common/useCases/getTorrentsById
 import { MovieContext } from "../../../domain/movies/controllers/context"
 import { watchParams } from "../../../domain/movies/controllers/params"
 import { TorrentT } from "../../../domain/common/entities/torrent"
-import { LanguageT } from "../../../domain/movies/entities/language"
-import { getSubtitles } from "../../../domain/common/useCases/getSubtitles"
-import { SubtitleT } from "../../../domain/common/entities/subtitle"
 import applicationConfig from "../../../core/config/app.config"
 
 //helpers
@@ -35,14 +32,6 @@ const resolutionIcons: Icon[] = [
 
 const sortTorrents = (isRemote: boolean) => (a: TorrentT, b: TorrentT) =>
     isRemote ? b.size - a.size : b.seeders - a.seeders //for remote plays resolution is more impoarnt. for local plays seeders are more important
-
-const parseSubtitles = (subtitles: SubtitleT[]) =>
-    Object.fromEntries(
-        subtitles.map((sub) => [
-            `torrent:subtitle:${sub.language}:${sub.id}`,
-            `${applicationConfig.externalURL}/msx/subtitle?id=${sub.id}`,
-        ])
-    )
 
 export const watchView: Controller<
     MovieContext,
@@ -67,14 +56,8 @@ export const watchView: Controller<
                     TE.fromTaskOption(() => "")
                 )
             ),
-            TE.bind("subtitles", () =>
-                getSubtitles(context.subtitlesRepo)([
-                    "en" as LanguageT,
-                    "el" as LanguageT,
-                ])(params.imdbId)
-            ),
             TE.map(
-                ({ torrents, instantAvailability, subtitles }) =>
+                ({ torrents, instantAvailability }) =>
                     ({
                         headline: params.title,
                         type: "pages",
@@ -102,27 +85,25 @@ export const watchView: Controller<
                                         instantAvailability[i]
                                             ? "{ico:offline-bolt}"
                                             : "",
-                                    action: `video:plugin:${
+                                    action: `execute:${
                                         applicationConfig.externalURL
-                                    }/plugin/?t=${Date.now()}`,
-                                    playerLabel: params.title,
-                                    properties: {
-                                        "torrent:fallbackUrl":
-                                            `${applicationConfig.externalURL}` +
-                                            context.matchers.stream.formatter.run(
-                                                R.Route.empty,
-                                                {
-                                                    magnet: torrent.magnetURI,
-                                                    fileIdx: String(
-                                                        torrent.fileIdx
-                                                    ),
-                                                }
-                                            ),
-                                        ...parseSubtitles(subtitles),
-                                        "button:content:icon": "settings",
-                                        "button:content:action":
-                                            "panel:request:player:options",
-                                    },
+                                    }${context.matchers.stream.formatter.run(
+                                        R.Route.empty,
+                                        {
+                                            magnet: torrent.magnetURI,
+                                            fileIdx: String(torrent.fileIdx),
+                                            imdbId: params.imdbId,
+                                            title: params.title,
+                                        }
+                                    )}`,
+                                    // playerLabel: params.title,
+                                    // properties: {
+                                    //     "torrent:fallbackUrl":
+
+                                    //     "button:content:icon": "settings",
+                                    //     "button:content:action":
+                                    //         "panel:request:player:options",
+                                    // },
                                 } satisfies MsxContentItem
                             }),
                     } satisfies MsxContentRoot)

@@ -1,6 +1,7 @@
 import * as TE from "fp-ts/TaskEither"
 import { MsxContentRoot } from "../msxUI/contentObjects"
 import { MsxMenu } from "../msxUI/menuObject"
+import { MsxServerResponse } from "../msxUI/response"
 
 type MsxContent = MsxContentRoot | MsxMenu
 
@@ -19,7 +20,19 @@ export type Redirection<C, P = {}> = {
     render: (context: C) => (params: P) => TE.TaskEither<string, string>
 }
 
+//this type represents server responses
+export type Response<C, P = {}> = {
+    _tag: "response"
+    render: (
+        context: C
+    ) => (params: P) => TE.TaskEither<string, MsxServerResponse>
+}
+
 export type Result = {
-    _tag: (Controller<any, any> | Redirection<any, any>)["_tag"]
+    _tag: (
+        | Controller<any, any>
+        | Redirection<any, any>
+        | Response<any, any>
+    )["_tag"]
     result: TE.TaskEither<string, object>
 }

@@ -38,6 +38,8 @@ export const watchParams = t.type({
 })
 
 export const streamParams = t.type({
+    imdbId: t.string,
     magnet: t.string,
     fileIdx: t.string,
+    title: t.string,
 })

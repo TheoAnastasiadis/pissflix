@@ -1,4 +1,8 @@
-import { Controller, Redirection } from "../../../core/sharedObjects/controller"
+import {
+    Controller,
+    Redirection,
+    Response,
+} from "../../../core/sharedObjects/controller"
 import {
     panelParams,
     searchParams,
@@ -20,8 +24,10 @@ export type MovieControllers = {
     info: Controller<MovieContext, t.TypeOf<typeof infoParams>>
     discover: Controller<MovieContext>
     watch: Controller<MovieContext, t.TypeOf<typeof watchParams>>
-    stream: Redirection<MovieContext, t.TypeOf<typeof streamParams>>
+    stream: Response<MovieContext, t.TypeOf<typeof streamParams>>
 } & Record<
     MoviePaths,
-    Controller<MovieContext, any> | Redirection<MovieContext, any>
+    | Controller<MovieContext, any>
+    | Redirection<MovieContext, any>
+    | Response<MovieContext, any>
 >

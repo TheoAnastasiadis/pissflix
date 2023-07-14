@@ -17,6 +17,8 @@ export const handleSuccess: (
         switch (_tag) {
             case "view":
                 return pipe(result, TE.map(res.json.bind(res)))
+            case "response":
+                return pipe(result, TE.map(res.json.bind(res)))
             case "redirection":
                 return pipe(
                     result as TE.TaskEither<

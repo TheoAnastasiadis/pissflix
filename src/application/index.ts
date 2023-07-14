@@ -11,7 +11,7 @@ const app = express()
 app.use(middleware)
 
 //Handlers
-app.get(
+app.all(
     "*",
     async (req, res) =>
         await pipe(

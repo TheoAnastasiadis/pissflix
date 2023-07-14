@@ -7,12 +7,12 @@ import {
 } from "../../domain/movies/controllers/matchers"
 import { MovieControllersImpl } from "./controllers"
 import { OSRepo } from "../common/repos/opensubtitles"
-import { DebridLinkRepo } from "../common/repos/debridLink"
+import { RealDebridRepo } from "../common/repos/realDebrid"
 
 const MovieContextImpl: MovieContext = {
     moviesRepo: TMDBRepo,
     torrentRepo: TorrentIoRepo,
-    debridRepo: DebridLinkRepo,
+    debridRepo: RealDebridRepo,
     matchers: prependMovieMatchers("movies")(MovieMatchers),
     subtitlesRepo: OSRepo,
 }

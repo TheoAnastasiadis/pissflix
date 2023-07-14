@@ -14,8 +14,14 @@ export type SeriesParamsT = {
 
 export type SeriesRepoT = {
     findSeries: (id: number) => TE.TaskEither<string, SeriesT>
-    findSeason: (id: number) => TE.TaskEither<string, SeasonT>
-    findEpisode: (id: number) => TE.TaskEither<string, EpisodeT>
+    findSeason: (
+        seriesId: number
+    ) => (seasonId: number) => TE.TaskEither<string, SeasonT>
+    findEpisode: (
+        seriesId: number
+    ) => (
+        seasonId: number
+    ) => (episodeId: number) => TE.TaskEither<string, EpisodeT>
     findMany: (
         params: SeriesParamsT,
         pagination: paginationParamsT

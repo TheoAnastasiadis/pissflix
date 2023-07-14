@@ -7,6 +7,7 @@ export const episode = t.type({
     order: t.string,
     background: Image,
     poster: Image,
+    overview: t.string,
 })
 
 export type EpisodeT = t.TypeOf<typeof episode>

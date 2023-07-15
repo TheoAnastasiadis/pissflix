@@ -73,6 +73,7 @@ export const toEpisode: (data: t.TypeOf<typeof EpisodeResponse>) => EpisodeT = (
 ) =>
     ({
         id: data.id || 0,
+        title: data.name || "Unknown Episode Title",
         episode_imdbId: data.external_ids.imdb_id || "unknown",
         order: `${data.episode_number}` || "0",
         background: {

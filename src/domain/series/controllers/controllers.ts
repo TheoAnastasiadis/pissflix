@@ -2,7 +2,7 @@ import { Controller, Redirection } from "../../../core/sharedObjects/controller"
 import { SeriesContext } from "./context"
 import {
     episodeParams,
-    panelParams,
+    genreParams,
     searchParams,
     seasonParams,
     seriesParams,
@@ -12,8 +12,8 @@ import * as t from "io-ts"
 
 export type SeriesControllers = {
     menu: Controller<SeriesContext>
-    panel: Controller<SeriesContext, t.TypeOf<typeof panelParams>>
     genres: Controller<SeriesContext>
+    genre: Controller<SeriesContext, t.TypeOf<typeof genreParams>>
     search: Controller<SeriesContext, t.TypeOf<typeof searchParams>>
     discover: Controller<SeriesContext>
     series: Controller<SeriesContext, t.TypeOf<typeof seriesParams>>

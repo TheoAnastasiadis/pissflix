@@ -5,7 +5,7 @@ import { identity, pipe } from "fp-ts/lib/function"
 import * as E from "fp-ts/Either"
 import * as A from "fp-ts/Array"
 
-export const getMoviesByGenre =
+export const getSeriesByGenre =
     (repo: SeriesRepoT) =>
     (pagination: paginationParamsT) =>
     (genre: SeriesGenresT | Array<SeriesGenresT>) =>

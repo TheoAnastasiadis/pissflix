@@ -3,6 +3,7 @@ import { Image } from "../../movies/entities/image"
 
 export const episode = t.type({
     id: t.number,
+    title: t.string,
     episode_imdbId: t.union([t.string, t.null]),
     order: t.string,
     background: Image,

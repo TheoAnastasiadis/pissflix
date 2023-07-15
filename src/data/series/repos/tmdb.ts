@@ -6,7 +6,6 @@ import {
 import * as TE from "fp-ts/TaskEither"
 import * as E from "fp-ts/Either"
 import { pipe } from "fp-ts/function"
-import * as t from "io-ts"
 import * as O from "fp-ts/Option"
 import tmdbConfig from "../../../core/config/tmdb.config"
 import {

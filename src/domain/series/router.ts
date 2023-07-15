@@ -8,7 +8,7 @@ import { createSeriesControllerRegistry } from "./controllers"
 
 const SERIES_ROUTE = "tv"
 
-export const registerMovieRouter =
+export const registerSeriesRouter =
     (
         controllers: SeriesControllers,
         matchers: SeriesMatchersT,

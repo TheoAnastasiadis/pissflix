@@ -9,6 +9,9 @@ import * as TE from "fp-ts/TaskEither"
 import * as R from "fp-ts-routing"
 import { errorPage } from "./handlers/error.handler"
 import { Result } from "../core/sharedObjects/controller"
+import { registerSeriesRouter } from "../domain/series/router"
+import { SeriesContextImpl, SeriesControllersImpl } from "../data/series"
+import { SeriesMatchers } from "../domain/series/controllers/matchers"
 
 export const router = pipe(
     R.zero<TE.TaskEither<string, object>>().map(() => TE.left("zero")),
@@ -17,7 +20,12 @@ export const router = pipe(
         commonMatchers,
         commonContextImpl
     ),
-    registerMovieRouter(MovieControllersImpl, MovieMatchers, MovieContextImpl)
+    registerMovieRouter(MovieControllersImpl, MovieMatchers, MovieContextImpl),
+    registerSeriesRouter(
+        SeriesControllersImpl,
+        SeriesMatchers,
+        SeriesContextImpl
+    )
 )
 
 export const parseRoute: (route: string, router: R.Parser<Result>) => Result = (

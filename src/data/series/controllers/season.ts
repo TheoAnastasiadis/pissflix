@@ -66,10 +66,10 @@ export const seasonView: Controller<
                             ...episodes.map(
                                 (episode, i) =>
                                     ({
-                                        title: `S${season.id}E${i} ${episode.title}`,
+                                        title: `S${season.id}E${episode.id} ${episode.title}`,
                                         selection: {
                                             important: true,
-                                            action: `update:content:overlay:description`,
+                                            action: `update:panel:overlay:description`,
                                             data: {
                                                 type: "space",
                                                 id: "description",
@@ -80,9 +80,9 @@ export const seasonView: Controller<
                                         action: `content:${baseUrl}${context.movieMatchers.watch.formatter.run(
                                             R.Route.empty,
                                             {
-                                                imdbId: `${episode.episode_imdbId}`,
+                                                imdbId: `${params.seriesImdbId}:${season.id}:${episode.id}`,
                                                 player: "remote",
-                                                title: `S${season.id}E${i} ${episode.title}`,
+                                                title: `S${season.id}E${episode.id} ${episode.title}`,
                                             }
                                         )}`,
                                     } satisfies MsxContentItem)

@@ -12,7 +12,7 @@ export const menuView: Controller<SeriesContext> = {
     render: (context) => (params) =>
         TE.right({
             headline: "Movies",
-            logo: `${baseUrl}/pissflix_cinema_menu.png`,
+            logo: `${baseUrl}/pissflix_tv_menu.png`,
             logoSize: "small",
             menu: [
                 {

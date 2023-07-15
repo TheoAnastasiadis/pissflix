@@ -7,7 +7,7 @@ const serverApi = createApi({
     accessKey: unsplashConfig.usplashApiKey as string,
 })
 
-export const unsplash: PhotosRepoT = {
+export const UnsplashRepo: PhotosRepoT = {
     search: (query) =>
         pipe(
             TE.fromTask(() =>

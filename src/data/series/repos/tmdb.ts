@@ -97,7 +97,13 @@ export const TMDBSeriesRepo: SeriesRepoT = {
     findSeries: (id) =>
         pipe(
             TE.tryCatch(
-                () => api.get(baseURL + "tv/" + id),
+                () =>
+                    api.get(
+                        baseURL +
+                            "tv/" +
+                            id +
+                            "?append_to_response=external_ids"
+                    ),
                 (error) => (error as AxiosError).response?.data
             ),
             TE.map((response) => response.data),

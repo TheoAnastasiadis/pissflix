@@ -55,6 +55,7 @@ export const seriesView: Controller<
                                     type: "space",
                                     title: series.title,
                                     titleFooter: series.overview,
+                                    centration: "title",
                                     layout: "0,0,7,2",
                                     offset: "0,0.5,0,0",
                                 },
@@ -76,16 +77,17 @@ export const seriesView: Controller<
                         },
                         items: [
                             ...seasons.map(
-                                (season, i) =>
+                                (season) =>
                                     ({
-                                        title: `Season ${i}`,
+                                        title: `Season ${season.id}`,
                                         titleFooter: `${season.episodes.length} Episodes`,
                                         image: season.poster.bestQuality,
                                         action: `panel:${baseUrl}${context.matchers.season.formatter.run(
                                             R.Route.empty,
                                             {
                                                 series: String(series.id),
-                                                id: String(i),
+                                                id: String(season.id),
+                                                seriesImdbId: `${series.series_imdbId}`,
                                             }
                                         )}`,
                                     } satisfies MsxContentItem)

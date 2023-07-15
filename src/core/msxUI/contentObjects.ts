@@ -94,7 +94,7 @@ export type MsxContentItem = {
     text?: string
     alignment?: "left" | "center" | "right" | "justify"
     // truncation ?: string,
-    // centration ?: string,
+    centration?: "text" | "label" | "title" | "badge" | "stamp"
     tag?: string
     tagColor?: string
     badge?: string

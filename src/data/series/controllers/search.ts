@@ -27,6 +27,7 @@ const resultPoster: (
         },2,3` as `${number},${number},${number},${number}`,
         image: series.poster.economicQuality,
         type: "teaser",
+        title: series.title,
         action: `content:${
             appConfig.externalURL
         }${context.matchers.series.formatter.run(R.Route.empty, {
@@ -66,7 +67,7 @@ export const searchView: Controller<
                           page: 0,
                           limit: 11,
                       })("day")
-            ), //if query is empty, a list of trending movies is returned
+            ), //if query is empty, a list of trending shows is returned
             TE.map(({ query, series }) =>
                 pipe(
                     searchBar(query),

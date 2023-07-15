@@ -38,7 +38,7 @@ export const toSingleSeries: (
         },
         genres: data.genres as SeriesGenresT[],
         overview: data.overview || "",
-        series_imdbId: "unkown",
+        series_imdbId: data.external_ids.imdb_id,
         seasons: data.seasons.map((season) => season.season_number) as number[],
     } satisfies SeriesT)
 
@@ -97,18 +97,18 @@ export const toMultipleSeries: (
         title: entry.original_name || "Unknown",
         background: {
             economicQuality: entry.backdrop_path
-                ? "https://image.tmdb.org/t/p/w300/" + entry.backdrop_path
+                ? "https://image.tmdb.org/t/p/w300" + entry.backdrop_path
                 : defaultBackground,
             bestQuality: entry.backdrop_path
-                ? "https://image.tmdb.org/t/p/w1280/" + entry.backdrop_path
+                ? "https://image.tmdb.org/t/p/w1280" + entry.backdrop_path
                 : defaultBackground,
         },
         poster: {
             economicQuality: entry.poster_path
-                ? "https://image.tmdb.org/t/p/w300/" + entry.poster_path
+                ? "https://image.tmdb.org/t/p/w300" + entry.poster_path
                 : defaultBackground,
             bestQuality: entry.poster_path
-                ? "https://image.tmdb.org/t/p/w1280/" + entry.poster_path
+                ? "https://image.tmdb.org/t/p/w1280" + entry.poster_path
                 : defaultBackground,
         },
         genres: entry.genre_ids?.map((id) =>

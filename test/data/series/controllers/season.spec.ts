@@ -7,7 +7,7 @@ describe("season view", () => {
     test("expected output", async () => {
         const result = await SeriesControllersImpl.season.render(
             mockSeriesContext
-        )({ series: "0", id: "0" })()
+        )({ series: "0", id: "0", seriesImdbId: "" })()
 
         expect(result).toHaveProperty("right")
         expect((result as E.Right<MsxContentRoot>).right).toHaveProperty(

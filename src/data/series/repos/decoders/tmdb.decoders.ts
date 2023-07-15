@@ -63,6 +63,14 @@ export const successfullTMDBTVResponse = t.type({
     type: t.union([t.string, t.null]),
     vote_average: t.union([t.number, t.null]),
     vote_count: t.union([t.number, t.null]),
+    external_ids: t.type({
+        imdb_id: t.union([t.string, t.null]),
+        freebase_mid: t.any,
+        freebase_id: t.any,
+        tvdb_id: t.any,
+        tvrage_id: t.any,
+        wikidata_id: t.any,
+    }),
 })
 
 export const SeasonResponse = t.type({

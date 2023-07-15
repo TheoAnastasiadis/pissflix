@@ -15,5 +15,6 @@ export const seriesParams = t.type({
 
 export const seasonParams = t.type({
     series: t.string,
+    seriesImdbId: t.string,
     id: t.string,
 })

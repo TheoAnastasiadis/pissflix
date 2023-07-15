@@ -162,7 +162,7 @@ describe("TMDB Series Decoders", () => {
         expect(SeasonResponse.decode(invalidPayload)).toHaveProperty("left")
     })
 
-    test("single info response", () => {
+    test("single series response", () => {
         const validPayload = {
             adult: false,
             backdrop_path: "/b017s0M897KyqrXmtyAixo4vxxu.jpg",
@@ -260,6 +260,14 @@ describe("TMDB Series Decoders", () => {
             type: "Scripted",
             vote_average: 7.5,
             vote_count: 975,
+            external_ids: {
+                imdb_id: "tt8887436",
+                freebase_mid: null,
+                freebase_id: null,
+                tvdb_id: 8287162,
+                tvrage_id: null,
+                wikidata_id: null,
+            },
         }
         const invalidPayload = {}
 

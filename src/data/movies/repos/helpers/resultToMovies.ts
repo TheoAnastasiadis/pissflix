@@ -30,10 +30,10 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
 ) => ({
     background: {
         economicQuality: data.backdrop_path
-            ? "https://image.tmdb.org/t/p/w300/" + data.backdrop_path
+            ? "https://image.tmdb.org/t/p/w300" + data.backdrop_path
             : defaultBackground,
         bestQuality: data.backdrop_path
-            ? "https://image.tmdb.org/t/p/w1280/" + data.backdrop_path
+            ? "https://image.tmdb.org/t/p/w1280" + data.backdrop_path
             : defaultBackground,
     },
     genres:
@@ -55,10 +55,10 @@ const toMovie: (data: t.TypeOf<typeof successfullTMDBResponse>) => MovieT = (
     overview: data.overview || "",
     poster: {
         economicQuality: data.backdrop_path
-            ? "https://image.tmdb.org/t/p/w300/" + data.poster_path
+            ? "https://image.tmdb.org/t/p/w300" + data.poster_path
             : defaultPoster,
         bestQuality: data.backdrop_path
-            ? "https://image.tmdb.org/t/p/w1280/" + data.poster_path
+            ? "https://image.tmdb.org/t/p/w1280" + data.poster_path
             : defaultPoster,
     },
     countries: pipe(
@@ -86,10 +86,10 @@ const toMovies: (
         A.map((result) => ({
             background: {
                 economicQuality: result.backdrop_path
-                    ? "https://image.tmdb.org/t/p/w300/" + result.backdrop_path
+                    ? "https://image.tmdb.org/t/p/w300" + result.backdrop_path
                     : defaultBackground,
                 bestQuality: result.backdrop_path
-                    ? "https://image.tmdb.org/t/p/w1280/" + result.backdrop_path
+                    ? "https://image.tmdb.org/t/p/w1280" + result.backdrop_path
                     : defaultBackground,
             },
             genres:
@@ -106,10 +106,10 @@ const toMovies: (
             overview: "",
             poster: {
                 economicQuality: result.backdrop_path
-                    ? "https://image.tmdb.org/t/p/w300/" + result.poster_path
+                    ? "https://image.tmdb.org/t/p/w300" + result.poster_path
                     : defaultPoster,
                 bestQuality: result.backdrop_path
-                    ? "https://image.tmdb.org/t/p/w1280/" + result.poster_path
+                    ? "https://image.tmdb.org/t/p/w1280" + result.poster_path
                     : defaultPoster,
             },
             release: parseReleaseDate(result.release_date),

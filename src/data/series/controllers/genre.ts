@@ -52,6 +52,10 @@ export const genreView: Controller<
                             ({
                                 title: show.title,
                                 image: show.poster.bestQuality,
+                                action: `content:${baseUrl}${context.matchers.series.formatter.run(
+                                    R.Route.empty,
+                                    { id: String(show.id) }
+                                )}`,
                             } satisfies MsxContentItem)
                     ),
                     A.reduce(
@@ -65,7 +69,6 @@ export const genreView: Controller<
                                 layout: "0,0,2,4",
                                 image: "",
                                 title: "Title",
-                                titleFooter: "Unkown Seasons",
                                 imageFiller: "cover",
                                 imageOverlay: 1,
                                 enumerate: false,
@@ -98,7 +101,7 @@ export const genreView: Controller<
                                         type: "button",
                                         layout: "0,0,12,1",
                                         label: "Load More {ico:arrow-drop-down}",
-                                        action: `replace:content:GENRE${context.matchers.genre.formatter.run(
+                                        action: `replace:content:GENRE:${baseUrl}${context.matchers.genre.formatter.run(
                                             R.Route.empty,
                                             {
                                                 id: params.id,

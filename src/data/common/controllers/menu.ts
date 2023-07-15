@@ -58,7 +58,6 @@ export const menuController: Controller<CommonContext> = {
                                         titleFooter:
                                             "Stream your favourite TV shows",
                                         layout: "0,0,4,6",
-                                        badge: "Coming soon",
                                         image: getPicForKey("series", pics),
                                         imageFiller: "cover",
                                         action: `menu:${appConfig.externalURL}/tv/menu`,

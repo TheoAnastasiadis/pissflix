@@ -11,9 +11,7 @@ import { getSeasonById } from "../../../domain/series/useCases/getSeasonById"
 import { getEpisodeById } from "../../../domain/series/useCases/getEpisodeById"
 import {
     MsxContentItem,
-    MsxContentPage,
     MsxContentRoot,
-    addItemToPage,
 } from "../../../core/msxUI/contentObjects"
 
 const baseUrl = appConfig.externalURL
@@ -64,7 +62,7 @@ export const seasonView: Controller<
                             layout: "0,0,8,1",
                             area: "0,1,8,4",
                         },
-                        items: {
+                        items: [
                             ...episodes.map(
                                 (episode, i) =>
                                     ({
@@ -89,7 +87,7 @@ export const seasonView: Controller<
                                         )}`,
                                     } satisfies MsxContentItem)
                             ),
-                        },
+                        ],
                     } satisfies MsxContentRoot)
             )
         ),

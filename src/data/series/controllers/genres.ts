@@ -42,7 +42,7 @@ export const genresView: Controller<SeriesContext> = {
                         (i, genre) =>
                             ({
                                 title: genre.name,
-                                image: images[i],
+                                image: images?.[i],
                                 action: `content:${baseUrl}${context.matchers.genre.formatter.run(
                                     R.Route.empty,
                                     { id: String(genre.id), page: "0" }

@@ -58,10 +58,10 @@ export const menuController: Controller<CommonContext> = {
                                         titleFooter:
                                             "Stream your favourite TV shows",
                                         layout: "0,0,4,6",
-                                        enable: false,
-                                        badge: "Comming soon",
+                                        badge: "Coming soon",
                                         image: getPicForKey("series", pics),
                                         imageFiller: "cover",
+                                        action: `menu:${appConfig.externalURL}/tv/menu`,
                                     },
                                     {
                                         type: "teaser",
@@ -80,7 +80,7 @@ export const menuController: Controller<CommonContext> = {
                                         titleFooter:
                                             "Stream all the important artists",
                                         enable: false,
-                                        badge: "Comming soon",
+                                        badge: "Coming soon",
                                         image: getPicForKey("music", pics),
                                         imageFiller: "cover",
                                     },
@@ -91,7 +91,7 @@ export const menuController: Controller<CommonContext> = {
                                         titleFooter:
                                             "All the great X-rated content",
                                         enable: false,
-                                        badge: "Comming soon",
+                                        badge: "Coming soon",
                                         image: getPicForKey("porn", pics),
                                         imageFiller: "cover",
                                     },
@@ -100,7 +100,7 @@ export const menuController: Controller<CommonContext> = {
                                         layout: "8,2,4,2",
                                         title: "Albanian Weddings",
                                         enable: false,
-                                        badge: "Comming soon",
+                                        badge: "Coming soon",
                                         image: getPicForKey("content", pics),
                                         imageFiller: "cover",
                                     },

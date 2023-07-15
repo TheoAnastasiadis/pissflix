@@ -85,7 +85,7 @@ const fromGenre =
             () =>
                 api.get(
                     baseURL +
-                        "discover/movie" +
+                        "discover/tv" +
                         toQuery(params) +
                         `page=${resultsPage(pagination)}`
                 ),
@@ -182,7 +182,7 @@ export const TMDBSeriesRepo: SeriesRepoT = {
             TE.map((response) => response.data),
             TE.chain((response) =>
                 pipe(
-                    SeasonResponse.decode(response),
+                    EpisodeResponse.decode(response),
                     E.match(
                         () => TE.left(response),
                         () => TE.right(response)
@@ -192,7 +192,7 @@ export const TMDBSeriesRepo: SeriesRepoT = {
             TE.mapLeft((response) =>
                 pipe(
                     response,
-                    EpisodeResponse.decode,
+                    UnsuccesfullTMDBResponse.decode,
                     E.match(
                         (errors) =>
                             `[TMDB Find Season] Response was recieved but did not conform to expected format. Payload : ${JSON.stringify(
@@ -236,9 +236,7 @@ export const TMDBSeriesRepo: SeriesRepoT = {
                     UnsuccesfullTMDBResponse.decode,
                     E.match(
                         () =>
-                            `[Find many series] Response was recieved but did not conform to expected format. Payload : ${JSON.stringify(
-                                response
-                            )}`,
+                            `[Find many series] Response was recieved but did not conform to expected format`,
                         () =>
                             `[Find many series] TMDB request was not succesful. Reason: ${JSON.stringify(
                                 response

@@ -132,7 +132,7 @@ export const TMDBSeriesAggregateResponse = t.type({
             original_name: t.union([t.string, t.null]),
             overview: t.union([t.string, t.null]),
             popularity: t.union([t.number, t.null]),
-            poster_path: t.union([t.number, t.null]),
+            poster_path: t.union([t.string, t.null]),
             vote_average: t.union([t.number, t.null]),
             vote_count: t.union([t.number, t.null]),
         })

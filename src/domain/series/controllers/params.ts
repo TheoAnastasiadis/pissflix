@@ -17,9 +17,3 @@ export const seasonParams = t.type({
     series: t.string,
     id: t.string,
 })
-
-export const episodeParams = t.type({
-    series: t.string,
-    season: t.string,
-    id: t.string,
-})

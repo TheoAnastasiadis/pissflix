@@ -19,7 +19,7 @@ export const UnsplashRepo: PhotosRepoT = {
                     : TE.right(response)
             ),
             TE.map((photos) =>
-                photos.response?.results.map((v) => v.urls.full)
+                photos.response?.results.map((v) => v.urls.regular)
             ),
             TE.mapLeft((errors) => errors.join("\n"))
         ),

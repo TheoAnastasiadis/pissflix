@@ -25,7 +25,7 @@ export const toSingleSeries: (
                 ? "https://image.tmdb.org/t/p/w300" + data.backdrop_path
                 : defaultBackground,
             bestQuality: data.backdrop_path
-                ? "https://image.tmdb.org/t/p/w1280" + data.backdrop_path
+                ? "https://image.tmdb.org/t/p/w780" + data.backdrop_path
                 : defaultBackground,
         },
         poster: {
@@ -33,7 +33,7 @@ export const toSingleSeries: (
                 ? "https://image.tmdb.org/t/p/w300" + data.poster_path
                 : defaultBackground,
             bestQuality: data.poster_path
-                ? "https://image.tmdb.org/t/p/w1280" + data.poster_path
+                ? "https://image.tmdb.org/t/p/w500" + data.poster_path
                 : defaultBackground,
         },
         genres: data.genres as SeriesGenresT[],

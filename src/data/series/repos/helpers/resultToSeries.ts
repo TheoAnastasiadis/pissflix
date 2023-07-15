@@ -39,16 +39,14 @@ export const toSingleSeries: (
         genres: data.genres as SeriesGenresT[],
         overview: data.overview || "",
         series_imdbId: "unkown",
-        seasons: data.seasons
-            .map((season) => season.id)
-            .filter((value) => !!value) as number[],
+        seasons: data.seasons.map((season) => season.season_number) as number[],
     } satisfies SeriesT)
 
 export const toSeason: (data: t.TypeOf<typeof SeasonResponse>) => SeasonT = (
     data
 ) =>
     ({
-        id: data.id || 0,
+        id: data.season_number || 0,
         season_imdbId: "unknown",
         order: `${data.season_number}`,
         background: {
@@ -63,16 +61,16 @@ export const toSeason: (data: t.TypeOf<typeof SeasonResponse>) => SeasonT = (
                 ? "https://image.tmdb.org/t/p/w1280/" + data.poster_path
                 : defaultBackground,
         },
-        episodes: data.episodes
-            .map((episode) => episode.episode_number)
-            .filter((value) => !!value) as number[],
+        episodes: data.episodes.map(
+            (episode) => episode.episode_number
+        ) as number[],
     } satisfies SeasonT)
 
 export const toEpisode: (data: t.TypeOf<typeof EpisodeResponse>) => EpisodeT = (
     data
 ) =>
     ({
-        id: data.id || 0,
+        id: data.episode_number || 0,
         title: data.name || "Unknown Episode Title",
         episode_imdbId: data.external_ids.imdb_id || "unknown",
         order: `${data.episode_number}` || "0",

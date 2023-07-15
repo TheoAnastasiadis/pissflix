@@ -38,7 +38,6 @@ export const discoverView: Controller<SeriesContext> = {
                             },
                             ...seriesOfTheDay.map((s, i) => ({
                                 titleHeader: s.title,
-                                titleFooter: `${s.seasons.length} Seasons`,
                                 image: s.poster.economicQuality,
                                 layout: `${i * 2},1,2,4`,
                                 type: "separate",
@@ -62,7 +61,6 @@ export const discoverView: Controller<SeriesContext> = {
                             },
                             ...seriesOfTheWeek.map((s, i) => ({
                                 titleHeader: s.title,
-                                titleFooter: `${s.seasons.length} Seasons`,
                                 image: s.poster.economicQuality,
                                 layout: `${i * 2},1,2,4`,
                                 type: "separate",

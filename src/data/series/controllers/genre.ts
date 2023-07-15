@@ -51,7 +51,6 @@ export const genreView: Controller<
                         (show) =>
                             ({
                                 title: show.title,
-                                titleFooter: `${show.seasons.length} Seasons`,
                                 image: show.poster.bestQuality,
                             } satisfies MsxContentItem)
                     ),

@@ -1,6 +1,5 @@
 import { MsxMenu } from "../../../core/msxUI/menuObject"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { MovieContext } from "../../../domain/movies/controllers/context"
 import * as TE from "fp-ts/TaskEither"
 import appConfig from "../../../core/config/app.config"
 import * as R from "fp-ts-routing"

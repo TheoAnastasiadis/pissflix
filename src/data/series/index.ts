@@ -13,7 +13,7 @@ import { TMDBSeriesRepo } from "./repos/tmdb"
 
 const SeriesContextImpl: SeriesContext = {
     seriesRepo: TMDBSeriesRepo,
-    matchers: prependSeriesMatchers("series")(SeriesMatchers),
+    matchers: prependSeriesMatchers("tv")(SeriesMatchers),
     movieMatchers: prependMovieMatchers("movies")(MovieMatchers),
     photosRepo: unsplash,
 }

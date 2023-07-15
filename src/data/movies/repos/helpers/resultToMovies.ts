@@ -89,7 +89,7 @@ const toMovies: (
                     ? "https://image.tmdb.org/t/p/w300" + result.backdrop_path
                     : defaultBackground,
                 bestQuality: result.backdrop_path
-                    ? "https://image.tmdb.org/t/p/w1280" + result.backdrop_path
+                    ? "https://image.tmdb.org/t/p/w780" + result.backdrop_path
                     : defaultBackground,
             },
             genres:
@@ -109,7 +109,7 @@ const toMovies: (
                     ? "https://image.tmdb.org/t/p/w300" + result.poster_path
                     : defaultPoster,
                 bestQuality: result.backdrop_path
-                    ? "https://image.tmdb.org/t/p/w1280" + result.poster_path
+                    ? "https://image.tmdb.org/t/p/w500" + result.poster_path
                     : defaultPoster,
             },
             release: parseReleaseDate(result.release_date),

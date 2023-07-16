@@ -1,1 +1,1 @@
-export type PPaths = "sections" | "categories" | "stream"
+export type PPaths = "sections" | "categories" | /*"stream" |*/ "backdrop"

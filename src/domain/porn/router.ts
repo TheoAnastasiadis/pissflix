@@ -8,7 +8,7 @@ import * as A from "fp-ts/Array"
 
 const P_ROUTE = "porn"
 
-export const registerMovieRouter =
+export const registerPornRouter =
     (controllers: PControllers, matchers: PMatchersT, context: PContext) =>
     (applicationRouter: R.Parser<any>) =>
         pipe(

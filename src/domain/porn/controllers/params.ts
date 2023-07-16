@@ -5,6 +5,10 @@ export const PCategoriesParams = t.type({
     page: t.string,
 })
 
-export const PStreamParams = t.type({
-    url: t.string,
+// export const PStreamParams = t.type({
+//     url: t.string,
+// })
+
+export const backDropParams = t.type({
+    query: t.string,
 })

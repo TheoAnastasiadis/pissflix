@@ -12,6 +12,7 @@ describe("watch view", () => {
                 magnet: "magnet:123456",
                 title: "Title",
                 fileIdx: "0",
+                episodeImdbId: undefined,
             })()) as E.Right<MsxServerResponse>
         ).right
 

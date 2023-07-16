@@ -10,6 +10,7 @@ describe("watch view", () => {
                 imdbId: "tt123456",
                 player: "local",
                 title: "Title",
+                episodeImdbId: undefined,
             })()) as E.Right<MsxContentRoot>
         ).right
 

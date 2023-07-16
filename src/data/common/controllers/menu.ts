@@ -89,10 +89,10 @@ export const menuController: Controller<CommonContext> = {
                                         title: "Porn",
                                         titleFooter:
                                             "All the great X-rated content",
-                                        enable: false,
-                                        badge: "Coming soon",
+                                        tag: "New!",
                                         image: getPicForKey("porn", pics),
                                         imageFiller: "cover",
+                                        action: `content:${appConfig.externalURL}/porn/sections`,
                                     },
                                     {
                                         type: "teaser",

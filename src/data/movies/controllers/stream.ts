@@ -69,6 +69,17 @@ export const streamResponse: Response<
                             },
                         },
                     } satisfies MsxServerResponse)
+            ),
+            TE.altW(() =>
+                TE.right({
+                    response: {
+                        status: 400,
+                        text: params.title,
+                        data: {
+                            action: `info:It seems the link you requested is not instantly streamable. Please keep checking {txt:msx-green:https://real-debrid.com/torrents} untill it is downloaded and try again!`,
+                        },
+                    },
+                } satisfies MsxServerResponse)
             )
         ),
 }

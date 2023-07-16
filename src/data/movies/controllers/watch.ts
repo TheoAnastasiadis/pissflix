@@ -61,6 +61,17 @@ export const watchView: Controller<
                     ({
                         headline: params.title,
                         type: "pages",
+                        underlay: {
+                            headline: "Torrent Options",
+                            items: [
+                                {
+                                    type: "space",
+                                    text: "Sources with the {ico:offline-bolt} symbol are instantly streamable",
+                                    layout: "0,5,12,1",
+                                    offset: "0,1,0,0",
+                                },
+                            ],
+                        },
                         template: {
                             type: "button",
                             layout: "0,0,4,2",
@@ -97,14 +108,6 @@ export const watchView: Controller<
                                             title: params.title,
                                         }
                                     )}`,
-                                    // playerLabel: params.title,
-                                    // properties: {
-                                    //     "torrent:fallbackUrl":
-
-                                    //     "button:content:icon": "settings",
-                                    //     "button:content:action":
-                                    //         "panel:request:player:options",
-                                    // },
                                 } satisfies MsxContentItem
                             }),
                     } satisfies MsxContentRoot)

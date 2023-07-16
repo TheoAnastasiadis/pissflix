@@ -27,6 +27,7 @@ export const infoView: Controller<MovieContext, t.TypeOf<typeof infoParams>> = {
                                     imdbId: movie.imdbId as string,
                                     player: "remote",
                                     title: movie.title,
+                                    episodeImdbId: undefined,
                                 })
                                 .toString(),
                         baseUrl +
@@ -35,6 +36,7 @@ export const infoView: Controller<MovieContext, t.TypeOf<typeof infoParams>> = {
                                     imdbId: movie.imdbId as string,
                                     player: "local",
                                     title: movie.title,
+                                    episodeImdbId: undefined,
                                 })
                                 .toString()
                     )

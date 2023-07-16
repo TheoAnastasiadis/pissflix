@@ -81,6 +81,10 @@ export const seasonView: Controller<
                                             R.Route.empty,
                                             {
                                                 imdbId: `${params.seriesImdbId}:${season.id}:${episode.id}`,
+                                                episodeImdbId:
+                                                    episode.episode_imdbId
+                                                        ? episode.episode_imdbId
+                                                        : undefined,
                                                 player: "remote",
                                                 title: `S${season.id}E${episode.id} ${episode.title}`,
                                             }

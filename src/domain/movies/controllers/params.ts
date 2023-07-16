@@ -33,12 +33,14 @@ export const searchParams = t.type({
 
 export const watchParams = t.type({
     imdbId: t.string,
+    episodeImdbId: t.union([t.string, t.undefined]),
     player: t.union([t.literal("remote"), t.literal("local")]),
     title: t.string,
 })
 
 export const streamParams = t.type({
     imdbId: t.string,
+    episodeImdbId: t.union([t.string, t.undefined]),
     magnet: t.string,
     fileIdx: t.string,
     title: t.string,

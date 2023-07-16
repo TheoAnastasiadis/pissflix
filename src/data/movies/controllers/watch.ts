@@ -93,6 +93,7 @@ export const watchView: Controller<
                                             magnet: torrent.magnetURI,
                                             fileIdx: String(torrent.fileIdx),
                                             imdbId: params.imdbId,
+                                            episodeImdbId: params.episodeImdbId,
                                             title: params.title,
                                         }
                                     )}`,

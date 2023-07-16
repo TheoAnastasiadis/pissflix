@@ -36,11 +36,13 @@ export const streamResponse: Response<
                     params.magnet
                 )
             ),
-            TE.bind("subtitles", () =>
-                getSubtitles(context.subtitlesRepo)([
-                    "en" as LanguageT,
-                    "el" as LanguageT,
-                ])(params.imdbId)
+            TE.bind(
+                "subtitles",
+                () =>
+                    getSubtitles(context.subtitlesRepo)([
+                        "en" as LanguageT,
+                        "el" as LanguageT,
+                    ])(params.episodeImdbId || params.imdbId) //check for specific episode and use general id as fallback
             ),
             TE.map(
                 ({ link, subtitles }) =>

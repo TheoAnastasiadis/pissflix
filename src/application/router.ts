@@ -12,6 +12,9 @@ import { Result } from "../core/sharedObjects/controller"
 import { registerSeriesRouter } from "../domain/series/router"
 import { SeriesContextImpl, SeriesControllersImpl } from "../data/series"
 import { SeriesMatchers } from "../domain/series/controllers/matchers"
+import { registerPornRouter } from "../domain/porn/router"
+import { PContextImpl, PControllersImpl } from "../data/porn"
+import { PMatchers } from "../domain/porn/controllers/matchers"
 
 export const router = pipe(
     R.zero<TE.TaskEither<string, object>>().map(() => TE.left("zero")),
@@ -25,7 +28,8 @@ export const router = pipe(
         SeriesControllersImpl,
         SeriesMatchers,
         SeriesContextImpl
-    )
+    ),
+    registerPornRouter(PControllersImpl, PMatchers, PContextImpl)
 )
 
 export const parseRoute: (route: string, router: R.Parser<Result>) => Result = (

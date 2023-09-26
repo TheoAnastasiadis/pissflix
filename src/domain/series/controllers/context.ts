@@ -1,24 +1,11 @@
 import { PhotosRepoT } from "../../common/repos/photos.repo"
-import { MovieMatchers } from "../../movies/controllers/matchers"
+import { movieMatchers } from "../../movies/controllers/matchers"
 import { SeriesRepoT } from "../repos/series.repo"
-import { SeriesMatchers } from "./matchers"
+import { seriesMatchers } from "./matchers"
 
 export type SeriesContext = {
     seriesRepo: SeriesRepoT
-    matchers: typeof SeriesMatchers
-    movieMatchers: typeof MovieMatchers
+    matchers: typeof seriesMatchers
+    movieMatchers: typeof movieMatchers
     photosRepo: PhotosRepoT
 }
-
-export const createMovieContext = (
-    seriesRepo: SeriesRepoT,
-    matchers: typeof SeriesMatchers,
-    movieMatchers: typeof MovieMatchers,
-    photosRepo: PhotosRepoT
-) =>
-    ({
-        seriesRepo,
-        matchers,
-        photosRepo,
-        movieMatchers,
-    } satisfies SeriesContext)

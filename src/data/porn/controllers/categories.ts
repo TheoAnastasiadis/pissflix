@@ -1,8 +1,8 @@
 import { pipe } from "fp-ts/lib/function"
 import appConfig from "../../../core/config/app.config"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { PContext } from "../../../domain/porn/controllers/context"
-import { PCategoriesParams } from "../../../domain/porn/controllers/params"
+import { PornContext } from "../../../domain/porn/controllers/context"
+import { pornCategoriesParams } from "../../../domain/porn/controllers/params"
 import * as t from "io-ts"
 import * as A from "fp-ts/Array"
 import * as TE from "fp-ts/TaskEither"
@@ -25,19 +25,19 @@ const shuffle = (unshuffled: any[]) =>
 const baseUrl = appConfig.externalURL
 
 export const categoriesView: Controller<
-    PContext,
-    t.TypeOf<typeof PCategoriesParams>
+    PornContext,
+    t.TypeOf<typeof pornCategoriesParams>
 > = {
     _tag: "view",
     render: (context) => (params) =>
         pipe(
             TE.Do,
-            TE.bind("categories", () => getCategories(context.prepo)),
+            TE.bind("categories", () => getCategories(context.pornRepo)),
             TE.bind("videos", ({ categories }) =>
                 pipe(
                     categories,
                     A.map((category) =>
-                        getVideos(context.prepo)({ name: params.section })(
+                        getVideos(context.pornRepo)({ name: params.section })(
                             category
                         )(0)
                     ),

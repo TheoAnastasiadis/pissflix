@@ -3,7 +3,7 @@ import { PSectionT } from "../entities/section"
 import { PCategoryT } from "../entities/category"
 import { PVideoT } from "../entities/video"
 
-export type PRepoT = {
+export type PornRepoT = {
     getSections: () => TE.TaskEither<string, PSectionT[]>
     getCategories: () => TE.TaskEither<string, PCategoryT[]>
     getVideos: (

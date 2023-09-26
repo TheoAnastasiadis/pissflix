@@ -1,3 +1,5 @@
+import appConfig from "../../core/config/app.config"
+import { commonEndpoint } from "../../domain/common"
 import { CommonContext } from "../../domain/common/controllers/context"
 import { commonMatchers } from "../../domain/common/controllers/matchers"
 import { commonControllersImpl } from "./controllers"
@@ -10,4 +12,6 @@ const commonContextImpl: CommonContext = {
     photosRepo: UnsplashRepo,
 }
 
-export { commonContextImpl, commonControllersImpl }
+export const commonRouter = commonEndpoint(commonControllersImpl).createRouter(
+    commonContextImpl
+)

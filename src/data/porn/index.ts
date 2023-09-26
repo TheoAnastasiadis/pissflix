@@ -1,18 +1,18 @@
-import { PContext } from "../../domain/porn/controllers/context"
-import {
-    PMatchers,
-    prependPMatchers,
-} from "../../domain/porn/controllers/matchers"
+import appConfig from "../../core/config/app.config"
+import { pornEndpoint } from "../../domain/porn"
+import { PornContext } from "../../domain/porn/controllers/context"
+import { pornMatchers } from "../../domain/porn/controllers/matchers"
 import { RealDebridRepo } from "../common/repos/realDebrid"
-import { PControllersImpl } from "./controllers"
+import { PornControllersImpl } from "./controllers"
 import { AVAPIRepo } from "./repos/avapiRepo"
 import { PPicsRepo } from "./repos/ppicsRepo"
 
-const PContextImpl: PContext = {
-    prepo: AVAPIRepo,
+const pornContextImpl: PornContext = {
+    pornRepo: AVAPIRepo,
     debridRepo: RealDebridRepo,
-    matchers: prependPMatchers("porn")(PMatchers),
+    matchers: pornMatchers,
     photosRepo: PPicsRepo,
 }
 
-export { PContextImpl, PControllersImpl }
+export const pornRouter =
+    pornEndpoint(PornControllersImpl).createRouter(pornContextImpl)

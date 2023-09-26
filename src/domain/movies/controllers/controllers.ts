@@ -1,8 +1,4 @@
-import {
-    Controller,
-    Redirection,
-    Response,
-} from "../../../core/sharedObjects/controller"
+import { Controller, Response } from "../../../core/sharedObjects/controller"
 import {
     panelParams,
     searchParams,
@@ -12,7 +8,6 @@ import {
 } from "./params"
 import * as t from "io-ts"
 import { MovieContext } from "./context"
-import { MoviePaths } from "./paths"
 
 export type MovieControllers = {
     menu: Controller<MovieContext>
@@ -25,9 +20,4 @@ export type MovieControllers = {
     discover: Controller<MovieContext>
     watch: Controller<MovieContext, t.TypeOf<typeof watchParams>>
     stream: Response<MovieContext, t.TypeOf<typeof streamParams>>
-} & Record<
-    MoviePaths,
-    | Controller<MovieContext, any>
-    | Redirection<MovieContext, any>
-    | Response<MovieContext, any>
->
+}

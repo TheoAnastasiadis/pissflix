@@ -1,17 +1,17 @@
 import { DebridProviderRepo } from "../../../../src/domain/common/repos/debridProvider.repo"
-import { PContext } from "../../../../src/domain/porn/controllers/context"
+import { PornContext } from "../../../../src/domain/porn/controllers/context"
 import { anyString, anything, instance, mock, when } from "ts-mockito"
 import * as TE from "fp-ts/TaskEither"
 import * as TO from "fp-ts/TaskOption"
 import { PhotosRepoT } from "../../../../src/domain/common/repos/photos.repo"
-import { PMatchers } from "../../../../src/domain/porn/controllers/matchers"
-import { PRepoT } from "../../../../src/domain/porn/repos/prepo"
+import { pornMatchers } from "../../../../src/domain/porn/controllers/matchers"
+import { PornRepoT } from "../../../../src/domain/porn/repos/prepo"
 import { PVideoT } from "../../../../src/domain/porn/entities/video"
 import { PCategoryT } from "../../../../src/domain/porn/entities/category"
 import { PSectionT } from "../../../../src/domain/porn/entities/section"
 
 //p*rn repo
-const mockPRepo = mock<PRepoT>()
+const mockPRepo = mock<PornRepoT>()
 when(mockPRepo.getVideos).thenReturn(() =>
     TE.right(
         Array(10).fill({
@@ -51,9 +51,9 @@ when(mockPhotosRepo.search(anyString())).thenReturn(
     TE.right(Array(20).fill("https://www.example.com/photo.jpg"))
 )
 
-export const mockPContext: PContext = {
-    prepo: instance(mockPRepo),
+export const mockPContext: PornContext = {
+    pornRepo: instance(mockPRepo),
     debridRepo: instance(mockedDebridRepo),
-    matchers: PMatchers,
+    matchers: pornMatchers,
     photosRepo: instance(mockPhotosRepo),
 }

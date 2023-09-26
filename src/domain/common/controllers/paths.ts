@@ -1,1 +1,1 @@
-export type CommonPaths = "subtitle" | "start" | "menu"
+export const commonPaths = ["subtitle", "start", "menu"]

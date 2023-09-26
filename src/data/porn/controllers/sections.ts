@@ -1,6 +1,6 @@
 import { pipe } from "fp-ts/lib/function"
 import { Controller } from "../../../core/sharedObjects/controller"
-import { PContext } from "../../../domain/porn/controllers/context"
+import { PornContext } from "../../../domain/porn/controllers/context"
 import * as TE from "fp-ts/TaskEither"
 import * as R from "fp-ts-routing"
 import * as A from "fp-ts/Array"
@@ -12,12 +12,12 @@ import { posters } from "./content/backdrops"
 
 const baseUrl = appConfig.externalURL
 
-export const SectionsView: Controller<PContext> = {
+export const SectionsView: Controller<PornContext> = {
     _tag: "view",
     render: (context) => (params) =>
         pipe(
             TE.Do,
-            TE.bind("sections", () => getSections(context.prepo)),
+            TE.bind("sections", () => getSections(context.pornRepo)),
             TE.bind("images", ({ sections }) =>
                 pipe(
                     sections,

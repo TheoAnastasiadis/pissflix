@@ -1,3 +1,3 @@
-import { PRepoT } from "../repos/prepo"
+import { PornRepoT } from "../repos/prepo"
 
-export const getCategories = (repo: PRepoT) => repo.getCategories()
+export const getCategories = (repo: PornRepoT) => repo.getCategories()

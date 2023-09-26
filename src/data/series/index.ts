@@ -1,21 +1,19 @@
-import {
-    MovieMatchers,
-    prependMovieMatchers,
-} from "../../domain/movies/controllers/matchers"
+import appConfig from "../../core/config/app.config"
+import { movieMatchers } from "../../domain/movies/controllers/matchers"
+import { seriesEndpoint } from "../../domain/series"
 import { SeriesContext } from "../../domain/series/controllers/context"
-import {
-    SeriesMatchers,
-    prependSeriesMatchers,
-} from "../../domain/series/controllers/matchers"
+import { seriesMatchers } from "../../domain/series/controllers/matchers"
 import { UnsplashRepo } from "../common/repos/unSplash"
 import { SeriesControllersImpl } from "./controllers"
 import { TMDBSeriesRepo } from "./repos/tmdb"
 
-const SeriesContextImpl: SeriesContext = {
+const seriesContextImpl: SeriesContext = {
     seriesRepo: TMDBSeriesRepo,
-    matchers: prependSeriesMatchers("tv")(SeriesMatchers),
-    movieMatchers: prependMovieMatchers("movies")(MovieMatchers),
     photosRepo: UnsplashRepo,
+    movieMatchers: movieMatchers,
+    matchers: seriesMatchers,
 }
 
-export { SeriesContextImpl, SeriesControllersImpl }
+export const seriesRouter = seriesEndpoint(SeriesControllersImpl).createRouter(
+    seriesContextImpl
+)

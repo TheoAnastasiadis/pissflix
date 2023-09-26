@@ -1,9 +1,9 @@
 import { PCategoryT } from "../entities/category"
 import { PSectionT } from "../entities/section"
-import { PRepoT } from "../repos/prepo"
+import { PornRepoT } from "../repos/prepo"
 
 export const getVideos =
-    (repo: PRepoT) =>
+    (repo: PornRepoT) =>
     (section: PSectionT) =>
     (category: PCategoryT) =>
     (page: number) =>

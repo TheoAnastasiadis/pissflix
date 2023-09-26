@@ -6,7 +6,7 @@ import {
 import { MovieT } from "../../../../domain/movies/entities/movie"
 import * as A from "fp-ts/Array"
 import { pipe } from "fp-ts/lib/function"
-import { MovieMatchersT } from "../../../../domain/movies/controllers/matchers"
+import { movieMatchers } from "../../../../domain/movies/controllers/matchers"
 import * as R from "fp-ts-routing"
 import applicationConfig from "../../../../core/config/app.config"
 
@@ -18,7 +18,7 @@ export const resultsPage = (
     subtitle: string,
     movies: MovieT[],
     panelUrl: string,
-    matchers: MovieMatchersT
+    matchers: typeof movieMatchers
 ) => {
     const page: MsxContentPage = {
         background: movies[0].background.bestQuality,

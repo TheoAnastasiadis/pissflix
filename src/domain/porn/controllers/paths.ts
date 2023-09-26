@@ -1,1 +1,1 @@
-export type PPaths = "sections" | "categories" | /*"stream" |*/ "backdrop"
+export const pornPaths = ["sections", "categories", "backdrop"]

@@ -7,4 +7,8 @@ export default {
             ? process.env.INTERNAL_URL
             : process.env.EXTERNAL_URL,
     staticPath: process.env.STATIC_PATH,
+    moviesPath: "movies",
+    seriesPath: "tv",
+    commonPath: "msx",
+    pornPath: "porn",
 }

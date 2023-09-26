@@ -1,4 +1,4 @@
-import { PRepoT } from "../../../domain/porn/repos/prepo"
+import { PornRepoT } from "../../../domain/porn/repos/prepo"
 import * as TE from "fp-ts/TaskEither"
 import * as E from "fp-ts/Either"
 import { avapiCategories } from "./helpers/avapiCategories"
@@ -17,7 +17,7 @@ const api = axios.create({
 
 const baseUrl = "https://adultvideosapi.com/api/"
 
-export const AVAPIRepo: PRepoT = {
+export const AVAPIRepo: PornRepoT = {
     getCategories: () => TE.of(avapiCategories as unknown as PCategoryT[]),
     getSections: () => TE.of(avapiSections as unknown as PSectionT[]),
     getVideos: (section, category, page) =>

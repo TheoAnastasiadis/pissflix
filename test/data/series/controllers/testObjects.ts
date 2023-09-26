@@ -11,8 +11,8 @@ import { SeriesContext } from "../../../../src/domain/series/controllers/context
 import { SeriesRepoT } from "../../../../src/domain/series/repos/series.repo"
 import * as TE from "fp-ts/TaskEither"
 import * as O from "fp-ts/Option"
-import { SeriesMatchers } from "../../../../src/domain/series/controllers/matchers"
-import { MovieMatchers } from "../../../../src/domain/movies/controllers/matchers"
+import { seriesMatchers } from "../../../../src/domain/series/controllers/matchers"
+import { movieMatchers } from "../../../../src/domain/movies/controllers/matchers"
 import { EpisodeT } from "../../../../src/domain/series/entities/episode"
 import { SeasonT } from "../../../../src/domain/series/entities/season"
 import { SeriesT } from "../../../../src/domain/series/entities/series"
@@ -78,7 +78,7 @@ when(mockPhotosRepo.search(anyString())).thenReturn(
 
 export const mockSeriesContext: SeriesContext = {
     seriesRepo: instance(mockSeriesRepo),
-    matchers: SeriesMatchers,
-    movieMatchers: MovieMatchers,
+    matchers: seriesMatchers,
+    movieMatchers: movieMatchers,
     photosRepo: instance(mockPhotosRepo),
 }

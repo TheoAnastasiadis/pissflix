@@ -15,7 +15,7 @@ import { TorrentRepo } from "../../../../src/domain/common/repos/torrent.repo"
 import { tmdbGenres } from "../../../../src/data/movies/repos/helpers/tmdbGenres"
 import { DebridProviderRepo } from "../../../../src/domain/common/repos/debridProvider.repo"
 import { MovieContext } from "../../../../src/domain/movies/controllers/context"
-import { MovieMatchers } from "../../../../src/domain/movies/controllers/matchers"
+import { movieMatchers } from "../../../../src/domain/movies/controllers/matchers"
 import { SubtitleRepo } from "../../../../src/domain/common/repos/subtitle.repo"
 import { SubtitleT } from "../../../../src/domain/common/entities/subtitle"
 import { LanguageT } from "../../../../src/domain/movies/entities/language"
@@ -81,5 +81,5 @@ export const mockedContext: MovieContext = {
     torrentRepo: mockedTorrentRepoInstance,
     debridRepo: mockedDebridRepoInstance,
     subtitlesRepo: mockedSubtitleRepoInstance,
-    matchers: MovieMatchers,
+    matchers: movieMatchers,
 }

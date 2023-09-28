@@ -14,7 +14,7 @@ const placementsToQueries = {
     movies: "movie posters",
     music: "music albums",
     porn: "masturbation",
-    content: "albania",
+    content: "youtube",
 } as const
 
 const getPicForKey = (
@@ -97,7 +97,9 @@ export const menuController: Controller<CommonContext> = {
                                     {
                                         type: "teaser",
                                         layout: "8,2,4,2",
-                                        title: "Albanian Weddings",
+                                        title: "Videos",
+                                        titleFooter:
+                                            "Keep in touch with your favorite channels",
                                         enable: false,
                                         badge: "Coming soon",
                                         image: getPicForKey("content", pics),

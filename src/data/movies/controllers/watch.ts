@@ -30,8 +30,21 @@ const resolutionIcons: Icon[] = [
     "device-unknown",
 ]
 
-const sortTorrents = (isRemote: boolean) => (a: TorrentT, b: TorrentT) =>
-    isRemote ? b.size - a.size : b.seeders - a.seeders //for remote plays resolution is more impoarnt. for local plays seeders are more important
+const sortTorrents =
+    (isRemote: boolean) =>
+    (
+        a: TorrentT & { instantlyAvailable: boolean },
+        b: TorrentT & { instantlyAvailable: boolean }
+    ) => {
+        // local players sort torrents by seeders
+        if (!isRemote) return b.seeders - a.seeders
+
+        // remote players sort torrents by size, prioritizing instantly available ones
+        if (a.instantlyAvailable === b.instantlyAvailable)
+            return b.size - a.size
+        else if (b.instantlyAvailable) return Infinity
+        return -Infinity
+    }
 
 export const watchView: Controller<
     MovieContext,
@@ -82,8 +95,12 @@ export const watchView: Controller<
                             titleFooter: "File Size",
                         },
                         items: torrents
-                            .sort(sortTorrents(params.player == "remote"))
-                            .map((torrent, i) => {
+                            .map((torrent, idx) => ({
+                                ...torrent,
+                                instantlyAvailable: instantAvailability[idx],
+                            }))
+                            .sort(sortTorrents(params.player === "remote"))
+                            .map((torrent) => {
                                 return {
                                     icon: resolutionIcons[
                                         indexOfResolution(torrent.resolution)
@@ -93,7 +110,7 @@ export const watchView: Controller<
                                     tagColor: "msx-green",
                                     tag:
                                         params.player == "remote" &&
-                                        instantAvailability[i]
+                                        torrent.instantlyAvailable
                                             ? "{ico:offline-bolt}"
                                             : "",
                                     action: `execute:${

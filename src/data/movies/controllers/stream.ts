@@ -32,8 +32,15 @@ export const streamResponse: Response<
         pipe(
             TE.Do,
             TE.bind("link", () =>
-                getStreamingLink(context.debridRepo)(Number(params.fileIdx))(
-                    params.magnet
+                pipe(
+                    params.magnet,
+                    getStreamingLink(context.debridRepo)(
+                        Number(params.fileIdx)
+                    ),
+                    TE.mapLeft(
+                        () =>
+                            `It seems the link you requested is not instantly streamable. Please keep checking {txt:msx-green:https://real-debrid.com/torrents} untill it is downloaded and try again!`
+                    )
                 )
             ),
             TE.bind(
@@ -69,17 +76,6 @@ export const streamResponse: Response<
                             },
                         },
                     } satisfies MsxServerResponse)
-            ),
-            TE.altW(() =>
-                TE.right({
-                    response: {
-                        status: 200,
-                        text: params.title,
-                        data: {
-                            action: `info:It seems the link you requested is not instantly streamable. Please keep checking {txt:msx-green:https://real-debrid.com/torrents} untill it is downloaded and try again!`,
-                        },
-                    },
-                } satisfies MsxServerResponse)
             )
         ),
 }

@@ -33,6 +33,7 @@ const api = axios.create({
     headers: {
         "Api-Key": OS_API_KEY,
         "Content-Type": "application/json",
+        "User-Agent": "PissFlix v0.1",
         Accept: "*/*",
     },
 })

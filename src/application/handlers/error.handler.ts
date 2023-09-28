@@ -18,7 +18,12 @@ export const handleError: (res: Response) => (result: Result) => {
     result: TE.TaskEither<ReturnType<Response["send"]>, string | object>
 } = (res) => (result) => ({
     _tag: result._tag,
-    result: TE.mapError((error) => res.status(404).send(error))(
-        result.result as TE.TaskEither<any, object | string>
-    ),
+    result: TE.mapError((error: string) =>
+        res.status(200).send({
+            response: {
+                status: 500,
+                message: error,
+            },
+        })
+    )(result.result as TE.TaskEither<any, object | string>),
 })

@@ -27,7 +27,7 @@ const resultPoster: (
         },2,3` as `${number},${number},${number},${number}`,
         image: series.poster.economicQuality,
         type: "teaser",
-        title: series.title,
+        label: `${series.seasons.length} Seasons`,
         action: `content:${
             appConfig.externalURL
         }${context.matchers.series.formatter.run(R.Route.empty, {

@@ -3,6 +3,7 @@ import { pipe } from "fp-ts/function"
 import { MagnetURIT } from "../../../../domain/common/entities/magnetURI"
 import {
     addTorrentResponse,
+    availablityResponse,
     availablityT,
     getTorrentInfoResponse,
     isTranscodingResult,
@@ -153,7 +154,7 @@ export const transcode = (id: string) =>
  *
  * @param {MagnetURIT} magnet
  */
-export const instantAvailability = (magnet: MagnetURIT) =>
+export const instantAvailability = (magnet: MagnetURIT) => (fileIdx: number) =>
     pipe(
         TO.tryCatch(() =>
             api.get(
@@ -163,7 +164,17 @@ export const instantAvailability = (magnet: MagnetURIT) =>
             )
         ),
         TO.map((response) => response.data),
-        TO.map(
-            (data) => Object.keys(data[Object.keys(data)[0]]).length > 0 //real debrid :/
-        )
+        TO.chain((data) => TO.fromEither(availablityResponse.decode(data))),
+        TO.map((data) => {
+            const relevant = data[Object.keys(data)[0]]
+            const key = fileIdx.toString()
+
+            if (Array.isArray(relevant)) return false
+
+            const providers = Object.keys(relevant)
+            return providers
+                .map((provider) => relevant[provider])
+                .map((variants) => variants.some((variant) => key in variant))
+                .some((isIncluded) => isIncluded)
+        })
     )

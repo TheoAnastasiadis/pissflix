@@ -73,7 +73,7 @@ export const DebridLinkRepo: DebridProviderRepo = {
             ),
             TE.map((data) => data.value.streamUrl)
         ),
-    checkIfAvailable: (magnet: string) =>
+    checkIfAvailable: (magnet: string) => (fileIdx: number) =>
         pipe(
             TO.tryCatch(() =>
                 api.get(`${BASE_URL}/seedbox/cached?url=${magnet}`)

@@ -54,22 +54,23 @@ export const unrestrictLinkResponse = t.type({
     streamable: t.number, // Is the file streamable on website
 })
 
-/**
- * These cannot be represented by an io-ts runtime type due to variable key names.
- */
-export type availablityT = {
-    [key: string]: {
-        //hash
-        [key: string]: //host
-        {
-            [key: string]: {
-                //fileIdx
-                filename: string
-                filesize: number
-            }
-        }[]
-    }
-}
+export const availablityResponse = t.record(
+    t.string,
+    t.union([
+        t.record(
+            t.string,
+            t.array(
+                t.record(
+                    t.string,
+                    t.type({ filename: t.string, filesize: t.Integer })
+                )
+            )
+        ),
+        t.array(t.string),
+    ])
+)
+
+export type availablityT = t.TypeOf<typeof availablityResponse>
 
 export type transcodingT = {
     dash: {

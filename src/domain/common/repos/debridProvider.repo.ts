@@ -6,5 +6,7 @@ export type DebridProviderRepo = {
     getStreamingLink(
         magnet: MagnetURIT
     ): (fileIdx: number) => TE.TaskEither<string, string>
-    checkIfAvailable(magnet: MagnetURIT): TO.TaskOption<boolean>
+    checkIfAvailable(
+        magnet: MagnetURIT
+    ): (fileIdx: number) => TO.TaskOption<boolean>
 }
